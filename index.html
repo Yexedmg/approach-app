@@ -1,0 +1,5108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#0a0a0a">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icon-192.png">
+  <title>Approach</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg: #0a0a0a;
+      --card: #151515;
+      --border: #222;
+      --text: #e0e0e0;
+      --dim: #666;
+      --accent: #ff6b35;
+      --accent-glow: rgba(255, 107, 53, 0.15);
+      --danger: #ff3b3b;
+      --success: #34d399;
+      --blue: #60a5fa;
+      --purple: #a78bfa;
+      --yellow: #fbbf24;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      min-height: 100dvh;
+      overflow-x: hidden;
+      padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    }
+
+    .app {
+      max-width: 430px;
+      margin: 0 auto;
+      padding: 16px;
+      padding-bottom: 100px;
+    }
+
+    /* Header */
+    .header {
+      text-align: center;
+      padding: 20px 0 10px;
+    }
+
+    .header h1 {
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+
+    .header .subtitle {
+      color: var(--dim);
+      font-size: 13px;
+      margin-top: 4px;
+    }
+
+    /* Countdown Ring */
+    .countdown-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 24px 0;
+    }
+
+    .ring-container {
+      position: relative;
+      width: 180px;
+      height: 180px;
+    }
+
+    .ring-container svg {
+      transform: rotate(-90deg);
+    }
+
+    .ring-bg {
+      fill: none;
+      stroke: var(--border);
+      stroke-width: 8;
+    }
+
+    .ring-progress {
+      fill: none;
+      stroke: var(--accent);
+      stroke-width: 8;
+      stroke-linecap: round;
+      transition: stroke-dashoffset 0.5s ease;
+      filter: drop-shadow(0 0 6px var(--accent));
+    }
+
+    .ring-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+    }
+
+    .ring-text .days-left {
+      font-size: 42px;
+      font-weight: 800;
+      color: var(--accent);
+      line-height: 1;
+    }
+
+    .ring-text .days-label {
+      font-size: 12px;
+      color: var(--dim);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* Truth Banner */
+    .truth-banner {
+      background: linear-gradient(135deg, rgba(255, 59, 59, 0.1), rgba(255, 107, 53, 0.1));
+      border: 1px solid rgba(255, 59, 59, 0.2);
+      border-radius: 12px;
+      padding: 14px;
+      text-align: center;
+      margin: 16px 0;
+    }
+
+    .truth-banner .truth-text {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--danger);
+      line-height: 1.4;
+    }
+
+    .truth-banner .truth-sub {
+      font-size: 12px;
+      color: var(--dim);
+      margin-top: 4px;
+    }
+
+    /* Stats Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin: 16px 0;
+    }
+
+    .stat-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px;
+      text-align: center;
+    }
+
+    .stat-card .stat-value {
+      font-size: 28px;
+      font-weight: 800;
+      line-height: 1;
+    }
+
+    .stat-card .stat-label {
+      font-size: 11px;
+      color: var(--dim);
+      margin-top: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .stat-card.accent .stat-value {
+      color: var(--accent);
+    }
+
+    .stat-card.success .stat-value {
+      color: var(--success);
+    }
+
+    .stat-card.danger .stat-value {
+      color: var(--danger);
+    }
+
+    .stat-card.blue .stat-value {
+      color: var(--blue);
+    }
+
+    .stat-card.purple .stat-value {
+      color: var(--purple);
+    }
+
+    .stat-card.yellow .stat-value {
+      color: var(--yellow);
+    }
+
+    /* Today Section — Dual Counter */
+    .today-section {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px;
+      margin: 16px 0;
+      text-align: center;
+    }
+
+    .today-section h2 {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .today-section .today-date {
+      font-size: 12px;
+      color: var(--dim);
+      margin-bottom: 16px;
+    }
+
+    .dual-counter {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .counter-col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .counter-col-label {
+      font-size: 13px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+    }
+
+    .counter-col-label.seen-label {
+      color: var(--blue);
+    }
+
+    .counter-col-label.talked-label {
+      color: var(--accent);
+    }
+
+    .counter-display {
+      font-size: 52px;
+      font-weight: 800;
+      line-height: 1;
+      margin: 6px 0;
+    }
+
+    .counter-display.seen-count {
+      color: var(--blue);
+    }
+
+    .counter-display.talked-count {
+      color: var(--accent);
+    }
+
+    .counter-buttons {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin-top: 10px;
+    }
+
+    .btn {
+      border: none;
+      border-radius: 50%;
+      width: 48px;
+      height: 48px;
+      font-size: 22px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.1s, box-shadow 0.2s;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .btn:active {
+      transform: scale(0.92);
+    }
+
+    .btn-add {
+      background: var(--accent);
+      color: #fff;
+      box-shadow: 0 4px 20px var(--accent-glow);
+    }
+
+    .btn-add.seen-add {
+      background: var(--blue);
+      box-shadow: 0 4px 20px rgba(96, 165, 250, 0.2);
+    }
+
+    .btn-sub {
+      background: #222;
+      color: var(--dim);
+    }
+
+    .courage-row {
+      margin-top: 14px;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .courage-row .courage-pct {
+      color: var(--accent);
+      font-size: 18px;
+    }
+
+    .courage-row .courage-label {
+      color: var(--dim);
+      font-size: 12px;
+    }
+
+    .today-potential {
+      font-size: 12px;
+      color: var(--dim);
+      margin-top: 10px;
+    }
+
+    .today-potential span {
+      color: var(--danger);
+      font-weight: 600;
+    }
+
+    /* Missed Section */
+    .missed-section {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px;
+      margin: 16px 0;
+    }
+
+    .missed-section h2 {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 4px;
+      text-align: center;
+    }
+
+    .missed-section .missed-sub {
+      font-size: 12px;
+      color: var(--dim);
+      text-align: center;
+      margin-bottom: 16px;
+    }
+
+    .missed-btn {
+      width: 100%;
+      padding: 14px;
+      border: 2px dashed var(--danger);
+      background: rgba(255, 59, 59, 0.05);
+      border-radius: 12px;
+      color: var(--danger);
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      transition: transform 0.1s;
+    }
+
+    .missed-btn:active {
+      transform: scale(0.97);
+    }
+
+    .missed-today-count {
+      text-align: center;
+      margin-top: 10px;
+      font-size: 13px;
+      color: var(--dim);
+    }
+
+    .missed-today-count span {
+      color: var(--danger);
+      font-weight: 700;
+    }
+
+    /* Reason Modal */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: 100;
+      align-items: flex-end;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .modal-overlay.open {
+      display: flex;
+    }
+
+    .modal {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px 20px 12px 12px;
+      width: 100%;
+      max-width: 430px;
+      padding: 20px;
+      max-height: 85vh;
+      overflow-y: auto;
+    }
+
+    .modal h3 {
+      font-size: 16px;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 4px;
+    }
+
+    .modal .modal-sub {
+      font-size: 12px;
+      color: var(--dim);
+      text-align: center;
+      margin-bottom: 16px;
+    }
+
+    .reason-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .reason-btn {
+      padding: 12px 8px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      border-radius: 10px;
+      color: var(--text);
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      text-align: center;
+      transition: border-color 0.15s, background 0.15s;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .reason-btn:active,
+    .reason-btn.selected {
+      border-color: var(--danger);
+      background: rgba(255, 59, 59, 0.1);
+    }
+
+    .modal-note {
+      width: 100%;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px;
+      color: var(--text);
+      font-size: 13px;
+      resize: none;
+      height: 60px;
+      margin-bottom: 12px;
+      font-family: inherit;
+    }
+
+    .modal-note::placeholder {
+      color: var(--dim);
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .modal-actions button {
+      flex: 1;
+      padding: 12px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+    }
+
+    .modal-cancel {
+      background: var(--border);
+      color: var(--dim);
+    }
+
+    .modal-confirm {
+      background: var(--danger);
+      color: #fff;
+    }
+
+    /* Missed Log */
+    .missed-log {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      margin: 16px 0;
+    }
+
+    .missed-log h3 {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .missed-log-toggle {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .missed-log-toggle .count-badge {
+      font-size: 12px;
+      color: var(--dim);
+    }
+
+    .missed-log-list {
+      display: none;
+      margin-top: 12px;
+    }
+
+    .missed-log-list.open {
+      display: block;
+    }
+
+    .missed-entry {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px;
+      margin-bottom: 8px;
+    }
+
+    .missed-entry-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .missed-entry-date {
+      font-size: 11px;
+      color: var(--dim);
+    }
+
+    .missed-entry-reason {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--danger);
+    }
+
+    .missed-entry-note {
+      font-size: 11px;
+      color: var(--dim);
+      margin-top: 4px;
+      font-style: italic;
+    }
+
+    .missed-entry-actions {
+      display: flex;
+      gap: 6px;
+      margin-top: 8px;
+    }
+
+    .missed-entry-btn {
+      padding: 5px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--dim);
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .missed-entry-btn.saw-again {
+      border-color: var(--yellow);
+      color: var(--yellow);
+    }
+
+    .missed-entry-btn.saw-again.active {
+      background: var(--yellow);
+      color: #000;
+    }
+
+    .missed-entry-btn.delete {
+      border-color: #333;
+    }
+
+    .missed-sighting {
+      font-size: 11px;
+      color: var(--yellow);
+      margin-top: 6px;
+      font-weight: 600;
+    }
+
+    .missed-sighting-list {
+      font-size: 10px;
+      color: var(--dim);
+      margin-top: 2px;
+    }
+
+    /* Re-encounter Reality Check */
+    .reencounter-section {
+      background: linear-gradient(135deg, rgba(251, 191, 36, 0.05), rgba(251, 191, 36, 0.1));
+      border: 1px solid rgba(251, 191, 36, 0.15);
+      border-radius: 12px;
+      padding: 16px;
+      margin: 16px 0;
+    }
+
+    .reencounter-section h3 {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: var(--yellow);
+    }
+
+    .reencounter-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+    }
+
+    .reencounter-stat {
+      text-align: center;
+    }
+
+    .reencounter-stat .rs-value {
+      font-size: 22px;
+      font-weight: 800;
+    }
+
+    .reencounter-stat .rs-label {
+      font-size: 10px;
+      color: var(--dim);
+      margin-top: 2px;
+    }
+
+    .reencounter-verdict {
+      text-align: center;
+      font-size: 12px;
+      color: var(--dim);
+      margin-top: 10px;
+      line-height: 1.4;
+    }
+
+    .reencounter-verdict strong {
+      color: var(--yellow);
+    }
+
+    /* Excuse Breakdown */
+    .excuse-section {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      margin: 16px 0;
+    }
+
+    .excuse-section h3 {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .excuse-bar-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 5px 0;
+    }
+
+    .excuse-label {
+      width: 90px;
+      font-size: 11px;
+      color: var(--dim);
+      flex-shrink: 0;
+    }
+
+    .excuse-bar-bg {
+      flex: 1;
+      height: 16px;
+      background: var(--border);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .excuse-bar-fill {
+      height: 100%;
+      background: var(--danger);
+      border-radius: 3px;
+      transition: width 0.3s;
+    }
+
+    .excuse-count {
+      width: 28px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--dim);
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    /* Per-Encounter EV */
+    .ev-section {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      margin: 16px 0;
+    }
+
+    .ev-section h3 {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    .ev-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 6px 0;
+    }
+
+    .ev-row .ev-label {
+      font-size: 12px;
+      color: var(--dim);
+    }
+
+    .ev-row .ev-value {
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .ev-row .ev-value.positive {
+      color: var(--success);
+    }
+
+    .ev-row .ev-value.negative {
+      color: var(--danger);
+    }
+
+    .ev-row .ev-value.neutral {
+      color: var(--blue);
+    }
+
+    .ev-divider {
+      border-top: 1px solid var(--border);
+      margin: 8px 0;
+    }
+
+    .ev-verdict {
+      text-align: center;
+      padding: 10px 0 4px;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    /* Funnel */
+    .funnel-section {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      margin: 16px 0;
+    }
+
+    .funnel-section h3 {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    .funnel-step {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 0;
+    }
+
+    .funnel-bar-bg {
+      flex: 1;
+      height: 20px;
+      background: var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .funnel-bar-fill {
+      height: 100%;
+      border-radius: 4px;
+      transition: width 0.5s ease;
+    }
+
+    .funnel-bar-text {
+      position: absolute;
+      right: 6px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 10px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .funnel-label {
+      width: 70px;
+      font-size: 11px;
+      color: var(--dim);
+      flex-shrink: 0;
+    }
+
+    .funnel-count {
+      width: 35px;
+      font-size: 13px;
+      font-weight: 700;
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    /* Regret Meter */
+    .regret-section {
+      background: linear-gradient(135deg, rgba(255, 59, 59, 0.05), rgba(255, 59, 59, 0.1));
+      border: 1px solid rgba(255, 59, 59, 0.15);
+      border-radius: 12px;
+      padding: 16px;
+      margin: 16px 0;
+    }
+
+    .regret-section h3 {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: var(--danger);
+    }
+
+    .regret-big {
+      font-size: 36px;
+      font-weight: 800;
+      color: var(--danger);
+      text-align: center;
+      line-height: 1;
+    }
+
+    .regret-sub {
+      font-size: 12px;
+      color: var(--dim);
+      text-align: center;
+      margin-top: 4px;
+    }
+
+    .regret-breakdown {
+      margin-top: 12px;
+    }
+
+    .regret-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 4px 0;
+      font-size: 12px;
+    }
+
+    .regret-row .rl {
+      color: var(--dim);
+    }
+
+    .regret-row .rv {
+      font-weight: 600;
+    }
+
+    /* Time Decay */
+    .decay-section {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      margin: 16px 0;
+    }
+
+    .decay-section h3 {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .decay-value {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--purple);
+      text-align: center;
+    }
+
+    .decay-label {
+      font-size: 12px;
+      color: var(--dim);
+      text-align: center;
+      margin-top: 2px;
+    }
+
+    .decay-explain {
+      font-size: 11px;
+      color: var(--dim);
+      text-align: center;
+      margin-top: 8px;
+      line-height: 1.4;
+    }
+
+    /* Power Level */
+    .power-section {
+      background: linear-gradient(135deg, rgba(255, 160, 0, 0.08), rgba(255, 107, 53, 0.12));
+      border: 1px solid rgba(255, 160, 0, 0.25);
+      border-radius: 16px;
+      padding: 20px;
+      margin: 16px 0;
+      text-align: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .power-section::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(ellipse at center, rgba(255, 160, 0, 0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .power-section h3 {
+      font-size: 14px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--yellow);
+      margin-bottom: 8px;
+    }
+
+    .power-number {
+      font-size: 56px;
+      font-weight: 900;
+      background: linear-gradient(135deg, #fbbf24, #ff6b35, #fbbf24);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: drop-shadow(0 0 20px rgba(255, 160, 0, 0.4));
+      line-height: 1;
+      margin: 8px 0;
+      animation: power-pulse 3s ease-in-out infinite;
+    }
+
+    @keyframes power-pulse {
+
+      0%,
+      100% {
+        filter: drop-shadow(0 0 20px rgba(255, 160, 0, 0.4));
+      }
+
+      50% {
+        filter: drop-shadow(0 0 35px rgba(255, 160, 0, 0.7));
+      }
+    }
+
+    .power-subtitle {
+      font-size: 11px;
+      color: var(--dim);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 16px;
+    }
+
+    .power-factors {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      text-align: left;
+    }
+
+    .power-factor {
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 160, 0, 0.1);
+      border-radius: 8px;
+      padding: 10px;
+    }
+
+    .power-factor-name {
+      font-size: 10px;
+      color: var(--dim);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .power-factor-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-top: 4px;
+    }
+
+    .power-factor-value {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--yellow);
+    }
+
+    .power-factor-mult {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .power-factor.full-width {
+      grid-column: 1 / -1;
+    }
+
+    .power-base {
+      font-size: 12px;
+      color: var(--dim);
+      margin-top: 12px;
+    }
+
+    .power-base span {
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    /* Two Futures */
+    .futures-section {
+      margin: 16px 0;
+    }
+
+    .futures-section h3 {
+      font-size: 16px;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 4px;
+    }
+
+    .futures-sub {
+      font-size: 12px;
+      color: var(--dim);
+      text-align: center;
+      margin-bottom: 14px;
+    }
+
+    .futures-split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .future-col {
+      border-radius: 12px;
+      padding: 14px 10px;
+      text-align: center;
+    }
+
+    .future-col.speak {
+      background: linear-gradient(135deg, rgba(52, 211, 153, 0.08), rgba(52, 211, 153, 0.15));
+      border: 1px solid rgba(52, 211, 153, 0.2);
+    }
+
+    .future-col.silent {
+      background: linear-gradient(135deg, rgba(255, 59, 59, 0.08), rgba(255, 59, 59, 0.15));
+      border: 1px solid rgba(255, 59, 59, 0.2);
+    }
+
+    .future-col-title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 10px;
+    }
+
+    .future-col.speak .future-col-title {
+      color: var(--success);
+    }
+
+    .future-col.silent .future-col-title {
+      color: var(--danger);
+    }
+
+    .future-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 3px 0;
+      font-size: 11px;
+    }
+
+    .future-row .fl {
+      color: var(--dim);
+    }
+
+    .future-row .fv {
+      font-weight: 700;
+    }
+
+    .future-col.speak .fv {
+      color: var(--success);
+    }
+
+    .future-col.silent .fv {
+      color: var(--danger);
+    }
+
+    .future-divider {
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      margin: 6px 0;
+    }
+
+    .future-big {
+      font-size: 28px;
+      font-weight: 900;
+      line-height: 1;
+      margin: 6px 0;
+    }
+
+    .future-col.speak .future-big {
+      color: var(--success);
+    }
+
+    .future-col.silent .future-big {
+      color: var(--danger);
+    }
+
+    .future-big-label {
+      font-size: 10px;
+      color: var(--dim);
+      margin-bottom: 6px;
+    }
+
+    /* Milestones */
+    .milestones {
+      margin-top: 12px;
+    }
+
+    .milestone {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px;
+      margin-bottom: 8px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .milestone.reached {
+      border-color: var(--success);
+      background: rgba(52, 211, 153, 0.05);
+    }
+
+    .milestone-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .milestone-when {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .milestone-talks {
+      font-size: 11px;
+      color: var(--dim);
+    }
+
+    .milestone-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      padding: 2px 0;
+    }
+
+    .milestone-row .ml {
+      color: var(--dim);
+    }
+
+    .milestone-row .mv {
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .milestone-reached-badge {
+      font-size: 10px;
+      color: var(--success);
+      font-weight: 700;
+    }
+
+    .milestone-quote {
+      font-size: 11px;
+      font-style: italic;
+      color: var(--dim);
+      margin-top: 6px;
+      padding-top: 6px;
+      border-top: 1px solid var(--border);
+    }
+
+    /* Fear reframe */
+    .fear-reframe {
+      background: linear-gradient(135deg, rgba(167, 139, 250, 0.08), rgba(96, 165, 250, 0.08));
+      border: 1px solid rgba(167, 139, 250, 0.2);
+      border-radius: 12px;
+      padding: 16px;
+      margin: 16px 0;
+      text-align: center;
+    }
+
+    .fear-reframe h3 {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--purple);
+      margin-bottom: 10px;
+    }
+
+    .fear-line {
+      font-size: 13px;
+      color: var(--text);
+      margin: 8px 0;
+      line-height: 1.5;
+    }
+
+    .fear-line strong {
+      color: var(--accent);
+    }
+
+    .fear-line .dim {
+      color: var(--dim);
+      font-size: 11px;
+    }
+
+    .fear-highlight {
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--success);
+      margin: 12px 0;
+    }
+
+    /* People Log */
+    .people-section {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 16px;
+      margin: 16px 0;
+    }
+
+    .people-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .people-header h3 {
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .people-header .badge {
+      font-size: 11px;
+      color: var(--dim);
+    }
+
+    .people-summary {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 12px;
+      font-size: 11px;
+      color: var(--dim);
+    }
+
+    .people-summary span {
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    .people-add-btn {
+      width: 100%;
+      padding: 10px;
+      border: 2px dashed var(--accent);
+      background: rgba(255, 107, 53, 0.05);
+      border-radius: 10px;
+      color: var(--accent);
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      margin-bottom: 10px;
+    }
+
+    .people-add-btn:active {
+      transform: scale(0.97);
+    }
+
+    .people-list {
+      max-height: 400px;
+      overflow-y: auto;
+    }
+
+    .person-card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 12px;
+      margin-bottom: 6px;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      transition: border-color 0.15s;
+    }
+
+    .person-card:active {
+      border-color: var(--accent);
+    }
+
+    .person-card.talked {
+      border-left: 3px solid var(--success);
+    }
+
+    .person-card.seen-only {
+      border-left: 3px solid var(--blue);
+    }
+
+    .person-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .person-nick {
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .person-meta {
+      font-size: 10px;
+      color: var(--dim);
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .person-status {
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    .person-status.talked {
+      background: rgba(52, 211, 153, 0.15);
+      color: var(--success);
+    }
+
+    .person-status.seen {
+      background: rgba(96, 165, 250, 0.15);
+      color: var(--blue);
+    }
+
+    .person-stats-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 4px;
+      font-size: 10px;
+      color: var(--dim);
+    }
+
+    .person-star {
+      background: none;
+      border: none;
+      font-size: 22px;
+      cursor: pointer;
+      padding: 6px;
+      -webkit-tap-highlight-color: transparent;
+      opacity: 0.8;
+      color: #fbbf24;
+    }
+
+    .person-star.active {
+      opacity: 1;
+    }
+
+    /* Reality Check Modal */
+    .reality-check { text-align: center; }
+    .reality-check .rc-icon { font-size: 48px; margin-bottom: 12px; }
+    .reality-check .rc-headline { font-size: 18px; font-weight: 800; color: var(--danger); margin-bottom: 8px; }
+    .reality-check .rc-truth { font-size: 13px; color: var(--dim); line-height: 1.6; margin-bottom: 16px; }
+    .reality-check .rc-truth strong { color: var(--text); }
+    .reality-check .rc-stat { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 12px; margin-bottom: 12px; }
+    .reality-check .rc-stat-num { font-size: 28px; font-weight: 800; color: var(--danger); }
+    .reality-check .rc-stat-label { font-size: 11px; color: var(--dim); margin-top: 2px; }
+    .reality-check .rc-btn-row { display: flex; gap: 8px; margin-top: 16px; }
+    .reality-check .rc-btn { flex: 1; padding: 14px 10px; border-radius: 12px; font-size: 13px; font-weight: 700; cursor: pointer; border: none; -webkit-tap-highlight-color: transparent; }
+    .reality-check .rc-dismiss { background: var(--bg); color: var(--dim); border: 1px solid var(--border); }
+    .reality-check .rc-go-back { background: var(--success); color: #000; }
+
+    /* Re-encounter Odds Screen */
+    .rc-odds-screen { display: none; }
+    .rc-odds-screen.active { display: block; }
+    .rc-main-screen.hidden { display: none; }
+    .rc-odds-title { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+    .rc-odds-sub { font-size: 12px; color: var(--dim); margin-bottom: 14px; }
+    .rc-odds-grid { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+    .rc-odds-btn { display: flex; justify-content: space-between; align-items: center; padding: 12px 14px; border: 1px solid var(--border); background: var(--bg); border-radius: 10px; color: var(--text); font-size: 13px; cursor: pointer; -webkit-tap-highlight-color: transparent; transition: border-color 0.15s; }
+    .rc-odds-btn:active, .rc-odds-btn.selected { border-color: var(--danger); background: rgba(255, 59, 59, 0.08); }
+    .rc-odds-btn .odds-label { font-weight: 600; }
+    .rc-odds-btn .odds-pct { color: var(--danger); font-weight: 800; font-size: 15px; }
+    .rc-odds-btn .odds-desc { font-size: 10px; color: var(--dim); font-weight: 400; }
+
+    /* Person Expanded */
+    .person-expanded {
+      display: none;
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid var(--border);
+    }
+
+    .person-expanded.open {
+      display: block;
+    }
+
+    .person-timeline {
+      margin-bottom: 10px;
+    }
+
+    .timeline-entry {
+      display: flex;
+      gap: 8px;
+      padding: 4px 0;
+      font-size: 11px;
+    }
+
+    .timeline-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      margin-top: 4px;
+      flex-shrink: 0;
+    }
+
+    .timeline-dot.sighting {
+      background: var(--blue);
+    }
+
+    .timeline-dot.interaction {
+      background: var(--success);
+    }
+
+    .timeline-date {
+      color: var(--dim);
+      width: 70px;
+      flex-shrink: 0;
+    }
+
+    .timeline-note {
+      color: var(--text);
+      flex: 1;
+    }
+
+    .timeline-note.empty {
+      color: var(--dim);
+      font-style: italic;
+    }
+
+    .person-actions {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .person-action-btn {
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--dim);
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .person-action-btn.primary {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .person-action-btn.success {
+      border-color: var(--success);
+      color: var(--success);
+    }
+
+    .person-action-btn.danger {
+      border-color: #333;
+      color: #555;
+    }
+
+    /* Person Add Modal */
+    .person-modal {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px 20px 12px 12px;
+      width: 100%;
+      max-width: 430px;
+      padding: 20px;
+    }
+
+    .person-modal h3 {
+      font-size: 16px;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 12px;
+    }
+
+    .person-modal input,
+    .person-modal textarea {
+      width: 100%;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px;
+      color: var(--text);
+      font-size: 13px;
+      font-family: inherit;
+      margin-bottom: 10px;
+      box-sizing: border-box;
+    }
+
+    .person-modal textarea {
+      resize: none;
+      height: 50px;
+    }
+
+    .person-modal input::placeholder,
+    .person-modal textarea::placeholder {
+      color: var(--dim);
+    }
+
+    .status-toggle {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .status-toggle button {
+      flex: 1;
+      padding: 10px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--dim);
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .status-toggle button.active-seen {
+      border-color: var(--blue);
+      background: rgba(96, 165, 250, 0.1);
+      color: var(--blue);
+    }
+
+    .status-toggle button.active-talked {
+      border-color: var(--success);
+      background: rgba(52, 211, 153, 0.1);
+      color: var(--success);
+    }
+
+    /* Excuses / Plans */
+    .excuses-section { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; margin: 16px 0; }
+    .excuses-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+    .excuses-header h3 { font-size: 14px; font-weight: 700; }
+    .excuses-sub { font-size: 11px; color: var(--dim); margin-bottom: 10px; }
+    .excuse-add-btn { width: 100%; padding: 10px; border: 2px dashed var(--success); background: rgba(52,211,153,0.05); border-radius: 10px; color: var(--success); font-size: 13px; font-weight: 700; cursor: pointer; -webkit-tap-highlight-color: transparent; margin-bottom: 10px; }
+    .excuse-add-btn:active { transform: scale(0.97); }
+    .excuse-list { display: flex; flex-direction: column; gap: 6px; }
+    .excuse-card { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; }
+    .excuse-card-top { display: flex; justify-content: space-between; align-items: center; }
+    .excuse-title { font-size: 13px; font-weight: 700; color: var(--success); }
+    .excuse-date { font-size: 10px; color: var(--dim); }
+    .excuse-desc { font-size: 11px; color: var(--dim); margin-top: 4px; line-height: 1.4; }
+    .excuse-actions { display: flex; gap: 6px; margin-top: 8px; }
+    .excuse-action-btn { padding: 4px 8px; border-radius: 6px; font-size: 10px; font-weight: 600; cursor: pointer; border: 1px solid var(--border); background: var(--card); color: var(--dim); -webkit-tap-highlight-color: transparent; }
+    .excuse-action-btn.danger { border-color: #333; color: #555; }
+    .excuse-empty { text-align: center; padding: 16px; color: var(--dim); font-size: 12px; font-style: italic; }
+    .excuses-page { max-width: 430px; margin: 0 auto; padding: 16px; padding-bottom: 80px; }
+    .excuses-page-header { text-align: center; margin-bottom: 8px; }
+    .excuses-page-header h1 { font-size: 22px; font-weight: 800; letter-spacing: 1px; }
+    .excuses-page-sub { font-size: 12px; color: var(--dim); margin-top: 4px; }
+    .excuses-count-bar { text-align: center; font-size: 14px; font-weight: 700; color: var(--success); padding: 10px; background: rgba(52,211,153,0.08); border: 1px solid rgba(52,211,153,0.2); border-radius: 10px; margin-top: 12px; }
+    .excuses-tip { margin-top: 20px; padding: 14px; background: rgba(52,211,153,0.05); border: 1px solid rgba(52,211,153,0.15); border-radius: 10px; }
+    .excuses-tip-title { font-size: 12px; font-weight: 700; color: var(--success); margin-bottom: 6px; }
+    .excuses-tip-text { font-size: 11px; color: var(--dim); line-height: 1.5; }
+    .excuse-desc { font-size: 11px; color: var(--dim); margin-top: 4px; line-height: 1.4; white-space: pre-line; }
+    .excuse-modal input, .excuse-modal textarea { width: 100%; background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 10px; color: var(--text); font-size: 13px; font-family: inherit; margin-bottom: 10px; box-sizing: border-box; }
+    .excuse-modal textarea { resize: none; height: 60px; }
+    .excuse-modal input::placeholder, .excuse-modal textarea::placeholder { color: var(--dim); }
+    .rc-excuses { margin-top: 12px; border-top: 1px solid var(--border); padding-top: 10px; }
+    .rc-excuses-title { font-size: 11px; font-weight: 700; color: var(--success); text-transform: uppercase; margin-bottom: 6px; }
+    .rc-excuse-chip { display: inline-block; background: rgba(52,211,153,0.1); border: 1px solid rgba(52,211,153,0.3); border-radius: 8px; padding: 4px 10px; font-size: 11px; color: var(--success); font-weight: 600; margin: 2px 4px 2px 0; }
+
+    /* History */
+    .history-section {
+      margin: 16px 0;
+    }
+
+    .history-section h3 {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .history-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 4px;
+    }
+
+    .history-day {
+      aspect-ratio: 1;
+      border-radius: 4px;
+      background: var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: 600;
+    }
+
+    .history-day.has-data {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .history-day.today {
+      outline: 2px solid var(--accent);
+      outline-offset: 1px;
+    }
+
+    .history-day.future {
+      background: #111;
+    }
+
+    /* Date Picker Row */
+    .date-picker-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .date-picker-row input[type="date"] {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 6px 10px;
+      color: var(--text);
+      font-size: 13px;
+      font-family: inherit;
+      -webkit-appearance: none;
+    }
+
+    .date-picker-row input[type="date"]::-webkit-calendar-picker-indicator {
+      filter: invert(0.7);
+      cursor: pointer;
+    }
+
+    .backlog-badge {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 2px 8px;
+      border-radius: 4px;
+      background: rgba(167, 139, 250, 0.15);
+      color: var(--purple);
+    }
+
+    .back-to-today {
+      font-size: 11px;
+      color: var(--accent);
+      cursor: pointer;
+      text-decoration: underline;
+      margin-top: 4px;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    /* Modal date/time inputs */
+    .modal-datetime-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .modal-datetime-row input {
+      flex: 1;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px;
+      color: var(--text);
+      font-size: 13px;
+      font-family: inherit;
+      box-sizing: border-box;
+      -webkit-appearance: none;
+    }
+
+    .modal-datetime-row input::-webkit-calendar-picker-indicator {
+      filter: invert(0.7);
+      cursor: pointer;
+    }
+
+    .modal-datetime-row label {
+      font-size: 11px;
+      color: var(--dim);
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    .modal-datetime-row .datetime-field {
+      flex: 1;
+    }
+
+    /* Timeline edit */
+    .timeline-entry {
+      position: relative;
+    }
+
+    .timeline-entry-actions {
+      position: absolute;
+      right: 0;
+      top: 2px;
+      display: flex;
+      gap: 4px;
+    }
+
+    .timeline-edit-btn,
+    .timeline-del-btn {
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--dim);
+      font-size: 13px;
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 6px;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .timeline-edit-btn:active {
+      background: rgba(255, 107, 53, 0.1);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .timeline-del-btn:active {
+      background: rgba(239, 68, 68, 0.15);
+      border-color: #ef4444;
+      color: #ef4444;
+    }
+
+    .timeline-edit-form {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      padding: 6px 0 6px 16px;
+      align-items: center;
+    }
+
+    .timeline-edit-form input {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 6px 8px;
+      color: var(--text);
+      font-size: 12px;
+      font-family: inherit;
+      -webkit-appearance: none;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .timeline-edit-form input::-webkit-calendar-picker-indicator {
+      filter: invert(0.7);
+      cursor: pointer;
+    }
+
+    .timeline-edit-form button {
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .timeline-edit-form .te-save {
+      border-color: var(--success);
+      color: var(--success);
+      background: rgba(52, 211, 153, 0.1);
+    }
+
+    .timeline-edit-form .te-cancel {
+      border-color: var(--border);
+      color: var(--dim);
+      background: var(--card);
+    }
+
+    .timeline-location {
+      font-size: 10px;
+      color: var(--dim);
+      margin-left: 16px;
+      margin-top: -2px;
+      padding-bottom: 2px;
+    }
+
+    /* Settings & Reset */
+    .reset-section {
+      text-align: center;
+      margin: 24px 0;
+    }
+
+    .reset-btn {
+      background: none;
+      border: 1px solid #333;
+      color: var(--dim);
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .settings-toggle {
+      display: flex;
+      justify-content: center;
+      margin: 10px 0;
+    }
+
+    .settings-toggle button {
+      background: none;
+      border: none;
+      color: var(--dim);
+      font-size: 13px;
+      cursor: pointer;
+      padding: 8px 16px;
+    }
+
+    .settings-panel {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      margin: 10px 0;
+      display: none;
+    }
+
+    .settings-panel.open {
+      display: block;
+    }
+
+    .setting-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .setting-row:last-child {
+      border-bottom: none;
+    }
+
+    .setting-row label {
+      font-size: 13px;
+      color: var(--dim);
+    }
+
+    .setting-row input {
+      width: 70px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 6px 8px;
+      color: var(--text);
+      font-size: 14px;
+      text-align: right;
+    }
+
+    /* ===== GO MODE ===== */
+    .go-trigger {
+      width: 100%;
+      padding: 18px;
+      border: none;
+      border-radius: 16px;
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      color: #fff;
+      background: linear-gradient(135deg, #ff6b35, #ff3b3b);
+      box-shadow: 0 6px 30px rgba(255, 107, 53, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+      margin: 20px 0;
+      -webkit-tap-highlight-color: transparent;
+      animation: go-pulse 2.5s ease-in-out infinite;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .go-trigger::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.08) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .go-trigger:active {
+      transform: scale(0.96);
+      animation: none;
+    }
+
+    @keyframes go-pulse {
+
+      0%,
+      100% {
+        box-shadow: 0 6px 30px rgba(255, 107, 53, 0.35);
+      }
+
+      50% {
+        box-shadow: 0 8px 45px rgba(255, 107, 53, 0.55), 0 0 20px rgba(255, 59, 59, 0.2);
+      }
+    }
+
+    .go-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.85);
+      z-index: 200;
+      align-items: flex-end;
+      justify-content: center;
+      padding: 0;
+    }
+
+    .go-overlay.open {
+      display: flex;
+    }
+
+    .go-panel {
+      background: var(--bg);
+      border-radius: 24px 24px 0 0;
+      width: 100%;
+      max-width: 430px;
+      max-height: 95vh;
+      overflow-y: auto;
+      padding: 24px 20px;
+      padding-bottom: calc(24px + env(safe-area-inset-bottom));
+      animation: go-slide-up 0.3s ease-out;
+    }
+
+    @keyframes go-slide-up {
+      from {
+        transform: translateY(100%);
+      }
+
+      to {
+        transform: translateY(0);
+      }
+    }
+
+    .go-header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .go-header h2 {
+      font-size: 22px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #ff6b35, #fbbf24);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .go-header .go-sub {
+      font-size: 13px;
+      color: var(--dim);
+      margin-top: 4px;
+    }
+
+    .go-checkpoints {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .go-checkpoint {
+      background: var(--card);
+      border: 2px solid var(--border);
+      border-radius: 14px;
+      padding: 14px;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    .go-checkpoint.filled {
+      border-color: var(--success);
+      box-shadow: 0 0 12px rgba(52, 211, 153, 0.15);
+    }
+
+    .go-checkpoint-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .go-checkpoint-num {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--dim);
+      flex-shrink: 0;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    .go-checkpoint.filled .go-checkpoint-num {
+      background: var(--success);
+      color: #fff;
+    }
+
+    .go-checkpoint-label {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .go-checkpoint-hint {
+      font-size: 11px;
+      color: var(--dim);
+      font-weight: 400;
+    }
+
+    .go-checkpoint input {
+      width: 100%;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 11px 12px;
+      color: var(--text);
+      font-size: 14px;
+      font-family: inherit;
+      box-sizing: border-box;
+    }
+
+    .go-checkpoint input::placeholder {
+      color: #555;
+    }
+
+    .go-checkpoint input:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+
+    /* Blocker section */
+    .go-blocker {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+
+    .go-blocker-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .go-blocker-toggle span {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--yellow);
+    }
+
+    .go-blocker-toggle .arrow {
+      font-size: 12px;
+      color: var(--dim);
+      transition: transform 0.2s;
+    }
+
+    .go-blocker-body {
+      display: none;
+      padding: 0 14px 14px;
+    }
+
+    .go-blocker-body.open {
+      display: block;
+    }
+
+    .go-fear-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+
+    .go-fear-btn {
+      padding: 10px 8px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      border-radius: 8px;
+      color: var(--text);
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      text-align: center;
+      transition: border-color 0.15s, background 0.15s;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .go-fear-btn.selected {
+      border-color: var(--yellow);
+      background: rgba(251, 191, 36, 0.1);
+      color: var(--yellow);
+    }
+
+    .go-reframe {
+      background: rgba(52, 211, 153, 0.06);
+      border: 1px solid rgba(52, 211, 153, 0.15);
+      border-radius: 10px;
+      padding: 12px;
+      font-size: 13px;
+      color: var(--success);
+      line-height: 1.5;
+      text-align: center;
+      font-weight: 600;
+    }
+
+    /* GO button */
+    .go-execute {
+      width: 100%;
+      padding: 18px;
+      border: none;
+      border-radius: 14px;
+      font-size: 20px;
+      font-weight: 900;
+      letter-spacing: 2px;
+      cursor: pointer;
+      color: #555;
+      background: var(--border);
+      -webkit-tap-highlight-color: transparent;
+      transition: all 0.3s;
+      margin-bottom: 8px;
+    }
+
+    .go-execute.ready {
+      color: #fff;
+      background: linear-gradient(135deg, #34d399, #22c55e);
+      box-shadow: 0 6px 30px rgba(52, 211, 153, 0.4);
+      animation: go-ready-pulse 1.5s ease-in-out infinite;
+    }
+
+    @keyframes go-ready-pulse {
+
+      0%,
+      100% {
+        box-shadow: 0 6px 30px rgba(52, 211, 153, 0.4);
+      }
+
+      50% {
+        box-shadow: 0 8px 45px rgba(52, 211, 153, 0.65), 0 0 20px rgba(34, 197, 94, 0.3);
+      }
+    }
+
+    .go-execute:active {
+      transform: scale(0.96);
+    }
+
+    .go-bail {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #333;
+      background: none;
+      border-radius: 10px;
+      color: var(--dim);
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    /* GO History */
+    .go-history {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px;
+      margin: 16px 0;
+    }
+
+    .go-history-toggle {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .go-history-toggle h3 {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--success);
+    }
+
+    .go-history-list {
+      display: none;
+      margin-top: 12px;
+    }
+
+    .go-history-list.open {
+      display: block;
+    }
+
+    .go-entry {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px;
+      margin-bottom: 8px;
+    }
+
+    .go-entry-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .go-entry-date {
+      font-size: 11px;
+      color: var(--dim);
+    }
+
+    .go-entry-badge {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 2px 8px;
+      border-radius: 4px;
+      background: rgba(52, 211, 153, 0.15);
+      color: var(--success);
+    }
+
+    .go-entry-row {
+      display: flex;
+      gap: 6px;
+      font-size: 12px;
+      padding: 2px 0;
+    }
+
+    .go-entry-row .go-lbl {
+      color: var(--dim);
+      width: 60px;
+      flex-shrink: 0;
+    }
+
+    .go-entry-row .go-val {
+      color: var(--text);
+    }
+
+    .go-entry-blocker {
+      font-size: 11px;
+      color: var(--yellow);
+      margin-top: 4px;
+      font-style: italic;
+    }
+
+    /* Success flash */
+    .go-success-flash {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 300;
+      background: rgba(52, 211, 153, 0.15);
+      align-items: center;
+      justify-content: center;
+      animation: go-flash 0.8s ease-out forwards;
+    }
+
+    .go-success-flash.show {
+      display: flex;
+    }
+
+    .go-success-text {
+      font-size: 48px;
+      font-weight: 900;
+      color: var(--success);
+      text-shadow: 0 0 40px rgba(52, 211, 153, 0.6);
+    }
+
+    @keyframes go-flash {
+      0% {
+        opacity: 0;
+      }
+
+      30% {
+        opacity: 1;
+      }
+
+      100% {
+        opacity: 0;
+      }
+    }
+
+    /* ===== BOTTOM NAV ===== */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #111;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: center;
+      gap: 0;
+      z-index: 50;
+      padding-bottom: env(safe-area-inset-bottom);
+    }
+
+    .bottom-nav button {
+      flex: 1;
+      max-width: 215px;
+      background: none;
+      border: none;
+      color: var(--dim);
+      font-size: 11px;
+      font-weight: 600;
+      padding: 10px 0 8px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      -webkit-tap-highlight-color: transparent;
+      transition: color 0.2s;
+    }
+
+    .bottom-nav button.active {
+      color: var(--accent);
+    }
+
+    .bottom-nav button .nav-icon {
+      font-size: 20px;
+    }
+
+    .view-home,
+    .view-stats,
+    .view-excuses,
+    .view-go {
+      display: none;
+    }
+
+    .view-home.active,
+    .view-stats.active,
+    .view-excuses.active,
+    .view-go.active {
+      display: block;
+    }
+
+    /* ===== STATS PAGE ===== */
+    .stats-page {
+      max-width: 430px;
+      margin: 0 auto;
+      padding: 16px;
+      padding-bottom: 100px;
+    }
+
+    .stats-page-header {
+      text-align: center;
+      padding: 20px 0 16px;
+    }
+
+    .stats-page-header h1 {
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+    }
+
+    .stats-page-header .stats-sub {
+      font-size: 12px;
+      color: var(--dim);
+      margin-top: 4px;
+    }
+
+    /* Overview Cards */
+    .stats-overview {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .stats-ov-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px 8px;
+      text-align: center;
+    }
+
+    .stats-ov-card .ov-value {
+      font-size: 24px;
+      font-weight: 800;
+      line-height: 1;
+    }
+
+    .stats-ov-card .ov-label {
+      font-size: 10px;
+      color: var(--dim);
+      margin-top: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+
+    /* Monthly Table */
+    .stats-section {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px;
+      margin-bottom: 14px;
+    }
+
+    .stats-section h3 {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .stats-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .stats-table th {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--dim);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      text-align: left;
+      padding: 6px 4px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .stats-table td {
+      font-size: 13px;
+      padding: 8px 4px;
+      border-bottom: 1px solid rgba(34, 34, 34, 0.5);
+    }
+
+    .stats-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .stats-table .month-name {
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .stats-table .num-val {
+      font-weight: 700;
+      text-align: right;
+    }
+
+    .stats-table .num-val.accent {
+      color: var(--accent);
+    }
+
+    .stats-table .num-val.blue {
+      color: var(--blue);
+    }
+
+    .stats-table .num-val.success {
+      color: var(--success);
+    }
+
+    .stats-table .num-val.danger {
+      color: var(--danger);
+    }
+
+    .stats-table .num-val.yellow {
+      color: var(--yellow);
+    }
+
+    .stats-table .num-val.purple {
+      color: var(--purple);
+    }
+
+    /* Bar chart rows */
+    .stats-bar-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 0;
+    }
+
+    .stats-bar-label {
+      width: 50px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--dim);
+      flex-shrink: 0;
+    }
+
+    .stats-bar-bg {
+      flex: 1;
+      height: 22px;
+      background: var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .stats-bar-fill {
+      height: 100%;
+      border-radius: 4px;
+      transition: width 0.4s ease;
+      min-width: 2px;
+    }
+
+    .stats-bar-val {
+      width: 36px;
+      font-size: 13px;
+      font-weight: 700;
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    /* Records section */
+    .stats-records {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .stats-record {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px;
+      text-align: center;
+    }
+
+    .stats-record .rec-value {
+      font-size: 22px;
+      font-weight: 800;
+      line-height: 1;
+    }
+
+    .stats-record .rec-label {
+      font-size: 10px;
+      color: var(--dim);
+      margin-top: 4px;
+    }
+
+    .stats-record .rec-date {
+      font-size: 10px;
+      color: var(--dim);
+      margin-top: 2px;
+      font-style: italic;
+    }
+
+    /* Weekly averages */
+    .stats-week-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 4px;
+      margin-top: 8px;
+    }
+
+    .stats-dow {
+      text-align: center;
+      background: var(--bg);
+      border-radius: 6px;
+      padding: 8px 2px;
+    }
+
+    .stats-dow .dow-name {
+      font-size: 10px;
+      color: var(--dim);
+      font-weight: 600;
+    }
+
+    .stats-dow .dow-val {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--accent);
+      margin-top: 2px;
+    }
+
+    .stats-dow .dow-seen {
+      font-size: 10px;
+      color: var(--blue);
+      font-weight: 600;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- ===== HOME VIEW ===== -->
+  <div class="view-home active" id="viewHome">
+    <div class="app">
+      <div class="header">
+        <h1>APPROACH</h1>
+        <div class="subtitle">The window is closing</div>
+      </div>
+
+      <div class="countdown-section">
+        <div class="ring-container">
+          <svg width="180" height="180" viewBox="0 0 180 180">
+            <circle class="ring-bg" cx="90" cy="90" r="78" />
+            <circle class="ring-progress" id="ringProgress" cx="90" cy="90" r="78" stroke-dasharray="490"
+              stroke-dashoffset="0" />
+          </svg>
+          <div class="ring-text">
+            <div class="days-left" id="daysLeft">--</div>
+            <div class="days-label">days left</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="truth-banner">
+        <div class="truth-text" id="truthText"></div>
+        <div class="truth-sub" id="truthSub"></div>
+      </div>
+
+      <!-- Today: Dual Counter -->
+      <div class="today-section">
+        <h2 id="todayHeading">Today</h2>
+        <div class="today-date" id="todayDate"></div>
+        <div class="date-picker-row">
+          <input type="date" id="counterDatePicker" onchange="onCounterDateChange()">
+          <span class="backlog-badge" id="backlogBadge" style="display:none">BACKLOG</span>
+        </div>
+        <div id="backToTodayRow" style="display:none; text-align:center; margin-bottom:10px;">
+          <span class="back-to-today" onclick="resetToToday()">← Back to today</span>
+        </div>
+        <div class="dual-counter">
+          <div class="counter-col">
+            <div class="counter-col-label seen-label">Seen</div>
+            <div class="counter-display seen-count" id="todaySeenCount">0</div>
+            <div class="counter-buttons">
+              <button class="btn btn-sub" onclick="adjustSeen(-1)">-</button>
+              <button class="btn btn-add seen-add" onclick="adjustSeen(1)">+</button>
+            </div>
+          </div>
+          <div class="counter-col">
+            <div class="counter-col-label talked-label">Talked To</div>
+            <div class="counter-display talked-count" id="todayCount">0</div>
+            <div class="counter-buttons">
+              <button class="btn btn-sub" onclick="adjustCount(-1)">-</button>
+              <button class="btn btn-add" onclick="adjustCount(1)">+</button>
+            </div>
+          </div>
+        </div>
+        <div class="courage-row">
+          <span class="courage-pct" id="todayCouragePct">--%</span>
+          <span class="courage-label"> boldness today</span>
+        </div>
+        <div class="today-potential" id="todayPotentialText">
+          <span id="seenTodayNum">0</span> seen today, <span id="talkedTodayNum">0</span> talked to, <span
+            id="letGoTodayNum">0</span> let go
+        </div>
+      </div>
+
+      <!-- GO MODE Trigger -->
+      <button class="go-trigger" id="goTrigger" onclick="openGoMode()">🔥 I SEE HER — GO MODE</button>
+
+      <!-- GO MODE Overlay -->
+      <div class="go-overlay" id="goOverlay">
+        <div class="go-panel">
+          <div class="go-header">
+            <h2>She's right there.</h2>
+            <div class="go-sub">Fill these 3 and you're good to approach.</div>
+          </div>
+
+          <div class="go-checkpoints">
+            <div class="go-checkpoint" id="goCheck1">
+              <div class="go-checkpoint-header">
+                <div class="go-checkpoint-num">1</div>
+                <div>
+                  <div class="go-checkpoint-label">Reason</div>
+                  <div class="go-checkpoint-hint">Why her? What caught your eye?</div>
+                </div>
+              </div>
+              <input type="text" id="goReason" placeholder="Her smile, her style, she looks interesting..."
+                oninput="checkGoReady()" maxlength="120">
+            </div>
+
+            <div class="go-checkpoint" id="goCheck2">
+              <div class="go-checkpoint-header">
+                <div class="go-checkpoint-num">2</div>
+                <div>
+                  <div class="go-checkpoint-label">First Line</div>
+                  <div class="go-checkpoint-hint">What will you say first?</div>
+                </div>
+              </div>
+              <input type="text" id="goFirstLine" placeholder="Hey, I just saw you and had to say…"
+                oninput="checkGoReady()" maxlength="120">
+            </div>
+
+            <div class="go-checkpoint" id="goCheck3">
+              <div class="go-checkpoint-header">
+                <div class="go-checkpoint-num">3</div>
+                <div>
+                  <div class="go-checkpoint-label">Excuse <span class="go-checkpoint-hint">— what are we gonna
+                      do?</span></div>
+                </div>
+              </div>
+              <input type="text" id="goExcuse" placeholder="Coffee right now, exchange numbers, walk together..."
+                oninput="checkGoReady()" maxlength="120">
+            </div>
+          </div>
+
+          <!-- What's holding me back -->
+          <div class="go-blocker">
+            <div class="go-blocker-toggle" onclick="toggleGoBlocker()">
+              <span>Why no?</span>
+              <span class="arrow" id="goBlockerArrow">▼</span>
+            </div>
+            <div class="go-blocker-body" id="goBlockerBody">
+              <div class="go-fear-grid" id="goFearGrid"></div>
+              <div class="go-reframe" id="goReframe" style="display:none"></div>
+            </div>
+          </div>
+
+          <button class="go-execute" id="goExecute" onclick="executeGo()" disabled>GO</button>
+          <button class="go-bail" onclick="closeGoMode()">Not now — I'll log the miss instead</button>
+        </div>
+      </div>
+
+      <!-- GO Success Flash -->
+      <div class="go-success-flash" id="goSuccessFlash">
+        <div class="go-success-text">GO! 🔥</div>
+      </div>
+
+      <!-- GO MODE History -->
+      <div class="go-history" id="goHistorySection" style="display:none">
+        <div class="go-history-toggle" onclick="toggleGoHistory()">
+          <h3>🔥 Go Mode Log</h3>
+          <span class="count-badge" id="goHistoryCount">0</span>
+        </div>
+        <div class="go-history-list" id="goHistoryList"></div>
+      </div>
+
+      <!-- Today: Missed -->
+      <div class="missed-section">
+        <h2>Log a Miss</h2>
+        <div class="missed-sub">Saw someone, said nothing. Log it. Own it.</div>
+        <button class="missed-btn" onclick="openMissedModal()">+ I let one go</button>
+        <div class="missed-today-count">Today: <span id="missedTodayCount">0</span> missed</div>
+      </div>
+
+      <!-- Re-encounter Reality Check -->
+      <div class="reencounter-section" id="reencounterSection" style="display:none">
+        <h3>Re-encounter Reality Check</h3>
+        <div class="reencounter-stats">
+          <div class="reencounter-stat">
+            <div class="rs-value" id="reTotalMissed" style="color:var(--danger)">0</div>
+            <div class="rs-label">Total Missed</div>
+          </div>
+          <div class="reencounter-stat">
+            <div class="rs-value" id="reSawAgain" style="color:var(--yellow)">0</div>
+            <div class="rs-label">Saw Again</div>
+          </div>
+          <div class="reencounter-stat">
+            <div class="rs-value" id="reNeverAgain" style="color:var(--dim)">0</div>
+            <div class="rs-label">Never Again</div>
+          </div>
+        </div>
+        <div class="reencounter-verdict" id="reVerdict"></div>
+      </div>
+
+      <!-- Excuse Breakdown -->
+      <div class="excuse-section" id="excuseSection" style="display:none">
+        <h3>Your Excuses — Ranked</h3>
+        <div id="excuseBars"></div>
+      </div>
+
+      <!-- Missed Log -->
+      <div class="missed-log" id="missedLogSection" style="display:none">
+        <div class="missed-log-toggle" onclick="toggleMissedLog()">
+          <h3>Missed Log</h3>
+          <span class="count-badge" id="missedLogCount">0 entries</span>
+        </div>
+        <div class="missed-log-list" id="missedLogList"></div>
+      </div>
+
+      <!-- People Log -->
+      <div class="people-section">
+        <div class="people-header">
+          <h3>Your People</h3>
+          <span class="badge" id="peopleCount">0 people</span>
+        </div>
+        <div class="people-summary" id="peopleSummary"></div>
+        <button class="people-add-btn" onclick="openPersonModal()">+ New person</button>
+        <div class="people-list" id="peopleList"></div>
+      </div>
+
+      <!-- Person Add/Interaction Modal -->
+      <div class="modal-overlay" id="personModal">
+        <div class="person-modal">
+          <h3 id="personModalTitle">Log a Person</h3>
+          <input type="text" id="personNickname" placeholder="Quick ID: Red jacket, Starbucks" maxlength="60">
+          <div class="status-toggle" id="personStatusToggle">
+            <button onclick="setPersonStatus('seen')" id="pStatusSeen" class="active-seen">Just Seen</button>
+            <button onclick="setPersonStatus('talked')" id="pStatusTalked">Talked To</button>
+          </div>
+          <div class="modal-datetime-row">
+            <div class="datetime-field">
+              <label>Date</label>
+              <input type="date" id="personDate">
+            </div>
+            <div class="datetime-field">
+              <label>Time</label>
+              <input type="time" id="personTime">
+            </div>
+          </div>
+          <input type="text" id="personLocation" placeholder="Location: Starbucks, library, bus stop..." maxlength="80">
+          <textarea id="personNote" placeholder="Optional note..."></textarea>
+          <div class="modal-actions">
+            <button class="modal-cancel" onclick="closePersonModal()">Cancel</button>
+            <button class="modal-confirm" id="personModalConfirm" onclick="confirmPerson()">Log It</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Interaction Note Modal -->
+      <div class="modal-overlay" id="interactionModal">
+        <div class="person-modal">
+          <h3>What happened?</h3>
+          <div class="modal-datetime-row">
+            <div class="datetime-field">
+              <label>Date</label>
+              <input type="date" id="interactionDate">
+            </div>
+            <div class="datetime-field">
+              <label>Time</label>
+              <input type="time" id="interactionTime">
+            </div>
+          </div>
+          <input type="text" id="interactionLocation" placeholder="Location: Starbucks, library, bus stop..."
+            maxlength="80">
+          <textarea id="interactionNote"
+            placeholder="She lent me her phone, got her number, quick chat about..."></textarea>
+          <div class="modal-actions">
+            <button class="modal-cancel" onclick="closeInteractionModal()">Cancel</button>
+            <button class="modal-confirm" onclick="confirmInteraction()">Log It</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sighting Modal -->
+      <div class="modal-overlay" id="sightingModal">
+        <div class="person-modal">
+          <h3>Saw her again</h3>
+          <div class="modal-datetime-row">
+            <div class="datetime-field">
+              <label>Date</label>
+              <input type="date" id="sightingDate">
+            </div>
+            <div class="datetime-field">
+              <label>Time</label>
+              <input type="time" id="sightingTime">
+            </div>
+          </div>
+          <input type="text" id="sightingLocation" placeholder="Location (optional)" maxlength="80">
+          <textarea id="sightingNote" placeholder="Optional note..."></textarea>
+          <div class="modal-actions">
+            <button class="modal-cancel" onclick="closeSightingModal()">Cancel</button>
+            <button class="modal-confirm" onclick="confirmSighting()">Log It</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Power Level (stays on home as quick glance) -->
+      <div class="power-section">
+        <h3>Power Level</h3>
+        <div class="power-number" id="powerNumber">0</div>
+        <div class="power-subtitle">combined combat rating</div>
+        <div id="decayWarning"
+          style="display:none; margin: 12px 0; padding: 10px 14px; border-radius: 10px; background: rgba(255,59,59,0.12); border: 1px solid rgba(255,59,59,0.3); text-align: center; font-size: 13px; color: #ff6b6b;">
+        </div>
+        <div class="power-factors" id="powerFactors"></div>
+        <div class="power-base" id="powerBase"></div>
+      </div>
+
+      <div class="settings-toggle">
+        <button onclick="toggleSettings()">Settings</button>
+      </div>
+
+      <div class="settings-panel" id="settingsPanel">
+        <div class="setting-row"><label>Days in window</label><input type="number" id="setTotalDays" value="195"
+            onchange="saveSetting('totalDays', this.value)"></div>
+        <div class="setting-row"><label>2nd meeting chance (%)</label><input type="number" id="setSecondChance"
+            value="10" onchange="saveSetting('secondChance', this.value)"></div>
+        <div class="setting-row"><label>3rd meeting chance (%)</label><input type="number" id="setThirdChance" value="5"
+            onchange="saveSetting('thirdChance', this.value)"></div>
+        <div class="setting-row"><label>Hello → real convo (%)</label><input type="number" id="setConvoRate" value="40"
+            onchange="saveSetting('convoRate', this.value)"></div>
+        <div class="setting-row"><label>Real convo → number (%)</label><input type="number" id="setNumberRate"
+            value="30" onchange="saveSetting('numberRate', this.value)"></div>
+        <div class="setting-row"><label>Number → date (%)</label><input type="number" id="setDateRate" value="40"
+            onchange="saveSetting('dateRate', this.value)"></div>
+        <div class="setting-row"><label>Date → relationship (%)</label><input type="number" id="setRelRate" value="10"
+            onchange="saveSetting('relRate', this.value)"></div>
+      </div>
+
+      <div class="reset-section">
+        <button class="reset-btn" onclick="exportData()">Export Backup</button>
+        <button class="reset-btn" onclick="importData()" style="margin-left:8px">Import Backup</button>
+        <button class="reset-btn" onclick="resetAll()" style="margin-top:10px;border-color:#ff3b3b44">Reset All
+          Data</button>
+      </div>
+    </div>
+  </div> <!-- /view-home -->
+
+  <!-- ===== GO VIEW ===== -->
+  <div class="view-go" id="viewGo">
+    <div class="go-page" style="max-width:430px; margin:0 auto; padding:16px; padding-bottom:80px;">
+
+      <!-- Two Futures -->
+      <div class="futures-section">
+        <h3>Two Futures</h3>
+        <div class="futures-sub" id="futuresSub">Same person. Same 195 days. One choice.</div>
+        <div class="futures-split">
+          <div class="future-col speak">
+            <div class="future-col-title">You Who Speaks</div>
+            <div class="future-big" id="futSpeakDates">0</div>
+            <div class="future-big-label">projected dates</div>
+            <div class="future-divider"></div>
+            <div class="future-row"><span class="fl">Talks</span><span class="fv" id="futSpeakTalks">0</span></div>
+            <div class="future-row"><span class="fl">Real convos</span><span class="fv" id="futSpeakConvos">0</span></div>
+            <div class="future-row"><span class="fl">Numbers</span><span class="fv" id="futSpeakNumbers">0</span></div>
+            <div class="future-row"><span class="fl">Relationships</span><span class="fv" id="futSpeakRels">0</span></div>
+            <div class="future-row"><span class="fl">Skill level</span><span class="fv" id="futSpeakSkill">1.0x</span></div>
+          </div>
+          <div class="future-col silent">
+            <div class="future-col-title">You Who Stays Silent</div>
+            <div class="future-big" id="futSilentDates">0</div>
+            <div class="future-big-label">dates</div>
+            <div class="future-divider"></div>
+            <div class="future-row"><span class="fl">Talks</span><span class="fv">0</span></div>
+            <div class="future-row"><span class="fl">Real convos</span><span class="fv">0</span></div>
+            <div class="future-row"><span class="fl">Numbers</span><span class="fv">0</span></div>
+            <div class="future-row"><span class="fl">Relationships</span><span class="fv">0</span></div>
+            <div class="future-row"><span class="fl">Gone forever</span><span class="fv" id="futSilentGone">0</span></div>
+          </div>
+        </div>
+        <h3 style="font-size:14px; margin-bottom:8px;">Your Journey — Milestones</h3>
+        <div class="milestones" id="milestones"></div>
+      </div>
+
+      <!-- Fear Reframe -->
+      <div class="fear-reframe" id="fearReframe">
+        <h3>When Fear Hits — Read This</h3>
+        <div id="fearContent"></div>
+      </div>
+
+      <!-- EV Section -->
+      <div class="ev-section">
+        <h3>What One Hello Is Worth</h3>
+        <div class="ev-row">
+          <span class="ev-label">Chance she vanishes forever if you don't speak</span>
+          <span class="ev-value negative" id="evVanish">90%</span>
+        </div>
+        <div class="ev-row">
+          <span class="ev-label">Your current success rate (hello → real convo)</span>
+          <span class="ev-value neutral" id="evSuccessRate">--</span>
+        </div>
+        <div class="ev-row">
+          <span class="ev-label">Expected connections from this one hello</span>
+          <span class="ev-value positive" id="evExpected">--</span>
+        </div>
+        <div class="ev-row">
+          <span class="ev-label">Expected connections from staying silent</span>
+          <span class="ev-value negative">0</span>
+        </div>
+        <div class="ev-divider"></div>
+        <div class="ev-row">
+          <span class="ev-label">Cost of speaking (5 seconds + mild discomfort)</span>
+          <span class="ev-value neutral">5 sec</span>
+        </div>
+        <div class="ev-row">
+          <span class="ev-label">Cost of silence (she's gone, permanently)</span>
+          <span class="ev-value negative">∞</span>
+        </div>
+        <div class="ev-verdict" id="evVerdict"></div>
+      </div>
+
+    </div>
+  </div> <!-- /view-go -->
+
+  <!-- ===== STATS VIEW ===== -->
+  <div class="view-stats" id="viewStats">
+    <div class="stats-page">
+      <div class="stats-page-header">
+        <h1>📊 STATS</h1>
+        <div class="stats-sub">Your numbers, month by month</div>
+      </div>
+
+      <!-- Overview Cards -->
+      <div class="stats-overview" id="statsOverview"></div>
+
+      <!-- Monthly Breakdown Table -->
+      <div class="stats-section">
+        <h3>Monthly Breakdown</h3>
+        <div style="overflow-x:auto">
+          <table class="stats-table" id="statsMonthlyTable">
+            <thead>
+              <tr>
+                <th>Month</th>
+                <th style="text-align:right">Talked</th>
+                <th style="text-align:right">Seen</th>
+                <th style="text-align:right">Boldness</th>
+                <th style="text-align:right">Missed</th>
+                <th style="text-align:right">GO</th>
+              </tr>
+            </thead>
+            <tbody id="statsMonthlyBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Approaches per Month Bar Chart -->
+      <div class="stats-section">
+        <h3>🗣️ Approaches per Month</h3>
+        <div id="statsApproachBars"></div>
+      </div>
+
+      <!-- Seen per Month Bar Chart -->
+      <div class="stats-section">
+        <h3>👀 Seen per Month</h3>
+        <div id="statsSeenBars"></div>
+      </div>
+
+      <!-- Boldness Over Time -->
+      <div class="stats-section">
+        <h3>💪 Boldness Rate per Month</h3>
+        <div id="statsCourageBars"></div>
+      </div>
+
+      <!-- Records -->
+      <div class="stats-section">
+        <h3>🏆 Personal Records</h3>
+        <div class="stats-records" id="statsRecords"></div>
+      </div>
+
+      <!-- Day of Week -->
+      <div class="stats-section">
+        <h3>📅 Average by Day of Week</h3>
+        <div class="stats-week-grid" id="statsDow"></div>
+      </div>
+
+      <!-- Weekly Breakdown Table -->
+      <div class="stats-section">
+        <h3>📈 Weekly Breakdown</h3>
+        <div style="overflow-x:auto">
+          <table class="stats-table" id="statsWeeklyTable">
+            <thead>
+              <tr>
+                <th>Week</th>
+                <th style="text-align:right">Talked</th>
+                <th style="text-align:right">Seen</th>
+                <th style="text-align:right">Boldness</th>
+                <th style="text-align:right">Missed</th>
+                <th style="text-align:right">GO</th>
+              </tr>
+            </thead>
+            <tbody id="statsWeeklyBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Weekly Trend Chart -->
+      <div class="stats-section">
+        <h3>📈 Weekly Trend</h3>
+        <div id="statsWeeklyBars"></div>
+      </div>
+
+      <!-- Milestones -->
+      <div class="stats-section">
+        <h3>🚀 Your Journey — Milestones</h3>
+        <div class="milestones" id="statsMilestones"></div>
+      </div>
+
+      <!-- Funnel -->
+      <div class="funnel-section">
+        <h3>Your Funnel (Projected from Total Talks)</h3>
+        <div id="funnelSteps"></div>
+      </div>
+
+      <!-- Stats Grid -->
+      <div class="stats-grid">
+        <div class="stat-card accent">
+          <div class="stat-value" id="totalApproaches">0</div>
+          <div class="stat-label">Total Talks</div>
+        </div>
+        <div class="stat-card danger">
+          <div class="stat-value" id="missedForever">0</div>
+          <div class="stat-label">Gone Forever</div>
+        </div>
+        <div class="stat-card success">
+          <div class="stat-value" id="expectedSecond">0</div>
+          <div class="stat-label">2nd Meetings</div>
+        </div>
+        <div class="stat-card blue">
+          <div class="stat-value" id="expectedNumbers">0</div>
+          <div class="stat-label">Numbers</div>
+        </div>
+        <div class="stat-card purple">
+          <div class="stat-value" id="expectedDates">0</div>
+          <div class="stat-label">Dates</div>
+        </div>
+        <div class="stat-card success">
+          <div class="stat-value" id="expectedRelationships">0</div>
+          <div class="stat-label">Relationships</div>
+        </div>
+      </div>
+
+      <!-- Regret -->
+      <div class="regret-section">
+        <h3>Irreversible Loss</h3>
+        <div class="regret-big" id="regretTotal">0</div>
+        <div class="regret-sub">people gone forever who you could have talked to</div>
+        <div class="regret-breakdown">
+          <div class="regret-row"><span class="rl">Total people seen</span><span class="rv" id="regretSeen">0</span></div>
+          <div class="regret-row"><span class="rl">You talked to</span><span class="rv" id="regretTalked">0</span></div>
+          <div class="regret-row"><span class="rl">Ignored</span><span class="rv" id="regretIgnored" style="color:var(--danger)">0</span></div>
+          <div class="regret-row"><span class="rl">Of those, gone permanently (90%)</span><span class="rv" id="regretGone" style="color:var(--danger)">0</span></div>
+          <div class="regret-row"><span class="rl">Among them, potential connections lost</span><span class="rv" id="regretConnections" style="color:var(--danger)">0</span></div>
+          <div class="regret-row"><span class="rl">Among them, potential dates lost</span><span class="rv" id="regretDates" style="color:var(--danger)">0</span></div>
+        </div>
+      </div>
+
+      <!-- Time Decay -->
+      <div class="decay-section">
+        <h3>Value of Today</h3>
+        <div class="decay-value" id="decayMultiplier">1.0x</div>
+        <div class="decay-label">today's urgency multiplier</div>
+        <div class="decay-explain" id="decayExplain"></div>
+      </div>
+
+      <!-- History -->
+      <div class="history-section">
+        <h3>Last 28 Days</h3>
+        <div class="history-grid" id="historyGrid"></div>
+      </div>
+
+    </div>
+  </div> <!-- /view-stats -->
+
+  <!-- ===== EXCUSES VIEW ===== -->
+  <div class="view-excuses" id="viewExcuses">
+    <div class="excuses-page">
+      <div class="excuses-page-header">
+        <h1>☕ YOUR EXCUSES</h1>
+        <div class="excuses-page-sub">What are you gonna do with her? Have the answer ready.</div>
+      </div>
+
+      <div class="excuses-count-bar" id="excuseCountBar">
+        <span id="excuseCountPage">0</span> plans ready
+      </div>
+
+      <button class="excuse-add-btn" onclick="openExcuseModal()" style="margin-top:12px">+ Add a plan</button>
+
+      <div class="excuse-list" id="excuseList" style="margin-top:12px"></div>
+
+      <div class="excuses-tip" id="excusesTip">
+        <div class="excuses-tip-title">Why this matters</div>
+        <div class="excuses-tip-text">When you see her and your brain says "to do what exactly?" — you already have the answer. No thinking. No hesitation. You know exactly what you'd invite her to.</div>
+      </div>
+    </div>
+  </div> <!-- /view-excuses -->
+
+  <!-- Excuse Add/Edit Modal -->
+  <div class="modal-overlay" id="excuseModal">
+    <div class="person-modal excuse-modal">
+      <h3 id="excuseModalTitle">Add an Excuse</h3>
+      <input type="text" id="excuseTitle" placeholder="Walk in the park, coffee date, gym together..." maxlength="80">
+      <textarea id="excuseDesc" placeholder="What does it look like? e.g. Walk in nature, talk about fantasy shit..."></textarea>
+      <input type="date" id="excuseDate">
+      <div class="modal-actions">
+        <button class="modal-cancel" onclick="closeExcuseModal()">Cancel</button>
+        <button class="modal-confirm" onclick="confirmExcuse()">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== BOTTOM NAV ===== -->
+  <div class="bottom-nav">
+    <button class="active" id="navHome" onclick="switchView('home')">
+      <span class="nav-icon">🏠</span>
+      Home
+    </button>
+    <button id="navGo" onclick="switchView('go')">
+      <span class="nav-icon">🔥</span>
+      Go
+    </button>
+    <button id="navExcuses" onclick="switchView('excuses')">
+      <span class="nav-icon">☕</span>
+      Excuses
+    </button>
+    <button id="navStats" onclick="switchView('stats')">
+      <span class="nav-icon">📊</span>
+      Stats
+    </button>
+  </div>
+
+  <!-- Missed Reason Modal -->
+  <div class="modal-overlay" id="missedModal">
+    <div class="modal">
+      <h3>Why didn't you speak?</h3>
+      <div class="modal-sub">Be honest. This data is for you.</div>
+      <div class="modal-datetime-row">
+        <div class="datetime-field">
+          <label>Date</label>
+          <input type="date" id="missedDate">
+        </div>
+        <div class="datetime-field">
+          <label>Time</label>
+          <input type="time" id="missedTime">
+        </div>
+      </div>
+      <div class="reason-grid" id="reasonGrid"></div>
+      <textarea class="modal-note" id="missedNote" placeholder="Optional: describe the situation..."></textarea>
+      <div class="modal-actions">
+        <button class="modal-cancel" onclick="closeMissedModal()">Cancel</button>
+        <button class="modal-confirm" onclick="confirmMissed()">Log It</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Reality Check Modal (after logging a miss) -->
+  <div class="modal-overlay" id="realityCheckModal">
+    <div class="modal reality-check">
+      <!-- Screen 1: Gut punch -->
+      <div class="rc-main-screen" id="rcMainScreen">
+        <div class="rc-icon" id="rcIcon"></div>
+        <div class="rc-headline" id="rcHeadline"></div>
+        <div class="rc-truth" id="rcTruth"></div>
+        <div class="rc-stat">
+          <div class="rc-stat-num" id="rcStatNum"></div>
+          <div class="rc-stat-label" id="rcStatLabel"></div>
+        </div>
+        <div class="rc-excuses" id="rcExcuses" style="display:none">
+          <div class="rc-excuses-title">Look at your excuses:</div>
+          <div id="rcExcuseChips"></div>
+          <button class="rc-btn rc-go-back" style="margin-top:10px;width:100%" onclick="closeRealityCheck(); switchView('excuses')">☕ Open Excuses</button>
+        </div>
+        <div class="rc-btn-row">
+          <button class="rc-btn rc-dismiss" onclick="showOddsScreen()">I know...</button>
+          <button class="rc-btn rc-go-back" onclick="closeRealityCheck(); goBackForHer()">She's still there?</button>
+        </div>
+      </div>
+      <!-- Screen 2: Will you see her again? -->
+      <div class="rc-odds-screen" id="rcOddsScreen">
+        <div class="rc-odds-title">Will you ever see her again?</div>
+        <div class="rc-odds-sub">Be honest with yourself.</div>
+        <div class="rc-odds-grid">
+          <button class="rc-odds-btn" onclick="logReencounterOdds('daily', 80)">
+            <div><span class="odds-label">Same place daily</span><br><span class="odds-desc">Gym, class, commute, coffee shop</span></div>
+            <span class="odds-pct">~80%</span>
+          </button>
+          <button class="rc-odds-btn" onclick="logReencounterOdds('weekly', 40)">
+            <div><span class="odds-label">Same area sometimes</span><br><span class="odds-desc">Campus, neighborhood, regular spot</span></div>
+            <span class="odds-pct">~40%</span>
+          </button>
+          <button class="rc-odds-btn" onclick="logReencounterOdds('random', 10)">
+            <div><span class="odds-label">Random encounter</span><br><span class="odds-desc">Street, mall, one-time event</span></div>
+            <span class="odds-pct">~10%</span>
+          </button>
+          <button class="rc-odds-btn" onclick="logReencounterOdds('never', 2)">
+            <div><span class="odds-label">Probably never</span><br><span class="odds-desc">Tourist, traveler, passing through</span></div>
+            <span class="odds-pct">~2%</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // --- Reasons ---
+    const REASONS = [
+      'Scared',
+      'Tired',
+      'No idea what to say',
+      'She was busy',
+      'She was with people',
+      'I was with people',
+      'Bad timing',
+      'Told myself "next time"',
+      'Overthought it',
+      'Felt not good enough',
+      'Too fast / walked past',
+      'To do what exactly',
+      'Other'
+    ];
+
+    // --- Data ---
+    const DEFAULTS = {
+      totalDays: 195,
+      secondChance: 10, thirdChance: 5,
+      convoRate: 40, numberRate: 30, dateRate: 40, relRate: 10
+    };
+
+    function getData() {
+      const raw = localStorage.getItem('approachData');
+      if (!raw) return createFreshData();
+      const data = JSON.parse(raw);
+      data.settings = { ...DEFAULTS, ...data.settings };
+      if (!data.missed) data.missed = [];
+      if (!data.people) data.people = [];
+      if (!data.goAttempts) data.goAttempts = [];
+      if (!data.excuses) data.excuses = [];
+      // Migrate: add seen tracking if missing
+      if (!data.seen) data.seen = {};
+      // Remove deprecated girlsPerDay from settings
+      delete data.settings.girlsPerDay;
+      return data;
+    }
+
+    function createFreshData() {
+      const data = { startDate: todayStr(), settings: { ...DEFAULTS }, days: {}, seen: {}, missed: [], people: [], goAttempts: [], excuses: [] };
+      localStorage.setItem('approachData', JSON.stringify(data));
+      return data;
+    }
+
+    function saveData(data) {
+      localStorage.setItem('approachData', JSON.stringify(data));
+    }
+
+    function todayStr() { return new Date().toISOString().slice(0, 10); }
+    function daysBetween(a, b) { return Math.round((new Date(b) - new Date(a)) / 86400000); }
+    function nowTimeStr() { return new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }); }
+    function toHHMM() { const n = new Date(); return n.getHours().toString().padStart(2, '0') + ':' + n.getMinutes().toString().padStart(2, '0'); }
+    function hhmmToDisplay(hhmm) { if (!hhmm) return ''; const [h, m] = hhmm.split(':'); const d = new Date(); d.setHours(+h, +m); return d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }); }
+
+    // --- Date Picker for Counter ---
+    let selectedCounterDate = todayStr();
+
+    function onCounterDateChange() {
+      const val = document.getElementById('counterDatePicker').value;
+      if (!val) return;
+      selectedCounterDate = val;
+      renderCounterForDate();
+    }
+
+    function resetToToday() {
+      selectedCounterDate = todayStr();
+      document.getElementById('counterDatePicker').value = todayStr();
+      renderCounterForDate();
+    }
+
+    function renderCounterForDate() {
+      const data = getData();
+      const today = todayStr();
+      const isToday = selectedCounterDate === today;
+      const dateObj = new Date(selectedCounterDate + 'T12:00:00');
+      const heading = document.getElementById('todayHeading');
+      const dateLabel = document.getElementById('todayDate');
+      const badge = document.getElementById('backlogBadge');
+      const backRow = document.getElementById('backToTodayRow');
+
+      if (isToday) {
+        heading.textContent = 'Today';
+        dateLabel.textContent = new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' });
+        badge.style.display = 'none';
+        backRow.style.display = 'none';
+      } else {
+        heading.textContent = dateObj.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+        dateLabel.textContent = selectedCounterDate;
+        badge.style.display = '';
+        backRow.style.display = '';
+      }
+
+      const count = data.days[selectedCounterDate] || 0;
+      const seenVal = data.seen[selectedCounterDate] || 0;
+      document.getElementById('todayCount').textContent = count;
+      document.getElementById('todaySeenCount').textContent = seenVal;
+      const courage = seenVal > 0 ? Math.round((count / seenVal) * 100) : (count > 0 ? 100 : 0);
+      document.getElementById('todayCouragePct').textContent = courage + '%';
+      const letGo = Math.max(0, seenVal - count);
+      document.getElementById('seenTodayNum').textContent = seenVal;
+      document.getElementById('talkedTodayNum').textContent = count;
+      document.getElementById('letGoTodayNum').textContent = letGo;
+    }
+
+    // --- Missed Modal ---
+    let selectedReason = null;
+
+    function openMissedModal() {
+      selectedReason = null;
+      document.getElementById('missedNote').value = '';
+      document.getElementById('missedDate').value = todayStr();
+      document.getElementById('missedTime').value = toHHMM();
+      const grid = document.getElementById('reasonGrid');
+      grid.innerHTML = '';
+      REASONS.forEach(r => {
+        const btn = document.createElement('button');
+        btn.className = 'reason-btn';
+        btn.textContent = r;
+        btn.onclick = () => {
+          grid.querySelectorAll('.reason-btn').forEach(b => b.classList.remove('selected'));
+          btn.classList.add('selected');
+          selectedReason = r;
+        };
+        grid.appendChild(btn);
+      });
+      document.getElementById('missedModal').classList.add('open');
+    }
+
+    function closeMissedModal() {
+      document.getElementById('missedModal').classList.remove('open');
+    }
+
+    function confirmMissed() {
+      if (!selectedReason) { alert('Pick a reason'); return; }
+      const data = getData();
+      const pickedDate = document.getElementById('missedDate').value || todayStr();
+      const pickedTime = document.getElementById('missedTime').value;
+      const entry = {
+        id: Date.now(),
+        date: pickedDate,
+        time: pickedTime ? hhmmToDisplay(pickedTime) : nowTimeStr(),
+        reason: selectedReason,
+        note: document.getElementById('missedNote').value.trim(),
+        sightings: []
+      };
+      data.missed.push(entry);
+      saveData(data);
+      closeMissedModal();
+      render();
+      if (navigator.vibrate) navigator.vibrate([30, 50, 30]);
+      showRealityCheck(data, entry);
+    }
+
+    // --- Reality Check (post-miss gut punch) ---
+    let lastMissedEntryId = null;
+
+    function showRealityCheck(data, entry) {
+      lastMissedEntryId = entry.id;
+      const s = data.settings;
+      const totalMissed = data.missed.length;
+      const daysUsed = daysBetween(data.startDate, todayStr());
+      const daysLeft = Math.max(1, s.totalDays - daysUsed);
+      const seeAgainPct = s.secondChance;
+
+      // Pick a message based on reason + context
+      const reason = entry.reason;
+      const msgs = [];
+
+      if (reason === 'Scared' || reason === 'Felt not good enough') {
+        msgs.push(
+          { icon: '👻', headline: 'She\'s already gone.', truth: `You were scared for <strong>10 seconds</strong>. Now she\'s gone for the rest of your life. There\'s a <strong>${seeAgainPct}%</strong> chance you\'ll ever see her face again.` },
+          { icon: '🪦', headline: 'Fear won. Again.', truth: `That fear lasted <strong>a few heartbeats</strong>. The regret? That stays. <strong>${100 - seeAgainPct}% chance</strong> she just became a ghost you\'ll never meet again.` }
+        );
+      } else if (reason === 'Told myself "next time"') {
+        msgs.push(
+          { icon: '⏳', headline: 'There is no "next time."', truth: `You have a <strong>${seeAgainPct}%</strong> chance of seeing her again. That\'s a <strong>${100 - seeAgainPct}% chance</strong> "next time" doesn\'t exist. You just lied to yourself.` },
+          { icon: '🎰', headline: `${seeAgainPct}% odds.`, truth: `That\'s the chance you get a "next time." Would you bet your future on a <strong>${seeAgainPct}%</strong> coin flip? Because you just did.` }
+        );
+      } else if (reason === 'Overthought it') {
+        msgs.push(
+          { icon: '🧠', headline: 'Your brain tricked you.', truth: `While you were thinking of the "perfect" thing to say, she walked away. <strong>"Hi"</strong> would have worked. Now there\'s a <strong>${100 - seeAgainPct}%</strong> chance you\'ll never get to say anything.` }
+        );
+      } else if (reason === 'Too fast / walked past') {
+        msgs.push(
+          { icon: '💨', headline: 'Gone in 3 seconds.', truth: `She walked past and the window closed. It took you longer to decide than it would have taken to say <strong>"hey, excuse me."</strong> Only <strong>${seeAgainPct}%</strong> chance you see her again.` }
+        );
+      } else if (reason === 'To do what exactly') {
+        msgs.push(
+          { icon: '☕', headline: 'A coffee. A walk. That\'s it.', truth: `You don\'t need a whole life planned out. <strong>"Let\'s grab coffee"</strong> is enough. The plan builds itself once you start talking. You skipped step 1 worrying about step 10. <strong>${100 - seeAgainPct}% chance</strong> she\'s gone now.` },
+          { icon: '🔄', headline: 'You\'re building it backwards.', truth: `You think you need a life to get her. But she could <strong>become</strong> part of the life you\'re building. You don\'t need a plan — you need a <strong>"hi."</strong> The rest follows. <strong>${daysLeft} days left.</strong>` }
+        );
+      } else {
+        msgs.push(
+          { icon: '🚪', headline: 'Another door closed.', truth: `That\'s <strong>${totalMissed}</strong> girls you let disappear. Each one had a face, a name, a life you\'ll never know. <strong>${seeAgainPct}%</strong> chance any of them come back.` },
+          { icon: '📉', headline: `Miss #${totalMissed}`, truth: `<strong>${daysLeft} days left.</strong> Every miss is a future you\'ll never have. <strong>${100 - seeAgainPct}%</strong> chance she\'s gone forever.` }
+        );
+      }
+
+      const msg = msgs[Math.floor(Math.random() * msgs.length)];
+
+      document.getElementById('rcIcon').textContent = msg.icon;
+      document.getElementById('rcHeadline').textContent = msg.headline;
+      document.getElementById('rcTruth').innerHTML = msg.truth;
+      document.getElementById('rcStatNum').textContent = totalMissed;
+      document.getElementById('rcStatLabel').textContent = 'total girls you let go';
+
+      // Show saved excuses when reason is "To do what exactly"
+      const rcExcuses = document.getElementById('rcExcuses');
+      const rcChips = document.getElementById('rcExcuseChips');
+      if (reason === 'To do what exactly' && data.excuses && data.excuses.length > 0) {
+        rcChips.innerHTML = data.excuses.map(e => `<span class="rc-excuse-chip">☕ ${e.title}</span>`).join('');
+        rcExcuses.style.display = 'block';
+      } else {
+        rcExcuses.style.display = 'none';
+      }
+
+      document.getElementById('realityCheckModal').classList.add('open');
+    }
+
+    function closeRealityCheck() {
+      document.getElementById('realityCheckModal').classList.remove('open');
+      // Reset screens for next time
+      document.getElementById('rcMainScreen').classList.remove('hidden');
+      document.getElementById('rcOddsScreen').classList.remove('active');
+      document.getElementById('rcExcuses').style.display = 'none';
+    }
+
+    function showOddsScreen() {
+      document.getElementById('rcMainScreen').classList.add('hidden');
+      document.getElementById('rcOddsScreen').classList.add('active');
+    }
+
+    function logReencounterOdds(type, pct) {
+      const data = getData();
+      const entry = data.missed.find(m => m.id === lastMissedEntryId);
+      if (entry) {
+        entry.reencounter = { type: type, pct: pct };
+        saveData(data);
+      }
+      closeRealityCheck();
+      render();
+    }
+
+    function goBackForHer() {
+      // User said "she's still there?" — remove the miss, log encouragement
+      const data = getData();
+      data.missed = data.missed.filter(m => m.id !== lastMissedEntryId);
+      if (!data.goAttempts) data.goAttempts = [];
+      data.goAttempts.push({ date: todayStr(), time: nowTimeStr() });
+      saveData(data);
+      render();
+      if (navigator.vibrate) navigator.vibrate([100, 50, 100, 50, 100]);
+    }
+
+    // --- Saw Again ---
+    function markSawAgain(id) {
+      const data = getData();
+      const entry = data.missed.find(m => m.id === id);
+      if (!entry) return;
+      entry.sightings.push(todayStr());
+      saveData(data);
+      render();
+    }
+
+    function deleteMissed(id) {
+      if (!confirm('Delete this entry?')) return;
+      const data = getData();
+      data.missed = data.missed.filter(m => m.id !== id);
+      saveData(data);
+      render();
+    }
+
+    function toggleMissedLog() {
+      document.getElementById('missedLogList').classList.toggle('open');
+    }
+
+    // --- Counter Logic ---
+    function adjustCount(delta) {
+      const data = getData();
+      const target = selectedCounterDate;
+      if (!data.days[target]) data.days[target] = 0;
+      data.days[target] = Math.max(0, data.days[target] + delta);
+      saveData(data);
+      render();
+      if (navigator.vibrate) navigator.vibrate(20);
+    }
+
+    function adjustSeen(delta) {
+      const data = getData();
+      const target = selectedCounterDate;
+      if (!data.seen[target]) data.seen[target] = 0;
+      data.seen[target] = Math.max(0, data.seen[target] + delta);
+      saveData(data);
+      render();
+      if (navigator.vibrate) navigator.vibrate(20);
+    }
+
+    function saveSetting(key, value) {
+      const data = getData();
+      data.settings[key] = parseFloat(value) || DEFAULTS[key];
+      saveData(data);
+      render();
+    }
+
+    function toggleSettings() {
+      document.getElementById('settingsPanel').classList.toggle('open');
+    }
+
+    function exportData() {
+      const data = localStorage.getItem('approachData');
+      if (!data) { alert('No data to export'); return; }
+      const encoded = btoa(unescape(encodeURIComponent(data)));
+      navigator.clipboard.writeText(encoded).then(() => {
+        alert('Backup copied to clipboard! Paste it somewhere safe.');
+      }).catch(() => { prompt('Copy this backup code:', encoded); });
+    }
+
+    function importData() {
+      const encoded = prompt('Paste your backup code:');
+      if (!encoded) return;
+      try {
+        const data = JSON.parse(decodeURIComponent(escape(atob(encoded))));
+        if (!data.startDate || !data.settings || !data.days) throw new Error('Invalid');
+        localStorage.setItem('approachData', JSON.stringify(data));
+        render();
+        alert('Data restored!');
+      } catch { alert('Invalid backup code.'); }
+    }
+
+    function resetAll() {
+      if (confirm('Reset all data? This cannot be undone.')) {
+        localStorage.removeItem('approachData');
+        render();
+      }
+    }
+
+    // --- People Log ---
+    let personModalMode = 'add'; // 'add' or 'interaction'
+    let personModalStatus = 'seen';
+    let pendingInteractionId = null;
+    let expandedPersonId = null;
+
+    function openPersonModal() {
+      personModalMode = 'add';
+      personModalStatus = 'seen';
+      document.getElementById('personModalTitle').textContent = 'Log a Person';
+      document.getElementById('personNickname').value = '';
+      document.getElementById('personNickname').style.display = '';
+      document.getElementById('personStatusToggle').style.display = '';
+      document.getElementById('personNote').value = '';
+      document.getElementById('personLocation').value = '';
+      document.getElementById('personDate').value = todayStr();
+      document.getElementById('personTime').value = toHHMM();
+      document.getElementById('pStatusSeen').className = 'active-seen';
+      document.getElementById('pStatusTalked').className = '';
+      document.getElementById('personModal').classList.add('open');
+      setTimeout(() => document.getElementById('personNickname').focus(), 100);
+    }
+
+    function closePersonModal() {
+      document.getElementById('personModal').classList.remove('open');
+    }
+
+    function setPersonStatus(s) {
+      personModalStatus = s;
+      document.getElementById('pStatusSeen').className = s === 'seen' ? 'active-seen' : '';
+      document.getElementById('pStatusTalked').className = s === 'talked' ? 'active-talked' : '';
+    }
+
+    function confirmPerson() {
+      const nick = document.getElementById('personNickname').value.trim();
+      if (!nick) { alert('Give her a quick nickname'); return; }
+      const note = document.getElementById('personNote').value.trim();
+      const location = document.getElementById('personLocation').value.trim();
+      const data = getData();
+      if (!data.people) data.people = [];
+      const pickedDate = document.getElementById('personDate').value || todayStr();
+      const pickedTime = document.getElementById('personTime').value;
+      const displayTime = pickedTime ? hhmmToDisplay(pickedTime) : nowTimeStr();
+      const person = {
+        id: Date.now(),
+        nickname: nick,
+        status: personModalStatus,
+        sightings: [{ date: pickedDate, time: displayTime, note: '', location: location }],
+        interactions: [],
+        created: pickedDate,
+        lastSeen: pickedDate,
+        starred: false
+      };
+      if (personModalStatus === 'talked' && note) {
+        person.interactions.push({ date: pickedDate, time: displayTime, note: note, location: location });
+      } else if (note) {
+        person.sightings[0].note = note;
+      }
+      data.people.push(person);
+      saveData(data);
+      closePersonModal();
+      render();
+      if (navigator.vibrate) navigator.vibrate(20);
+    }
+
+    let pendingSightingId = null;
+
+    function addSighting(personId) {
+      openSightingModal(personId);
+    }
+
+    function openSightingModal(personId) {
+      pendingSightingId = personId;
+      document.getElementById('sightingDate').value = todayStr();
+      document.getElementById('sightingTime').value = toHHMM();
+      document.getElementById('sightingLocation').value = '';
+      document.getElementById('sightingNote').value = '';
+      document.getElementById('sightingModal').classList.add('open');
+    }
+
+    function closeSightingModal() {
+      document.getElementById('sightingModal').classList.remove('open');
+      pendingSightingId = null;
+    }
+
+    function confirmSighting() {
+      if (!pendingSightingId) return;
+      const pickedDate = document.getElementById('sightingDate').value || todayStr();
+      const pickedTime = document.getElementById('sightingTime').value || toHHMM();
+      const location = document.getElementById('sightingLocation').value.trim();
+      const note = document.getElementById('sightingNote').value.trim();
+      const data = getData();
+      const p = (data.people || []).find(x => x.id === pendingSightingId);
+      if (!p) return;
+      const displayTime = hhmmToDisplay(pickedTime);
+      p.sightings.push({ date: pickedDate, time: displayTime, note: note, location: location });
+      // Update lastSeen to the latest date across all entries
+      let maxDate = p.created;
+      p.sightings.forEach(s => { if (s.date > maxDate) maxDate = s.date; });
+      p.interactions.forEach(i => { if (i.date > maxDate) maxDate = i.date; });
+      p.lastSeen = maxDate;
+      saveData(data);
+      closeSightingModal();
+      render();
+      if (navigator.vibrate) navigator.vibrate(20);
+    }
+
+    function openInteractionModal(personId) {
+      pendingInteractionId = personId;
+      document.getElementById('interactionDate').value = todayStr();
+      document.getElementById('interactionTime').value = toHHMM();
+      document.getElementById('interactionNote').value = '';
+      document.getElementById('interactionLocation').value = '';
+      document.getElementById('interactionModal').classList.add('open');
+      setTimeout(() => document.getElementById('interactionNote').focus(), 100);
+    }
+
+    function closeInteractionModal() {
+      document.getElementById('interactionModal').classList.remove('open');
+      pendingInteractionId = null;
+    }
+
+    function confirmInteraction() {
+      if (!pendingInteractionId) return;
+      const pickedDate = document.getElementById('interactionDate').value || todayStr();
+      const pickedTime = document.getElementById('interactionTime').value || toHHMM();
+      const note = document.getElementById('interactionNote').value.trim();
+      const location = document.getElementById('interactionLocation').value.trim();
+      const data = getData();
+      const p = (data.people || []).find(x => x.id === pendingInteractionId);
+      if (!p) return;
+      const displayTime = hhmmToDisplay(pickedTime);
+      p.interactions.push({ date: pickedDate, time: displayTime, note: note || '(talked)', location: location });
+      p.status = 'talked';
+      // Update lastSeen to the latest date across all entries
+      let maxDate = p.created;
+      p.sightings.forEach(s => { if (s.date > maxDate) maxDate = s.date; });
+      p.interactions.forEach(i => { if (i.date > maxDate) maxDate = i.date; });
+      p.lastSeen = maxDate;
+      saveData(data);
+      closeInteractionModal();
+      render();
+      if (navigator.vibrate) navigator.vibrate(20);
+    }
+
+    function toggleStar(personId) {
+      const data = getData();
+      const p = (data.people || []).find(x => x.id === personId);
+      if (!p) return;
+      p.starred = !p.starred;
+      saveData(data);
+      render();
+    }
+
+    function togglePersonExpand(personId) {
+      expandedPersonId = expandedPersonId === personId ? null : personId;
+      render();
+    }
+
+    function deletePerson(personId) {
+      if (!confirm('Delete this person?')) return;
+      const data = getData();
+      data.people = (data.people || []).filter(x => x.id !== personId);
+      saveData(data);
+      expandedPersonId = null;
+      render();
+    }
+
+    // --- Timeline Entry Editing ---
+    let editingTimelineEntry = null; // { personId, type, index }
+
+    function editTimelineEntry(personId, type, index) {
+      editingTimelineEntry = { personId, type, index };
+      render();
+    }
+
+    function cancelTimelineEdit() {
+      editingTimelineEntry = null;
+      render();
+    }
+
+    function saveTimelineEntry(personId, type, index) {
+      const data = getData();
+      const p = (data.people || []).find(x => x.id === personId);
+      if (!p) return;
+      const arr = type === 'interaction' ? p.interactions : p.sightings;
+      if (!arr[index]) return;
+      const dateInput = document.getElementById('te-date-edit');
+      const timeInput = document.getElementById('te-time-edit');
+      const locInput = document.getElementById('te-location-edit');
+      if (dateInput && dateInput.value) arr[index].date = dateInput.value;
+      if (timeInput) arr[index].time = timeInput.value ? hhmmToDisplay(timeInput.value) : arr[index].time;
+      if (locInput) arr[index].location = locInput.value.trim();
+      // Recalculate lastSeen
+      let maxDate = p.created;
+      p.sightings.forEach(s => { if (s.date > maxDate) maxDate = s.date; });
+      p.interactions.forEach(i => { if (i.date > maxDate) maxDate = i.date; });
+      p.lastSeen = maxDate;
+      editingTimelineEntry = null;
+      saveData(data);
+      render();
+    }
+
+    function deleteTimelineEntry(personId, type, index) {
+      if (!confirm('Delete this entry?')) return;
+      const data = getData();
+      const p = (data.people || []).find(x => x.id === personId);
+      if (!p) return;
+      const arr = type === 'interaction' ? p.interactions : p.sightings;
+      arr.splice(index, 1);
+      // Recalculate lastSeen
+      let maxDate = p.created;
+      p.sightings.forEach(s => { if (s.date > maxDate) maxDate = s.date; });
+      p.interactions.forEach(i => { if (i.date > maxDate) maxDate = i.date; });
+      p.lastSeen = maxDate;
+      // Update status if no interactions left
+      if (p.interactions.length === 0) p.status = 'seen';
+      editingTimelineEntry = null;
+      saveData(data);
+      render();
+    }
+
+    function editPersonNick(personId) {
+      const data = getData();
+      const p = (data.people || []).find(x => x.id === personId);
+      if (!p) return;
+      const newNick = prompt('Edit nickname:', p.nickname);
+      if (newNick && newNick.trim()) {
+        p.nickname = newNick.trim();
+        saveData(data);
+        render();
+      }
+    }
+
+    function renderPeople(data) {
+      const people = data.people || [];
+      document.getElementById('peopleCount').textContent = `${people.length} people`;
+
+      // Summary
+      const recurring = people.filter(p => p.sightings.length > 1).length;
+      const threads = people.filter(p => p.status === 'talked').length;
+      const summEl = document.getElementById('peopleSummary');
+      if (people.length > 0) {
+        summEl.innerHTML = `<span>${recurring}</span> seen more than once &nbsp;|&nbsp; <span>${threads}</span> active threads`;
+      } else {
+        summEl.innerHTML = '';
+      }
+
+      // Sort: starred first, then by lastSeen desc
+      const sorted = [...people].sort((a, b) => {
+        if (a.starred !== b.starred) return b.starred ? 1 : -1;
+        return new Date(b.lastSeen) - new Date(a.lastSeen);
+      });
+
+      const listEl = document.getElementById('peopleList');
+      listEl.innerHTML = '';
+      sorted.forEach(p => {
+        const isExpanded = expandedPersonId === p.id;
+        const statusClass = p.status === 'talked' ? 'talked' : 'seen-only';
+        const statusBadge = p.status === 'talked'
+          ? '<span class="person-status talked">Talked</span>'
+          : '<span class="person-status seen">Seen</span>';
+        const totalSightings = p.sightings.length;
+        const totalInteractions = p.interactions.length;
+        const daysSince = daysBetween(p.created, todayStr());
+
+        // Timeline (all events sorted chronologically)
+        let timelineHtml = '';
+        if (isExpanded) {
+          const events = [];
+          p.sightings.forEach((s, idx) => events.push({ ...s, type: 'sighting', origIndex: idx }));
+          p.interactions.forEach((i, idx) => events.push({ ...i, type: 'interaction', origIndex: idx }));
+          events.sort((a, b) => new Date(a.date + ' ' + (a.time || '')) - new Date(b.date + ' ' + (b.time || '')));
+
+          timelineHtml = events.map(e => {
+            const dotClass = e.type === 'interaction' ? 'interaction' : 'sighting';
+            const label = e.type === 'interaction' ? 'Talked' : 'Seen';
+            const noteText = e.note ? e.note : '';
+            const isEditing = editingTimelineEntry
+              && editingTimelineEntry.personId === p.id
+              && editingTimelineEntry.type === e.type
+              && editingTimelineEntry.index === e.origIndex;
+            if (isEditing) {
+              // Convert display time like "02:30 PM" to HH:MM for input
+              let timeVal = '';
+              if (e.time) {
+                const parts = e.time.match(/(\d+):(\d+)\s*(AM|PM)/i);
+                if (parts) {
+                  let h = parseInt(parts[1]);
+                  const m = parts[2];
+                  const ampm = parts[3].toUpperCase();
+                  if (ampm === 'PM' && h !== 12) h += 12;
+                  if (ampm === 'AM' && h === 12) h = 0;
+                  timeVal = h.toString().padStart(2, '0') + ':' + m;
+                }
+              }
+              return `<div class="timeline-entry" onclick="event.stopPropagation()">
+                <div class="timeline-dot ${dotClass}"></div>
+                <div class="timeline-edit-form">
+                  <input type="date" id="te-date-edit" value="${e.date}">
+                  <input type="time" id="te-time-edit" value="${timeVal}">
+                  <input type="text" id="te-location-edit" value="${(e.location || '').replace(/"/g, '&quot;')}" placeholder="Location..." style="flex: 2;">
+                  <button class="te-save" onclick="event.stopPropagation();saveTimelineEntry(${p.id},'${e.type}',${e.origIndex})">Save</button>
+                  <button class="te-cancel" onclick="event.stopPropagation();cancelTimelineEdit()">✕</button>
+                </div>
+              </div>`;
+            }
+            const locHtml = e.location ? `<div class="timeline-location">📍 ${e.location}</div>` : '';
+            return `<div class="timeline-entry">
+              <div class="timeline-dot ${dotClass}"></div>
+              <span class="timeline-date">${e.date.slice(5)} ${e.time || ''}</span>
+              <span class="timeline-note${noteText ? '' : ' empty'}">${noteText || label}</span>
+              <div class="timeline-entry-actions">
+                <button class="timeline-edit-btn" onclick="event.stopPropagation();editTimelineEntry(${p.id},'${e.type}',${e.origIndex})" title="Edit">✏</button>
+                <button class="timeline-del-btn" onclick="event.stopPropagation();deleteTimelineEntry(${p.id},'${e.type}',${e.origIndex})" title="Delete">🗑</button>
+              </div>
+            </div>${locHtml}`;
+          }).join('');
+        }
+
+        listEl.innerHTML += `
+          <div class="person-card ${statusClass}" onclick="togglePersonExpand(${p.id})">
+            <div class="person-top">
+              <span class="person-nick">${p.starred ? '⭐ ' : ''}${p.nickname}</span>
+              <div class="person-meta">
+                ${statusBadge}
+                <button class="person-star${p.starred ? ' active' : ''}" onclick="event.stopPropagation();toggleStar(${p.id})">${p.starred ? '⭐' : '☆'}</button>
+              </div>
+            </div>
+            <div class="person-stats-row">
+              <span>Seen ${totalSightings}x</span>
+              ${totalInteractions > 0 ? `<span>Talked ${totalInteractions}x</span>` : ''}
+              <span>Last: ${p.lastSeen.slice(5)}</span>
+              ${daysSince > 0 ? `<span>${daysSince}d ago</span>` : '<span>Today</span>'}
+            </div>
+            <div class="person-expanded${isExpanded ? ' open' : ''}">
+              <div class="person-timeline">${timelineHtml}</div>
+              <div class="person-actions">
+                <button class="person-action-btn primary" onclick="event.stopPropagation();addSighting(${p.id})">Saw her again</button>
+                <button class="person-action-btn success" onclick="event.stopPropagation();openInteractionModal(${p.id})">Talked to her</button>
+                <button class="person-action-btn" onclick="event.stopPropagation();editPersonNick(${p.id})">Edit</button>
+                <button class="person-action-btn danger" onclick="event.stopPropagation();deletePerson(${p.id})">Delete</button>
+              </div>
+            </div>
+          </div>`;
+      });
+    }
+
+    // --- Power Level Calculation ---
+    function calcPowerLevel(totalTalks, totalSeen, activeDays, daysPassed, totalDays, avgTalksPerActiveDay, data) {
+      // Base Power
+      const basePower = totalTalks * 100;
+
+      // Courage Factor (1.0x - 5.0x)
+      const courageRatio = totalSeen > 0 ? totalTalks / totalSeen : 0;
+      const courageFactor = 1 + 4 * courageRatio;
+
+      // Consistency Factor (1.0x - 3.0x)
+      const consistencyRatio = daysPassed > 0 ? activeDays / daysPassed : 0;
+      const consistencyFactor = 1 + 2 * consistencyRatio;
+
+      // Volume Factor (1.0x - 3.0x)
+      const volumeFactor = 1 + Math.min(2, avgTalksPerActiveDay / 5);
+
+      // Growth Factor (0.8x - 2.0x) — compare last 7 days vs overall
+      let growthFactor = 1.0;
+      if (daysPassed > 7 && totalSeen > 0) {
+        const today = todayStr();
+        let last7Talked = 0, last7Seen = 0;
+        for (let i = 0; i < 7; i++) {
+          const d = new Date();
+          d.setDate(d.getDate() - i);
+          const ds = d.toISOString().slice(0, 10);
+          last7Talked += (data.days[ds] || 0);
+          last7Seen += (data.seen[ds] || 0);
+        }
+        const recentCourage = last7Seen > 0 ? last7Talked / last7Seen : 0;
+        const overallCourage = courageRatio;
+        if (overallCourage > 0) {
+          const ratio = recentCourage / overallCourage;
+          growthFactor = Math.max(0.8, Math.min(2.0, ratio));
+        }
+      }
+
+      // Urgency Bonus (1.0x - 2.0x)
+      const urgencyBonus = totalDays > 0 ? 1 + (daysPassed / totalDays) : 1;
+      const urgencyBonusClamped = Math.min(2.0, urgencyBonus);
+
+      // === STAGNATION DECAY ===
+      // How many consecutive days have you gone WITHOUT talking to anyone?
+      // Each idle day drains your power. Stagnation kills momentum.
+      // 1 day off: 0.95x (gentle nudge)
+      // 2 days off: 0.85x (you're slipping)
+      // 3 days off: 0.72x (skills rusting)
+      // 5 days off: 0.45x (half your power gone)
+      // 7+ days off: 0.25x (starting from scratch)
+      let streakDead = 0;
+      const today = todayStr();
+      for (let i = 0; i < 30; i++) {
+        const d = new Date();
+        d.setDate(d.getDate() - i);
+        const ds = d.toISOString().slice(0, 10);
+        if ((data.days[ds] || 0) > 0) break;
+        // don't count today if it's still in progress (before 10pm)
+        if (i === 0 && new Date().getHours() < 22) continue;
+        streakDead++;
+      }
+      // Exponential decay: 0.95^streakDead, floored at 0.20x
+      const decayFactor = streakDead > 0 ? Math.max(0.20, Math.pow(0.88, streakDead)) : 1.0;
+
+      const rawPower = Math.round(basePower * courageFactor * consistencyFactor * volumeFactor * growthFactor * urgencyBonusClamped);
+      const powerLevel = Math.round(rawPower * decayFactor);
+
+      return {
+        powerLevel: Math.max(0, powerLevel),
+        basePower,
+        courageFactor,
+        consistencyFactor,
+        volumeFactor,
+        growthFactor,
+        urgencyBonus: urgencyBonusClamped,
+        decayFactor,
+        streakDead,
+        courageRatio,
+        consistencyRatio,
+        avgTalksPerActiveDay
+      };
+    }
+
+    // --- Math Engine ---
+    function effectiveRate(base, courageFactor) {
+      // Use courage factor as the skill multiplier for funnel calculations
+      const sm = 1 + 0.15 * Math.log2(1 + courageFactor);
+      return Math.min(0.9, (base / 100) * sm);
+    }
+
+    function getUrgencyMultiplier(left, total) { return left <= 0 ? 999 : total / left; }
+
+    // --- EXCUSES / PLANS ---
+    let excuseModalMode = 'add';
+    let excuseEditId = null;
+
+    function openExcuseModal(editId) {
+      if (editId) {
+        excuseModalMode = 'edit';
+        excuseEditId = editId;
+        const data = getData();
+        const ex = data.excuses.find(e => e.id === editId);
+        if (!ex) return;
+        document.getElementById('excuseModalTitle').textContent = 'Edit Excuse';
+        document.getElementById('excuseTitle').value = ex.title;
+        document.getElementById('excuseDesc').value = ex.description || '';
+        document.getElementById('excuseDate').value = ex.date || '';
+      } else {
+        excuseModalMode = 'add';
+        excuseEditId = null;
+        document.getElementById('excuseModalTitle').textContent = 'Add an Excuse';
+        document.getElementById('excuseTitle').value = '';
+        document.getElementById('excuseDesc').value = '';
+        document.getElementById('excuseDate').value = '';
+      }
+      document.getElementById('excuseModal').classList.add('open');
+      setTimeout(() => document.getElementById('excuseTitle').focus(), 100);
+    }
+
+    function closeExcuseModal() {
+      document.getElementById('excuseModal').classList.remove('open');
+    }
+
+    function confirmExcuse() {
+      const title = document.getElementById('excuseTitle').value.trim();
+      if (!title) { document.getElementById('excuseTitle').focus(); return; }
+      const desc = document.getElementById('excuseDesc').value.trim();
+      const date = document.getElementById('excuseDate').value;
+      const data = getData();
+
+      if (excuseModalMode === 'edit' && excuseEditId) {
+        const ex = data.excuses.find(e => e.id === excuseEditId);
+        if (ex) { ex.title = title; ex.description = desc; ex.date = date; }
+      } else {
+        data.excuses.push({ id: Date.now(), title, description: desc, date: date || '', created: todayStr() });
+      }
+      saveData(data);
+      closeExcuseModal();
+      render();
+    }
+
+    function deleteExcuse(id) {
+      if (!confirm('Delete this plan?')) return;
+      const data = getData();
+      data.excuses = data.excuses.filter(e => e.id !== id);
+      saveData(data);
+      render();
+    }
+
+    function escHtml(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+
+    function renderExcuses(data) {
+      const list = document.getElementById('excuseList');
+      const excuses = data.excuses || [];
+      const countLabel = excuses.length + ' plan' + (excuses.length !== 1 ? 's' : '');
+      const countPageEl = document.getElementById('excuseCountPage');
+      if (countPageEl) countPageEl.textContent = excuses.length;
+
+      if (excuses.length === 0) {
+        list.innerHTML = '<div class="excuse-empty">No plans yet. What could you invite her to?</div>';
+        return;
+      }
+
+      list.innerHTML = excuses.map(ex => {
+        const dateStr = ex.date ? `<span class="excuse-date">${ex.date}</span>` : '';
+        const desc = ex.description ? escHtml(ex.description) : '';
+        const descStr = desc ? `<div class="excuse-desc">${desc}</div>` : '';
+        return `<div class="excuse-card">
+          <div class="excuse-card-top">
+            <span class="excuse-title">${escHtml(ex.title)}</span>
+            ${dateStr}
+          </div>
+          ${descStr}
+          <div class="excuse-actions">
+            <button class="excuse-action-btn" onclick="openExcuseModal(${ex.id})">Edit</button>
+            <button class="excuse-action-btn danger" onclick="deleteExcuse(${ex.id})">Delete</button>
+          </div>
+        </div>`;
+      }).join('');
+    }
+
+    // --- GO MODE ---
+    const GO_FEARS = [
+      'Scared of rejection',
+      'Don\'t know what to say',
+      'She\'s too attractive',
+      'People are watching',
+      'She looks busy',
+      'I\'m not good enough',
+      'Bad timing',
+      'She\'s with friends',
+      'To do what exactly',
+    ];
+
+    const GO_REFRAMES = {
+      'Scared of rejection': 'Rejection = 5 seconds of awkwardness. Silence = she\'s gone forever. You lose more by NOT speaking.',
+      'Don\'t know what to say': 'You just filled in your first line above. That\'s literally all you need. Say THAT.',
+      'She\'s too attractive': 'She\'s a human being who probably doesn\'t get approached by someone genuine very often. That\'s your edge and she\'s waiting for someone like that. And, if consider your own attractiveness. And, females go for bums all the time, their standards are low.',
+      'People are watching': 'Nobody cares. And even if they do — they\'ll forget in 30 seconds. But YOU won\'t forget staying silent.',
+      'She looks busy': "She's waiting for Mister Perfect to come around, you never know if might be him",
+      'I\'m not good enough': 'You don\'t decide that. She does. Let her. Stop rejecting yourself on her behalf.',
+      'Bad timing': 'There is no perfect timing. There is only NOW or NEVER. 90% of people you see, you\'ll never see again.',
+      'She\'s with friends': 'Even better — shows confidence. "Hey sorry to interrupt, I just had to say..." Friends will respect it.',
+      'To do what exactly': 'A coffee. A walk. You already have plans — look at your Excuses tab.',
+    };
+
+    let selectedGoFear = null;
+
+    function openGoMode() {
+      document.getElementById('goReason').value = '';
+      document.getElementById('goFirstLine').value = '';
+      document.getElementById('goExcuse').value = '';
+      selectedGoFear = null;
+      document.getElementById('goCheck1').classList.remove('filled');
+      document.getElementById('goCheck2').classList.remove('filled');
+      document.getElementById('goCheck3').classList.remove('filled');
+      document.getElementById('goExecute').classList.remove('ready');
+      document.getElementById('goExecute').disabled = true;
+      document.getElementById('goBlockerBody').classList.remove('open');
+      document.getElementById('goBlockerArrow').textContent = '▼';
+      document.getElementById('goReframe').style.display = 'none';
+
+      // Render fear buttons
+      const grid = document.getElementById('goFearGrid');
+      grid.innerHTML = '';
+      GO_FEARS.forEach(fear => {
+        const btn = document.createElement('button');
+        btn.className = 'go-fear-btn';
+        btn.textContent = fear;
+        btn.onclick = () => selectGoFear(fear, btn);
+        grid.appendChild(btn);
+      });
+
+      document.getElementById('goOverlay').classList.add('open');
+      setTimeout(() => document.getElementById('goReason').focus(), 350);
+    }
+
+    function closeGoMode() {
+      document.getElementById('goOverlay').classList.remove('open');
+    }
+
+    function checkGoReady() {
+      const r = document.getElementById('goReason').value.trim();
+      const f = document.getElementById('goFirstLine').value.trim();
+      const e = document.getElementById('goExcuse').value.trim();
+
+      document.getElementById('goCheck1').classList.toggle('filled', r.length > 0);
+      document.getElementById('goCheck2').classList.toggle('filled', f.length > 0);
+      document.getElementById('goCheck3').classList.toggle('filled', e.length > 0);
+
+      const ready = r.length > 0 && f.length > 0 && e.length > 0;
+      const btn = document.getElementById('goExecute');
+      btn.disabled = !ready;
+      btn.classList.toggle('ready', ready);
+      btn.textContent = ready ? 'GO — APPROACH NOW' : 'GO';
+    }
+
+    function toggleGoBlocker() {
+      const body = document.getElementById('goBlockerBody');
+      const arrow = document.getElementById('goBlockerArrow');
+      body.classList.toggle('open');
+      arrow.textContent = body.classList.contains('open') ? '▲' : '▼';
+    }
+
+    function selectGoFear(fear, btn) {
+      document.querySelectorAll('.go-fear-btn').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      selectedGoFear = fear;
+      const reframe = document.getElementById('goReframe');
+      let html = escHtml(GO_REFRAMES[fear] || '');
+      if (fear === 'To do what exactly') {
+        const data = getData();
+        if (data.excuses && data.excuses.length > 0) {
+          html += '<div style="margin-top:8px">';
+          data.excuses.forEach(ex => {
+            html += `<span class="rc-excuse-chip">☕ ${escHtml(ex.title)}</span> `;
+          });
+          html += '</div>';
+        }
+        html += `<button class="rc-btn rc-go-back" style="margin-top:10px;width:100%;font-size:12px;padding:8px" onclick="closeGoMode(); switchView('excuses')">☕ Open Excuses</button>`;
+      }
+      reframe.innerHTML = html;
+      reframe.style.display = 'block';
+    }
+
+    function executeGo() {
+      const reason = document.getElementById('goReason').value.trim();
+      const firstLine = document.getElementById('goFirstLine').value.trim();
+      const excuse = document.getElementById('goExcuse').value.trim();
+      if (!reason || !firstLine || !excuse) return;
+
+      const data = getData();
+      const target = selectedCounterDate;
+
+      // Log the GO attempt
+      const attempt = {
+        id: Date.now(),
+        date: todayStr(),
+        time: nowTimeStr(),
+        reason: reason,
+        firstLine: firstLine,
+        excuse: excuse,
+        blocker: selectedGoFear || null,
+      };
+      data.goAttempts.push(attempt);
+
+      // Auto-increment today's talked counter
+      if (!data.days[todayStr()]) data.days[todayStr()] = 0;
+      data.days[todayStr()]++;
+
+      saveData(data);
+      closeGoMode();
+
+      // Show success flash
+      const flash = document.getElementById('goSuccessFlash');
+      flash.classList.add('show');
+      setTimeout(() => flash.classList.remove('show'), 900);
+
+      if (navigator.vibrate) navigator.vibrate([50, 100, 50, 100, 50]);
+      render();
+    }
+
+    function toggleGoHistory() {
+      document.getElementById('goHistoryList').classList.toggle('open');
+    }
+
+    function deleteGoAttempt(id) {
+      if (!confirm('Delete this approach log?')) return;
+      const data = getData();
+      data.goAttempts = data.goAttempts.filter(a => a.id !== id);
+      saveData(data);
+      render();
+    }
+
+    function renderGoHistory(data) {
+      const attempts = data.goAttempts || [];
+      if (attempts.length === 0) {
+        document.getElementById('goHistorySection').style.display = 'none';
+        return;
+      }
+      document.getElementById('goHistorySection').style.display = '';
+      document.getElementById('goHistoryCount').textContent = `${attempts.length} approaches`;
+
+      const listEl = document.getElementById('goHistoryList');
+      const recent = [...attempts].reverse().slice(0, 30);
+      listEl.innerHTML = '';
+      recent.forEach(a => {
+        const blockerHtml = a.blocker ? `<div class="go-entry-blocker">⚡ Overcame: ${a.blocker}</div>` : '';
+        listEl.innerHTML += `
+          <div class="go-entry">
+            <div class="go-entry-header">
+              <span class="go-entry-badge">APPROACHED</span>
+              <span class="go-entry-date">${a.date} ${a.time || ''}</span>
+            </div>
+            <div class="go-entry-row"><span class="go-lbl">Reason</span><span class="go-val">${a.reason}</span></div>
+            <div class="go-entry-row"><span class="go-lbl">Line</span><span class="go-val">${a.firstLine}</span></div>
+            <div class="go-entry-row"><span class="go-lbl">Plan</span><span class="go-val">${a.excuse}</span></div>
+            ${blockerHtml}
+            <div style="margin-top:6px"><button class="missed-entry-btn delete" onclick="deleteGoAttempt(${a.id})">Delete</button></div>
+          </div>`;
+      });
+    }
+
+    // --- Render ---
+    function render() {
+      const data = getData();
+      const s = data.settings;
+      const today = todayStr();
+      const daysPassed = daysBetween(data.startDate, today);
+      const daysLeft = Math.max(0, s.totalDays - daysPassed);
+      const todayCount = data.days[today] || 0;
+      const todaySeenVal = data.seen[today] || 0;
+      const missed = data.missed || [];
+      const missedToday = missed.filter(m => m.date === today);
+
+      let totalApproaches = 0;
+      Object.values(data.days).forEach(v => totalApproaches += v);
+
+      // Total seen from real tracked data
+      let totalSeen = 0;
+      Object.values(data.seen).forEach(v => totalSeen += v);
+
+      const ignored = Math.max(0, totalSeen - totalApproaches);
+      const vanishRate = 1 - s.secondChance / 100;
+      const goneForever = Math.round(ignored * vanishRate);
+
+      // Active days (days with at least 1 talk)
+      let activeDays = 0;
+      Object.values(data.days).forEach(v => { if (v > 0) activeDays++; });
+
+      // Avg talks per active day
+      const avgTalksPerActiveDay = activeDays > 0 ? totalApproaches / activeDays : 0;
+
+      // Power Level
+      const pl = calcPowerLevel(totalApproaches, totalSeen, activeDays, daysPassed, s.totalDays, avgTalksPerActiveDay, data);
+
+      // Use courage factor as skill multiplier for funnel
+      const skillMult = pl.courageFactor;
+
+      const fHello = totalApproaches;
+      const fConvo = fHello * effectiveRate(s.convoRate, totalApproaches);
+      const fNumber = fConvo * effectiveRate(s.numberRate, totalApproaches);
+      const fDate = fNumber * effectiveRate(s.dateRate, totalApproaches);
+      const fRel = fDate * effectiveRate(s.relRate, totalApproaches);
+
+      const secondMeetings = Math.round(totalApproaches * s.secondChance / 100);
+      const evConvo = effectiveRate(s.convoRate, totalApproaches);
+      const evConnection = evConvo;
+
+      const regretConvo = ignored * effectiveRate(s.convoRate, 0);
+      const regretNumber = regretConvo * effectiveRate(s.numberRate, 0);
+      const regretDate = regretNumber * effectiveRate(s.dateRate, 0);
+
+      const urgency = getUrgencyMultiplier(daysLeft, s.totalDays);
+
+      // ===== DOM =====
+
+      // Ring
+      const circ = 2 * Math.PI * 78;
+      document.getElementById('ringProgress').setAttribute('stroke-dashoffset', circ * (1 - daysLeft / s.totalDays));
+      document.getElementById('daysLeft').textContent = daysLeft;
+
+      // Truth
+      const truths = [
+        { text: `${goneForever.toLocaleString()} people have already vanished from your life`, sub: 'Because you said nothing' },
+        { text: `${daysLeft} days. Every one you see could be the last time.`, sub: 'Most will disappear forever' },
+        { text: `Every hello is now worth ${(evConnection * 100).toFixed(0)}% chance of a real connection`, sub: `Power level: ${pl.powerLevel.toLocaleString()}` },
+        { text: `${Math.round(regretDate)} potential dates lost to silence`, sub: totalApproaches > 0 ? `But you saved ${Math.round(fDate)} by speaking up` : 'Start today to stop the bleed' },
+        { text: `You will never be younger than right now`, sub: 'Neither will they' },
+        { text: `Today is worth ${urgency.toFixed(1)}x what day one was`, sub: 'The window gets more valuable as it shrinks' },
+      ];
+      const truth = truths[daysPassed % truths.length];
+      document.getElementById('truthText').textContent = truth.text;
+      document.getElementById('truthSub').textContent = truth.sub;
+
+      // Today — Dual Counter
+      document.getElementById('todayDate').textContent = new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' });
+
+      // Counter date picker
+      document.getElementById('counterDatePicker').value = selectedCounterDate;
+      renderCounterForDate();
+
+      // Missed today count
+      document.getElementById('missedTodayCount').textContent = missedToday.length;
+
+      // Re-encounter Reality Check
+      if (missed.length > 0) {
+        document.getElementById('reencounterSection').style.display = '';
+        const sawAgainCount = missed.filter(m => m.sightings.length > 0).length;
+        const neverAgainCount = missed.length - sawAgainCount;
+        const realRate = missed.length > 0 ? (sawAgainCount / missed.length * 100) : 0;
+
+        document.getElementById('reTotalMissed').textContent = missed.length;
+        document.getElementById('reSawAgain').textContent = sawAgainCount;
+        document.getElementById('reNeverAgain').textContent = neverAgainCount;
+
+        let verdict = '';
+        if (missed.length < 5) {
+          verdict = `Keep logging. Need more data to see the real pattern.`;
+        } else if (realRate <= 15) {
+          verdict = `Your real re-encounter rate: <strong>${realRate.toFixed(0)}%</strong>. ` +
+            `${neverAgainCount} out of ${missed.length} people you let go — gone. ` +
+            `The math was right. Most disappear forever.`;
+        } else {
+          verdict = `Your real re-encounter rate: <strong>${realRate.toFixed(0)}%</strong>. ` +
+            `Higher than expected, but ${neverAgainCount} are still gone forever. ` +
+            `Even seeing someone again doesn't mean you'll speak next time.`;
+        }
+        document.getElementById('reVerdict').innerHTML = verdict;
+      } else {
+        document.getElementById('reencounterSection').style.display = 'none';
+      }
+
+      // Excuse Breakdown
+      if (missed.length > 0) {
+        document.getElementById('excuseSection').style.display = '';
+        const reasonCounts = {};
+        missed.forEach(m => { reasonCounts[m.reason] = (reasonCounts[m.reason] || 0) + 1; });
+        const sorted = Object.entries(reasonCounts).sort((a, b) => b[1] - a[1]);
+        const maxCount = sorted[0] ? sorted[0][1] : 1;
+        const barsEl = document.getElementById('excuseBars');
+        barsEl.innerHTML = '';
+        sorted.forEach(([reason, count]) => {
+          const pct = (count / maxCount) * 100;
+          barsEl.innerHTML += `
+            <div class="excuse-bar-row">
+              <span class="excuse-label">${reason}</span>
+              <div class="excuse-bar-bg">
+                <div class="excuse-bar-fill" style="width:${pct}%"></div>
+              </div>
+              <span class="excuse-count">${count}</span>
+            </div>`;
+        });
+      } else {
+        document.getElementById('excuseSection').style.display = 'none';
+      }
+
+      // Missed Log
+      if (missed.length > 0) {
+        document.getElementById('missedLogSection').style.display = '';
+        document.getElementById('missedLogCount').textContent = `${missed.length} entries`;
+        const listEl = document.getElementById('missedLogList');
+        const recent = [...missed].reverse().slice(0, 50);
+        listEl.innerHTML = '';
+        recent.forEach(m => {
+          const sightingHtml = m.sightings.length > 0
+            ? `<div class="missed-sighting">Saw again ${m.sightings.length}x</div>
+               <div class="missed-sighting-list">${m.sightings.join(', ')}</div>`
+            : '';
+          const sawAgainClass = m.sightings.length > 0 ? ' active' : '';
+          listEl.innerHTML += `
+            <div class="missed-entry">
+              <div class="missed-entry-header">
+                <span class="missed-entry-reason">${m.reason}</span>
+                <span class="missed-entry-date">${m.date} ${m.time || ''}</span>
+              </div>
+              ${m.note ? `<div class="missed-entry-note">"${m.note}"</div>` : ''}
+              ${sightingHtml}
+              <div class="missed-entry-actions">
+                <button class="missed-entry-btn saw-again${sawAgainClass}" onclick="markSawAgain(${m.id})">Saw her again</button>
+                <button class="missed-entry-btn delete" onclick="deleteMissed(${m.id})">Delete</button>
+              </div>
+            </div>`;
+        });
+      } else {
+        document.getElementById('missedLogSection').style.display = 'none';
+      }
+
+      // GO Mode History
+      renderGoHistory(data);
+
+      // People Log
+      renderPeople(data);
+      renderExcuses(data);
+
+      // ===== TWO FUTURES =====
+      // Project forward using current pace (or default 3/day if no data yet)
+      const currentPace = activeDays > 0 ? avgTalksPerActiveDay : 3;
+      const currentSeenPace = activeDays > 0 ? (totalSeen / Math.max(1, daysPassed)) : 10;
+      const projTalks = Math.round(currentPace * daysLeft) + totalApproaches;
+      const projSeen = Math.round(currentSeenPace * daysLeft) + totalSeen;
+
+      // Simulate the speaking future with skill compounding
+      let futConvos = 0, futNumbers = 0, futDates = 0, futRels = 0;
+      let runningTalks = totalApproaches;
+      for (let d = 0; d < daysLeft; d++) {
+        const sm = 1 + 0.15 * Math.log2(1 + runningTalks);
+        for (let t = 0; t < currentPace; t++) {
+          runningTalks++;
+          const rc = Math.min(0.9, (s.convoRate / 100) * sm);
+          const rn = Math.min(0.9, (s.numberRate / 100) * sm);
+          const rd = Math.min(0.9, (s.dateRate / 100) * sm);
+          const rr = Math.min(0.9, (s.relRate / 100) * sm);
+          futConvos += rc;
+          futNumbers += rc * rn;
+          futDates += rc * rn * rd;
+          futRels += rc * rn * rd * rr;
+        }
+      }
+      // Add what you already earned
+      futConvos += fConvo; futNumbers += fNumber; futDates += fDate; futRels += fRel;
+      const finalSkill = 1 + 0.15 * Math.log2(1 + projTalks);
+
+      document.getElementById('futuresSub').textContent = `Same person. Same ${daysLeft} days. One choice.`;
+      document.getElementById('futSpeakTalks').textContent = projTalks.toLocaleString();
+      document.getElementById('futSpeakConvos').textContent = Math.round(futConvos).toLocaleString();
+      document.getElementById('futSpeakNumbers').textContent = Math.round(futNumbers).toLocaleString();
+      document.getElementById('futSpeakDates').textContent = futDates.toFixed(1);
+      document.getElementById('futSpeakRels').textContent = futRels.toFixed(1);
+      document.getElementById('futSpeakSkill').textContent = finalSkill.toFixed(1) + 'x';
+
+      const silentGone = Math.round(projSeen * vanishRate);
+      document.getElementById('futSilentDates').textContent = '0';
+      document.getElementById('futSilentGone').textContent = silentGone.toLocaleString();
+
+      // ===== FEAR REFRAME =====
+      const peopleLeft = Math.round(currentSeenPace * daysLeft);
+      const fearEl = document.getElementById('fearContent');
+      fearEl.innerHTML = `
+        <div class="fear-line">
+          Right now you're scared of <strong>one person</strong>.
+          <br><span class="dim">But she is 1 of ${peopleLeft.toLocaleString()} you'll see before this ends.</span>
+        </div>
+        <div class="fear-line">
+          If this one says no — you still have <strong>${(peopleLeft - 1).toLocaleString()} more chances</strong>.
+          <br><span class="dim">The fear is treating this like your only shot. It's not even close.</span>
+        </div>
+        <div class="fear-highlight">
+          ${projTalks} talks → ${Math.round(futNumbers)} numbers → ${futDates.toFixed(1)} dates
+        </div>
+        <div class="fear-line">
+          That's your future if you keep going.
+          <br><strong>This one interaction doesn't matter.</strong>
+          <br><span class="dim">What matters is that you don't stop.</span>
+        </div>
+        <div class="fear-line" style="margin-top:12px; padding-top:10px; border-top: 1px solid rgba(167,139,250,0.15);">
+          The worst outcome of saying hello: <strong>5 seconds of awkwardness</strong>
+          <br>The worst outcome of silence: <strong>she's gone forever</strong>
+          <br><span class="dim">90% of the people you don't talk to — you will never see again.</span>
+        </div>
+        <div class="fear-line" style="margin-top:10px;">
+          You are not risking rejection.
+          <br><strong>You are risking permanent invisibility.</strong>
+        </div>
+      `;
+
+      // EV
+      document.getElementById('evVanish').textContent = `${(vanishRate * 100).toFixed(0)}%`;
+      document.getElementById('evSuccessRate').textContent = `${(evConvo * 100).toFixed(0)}%`;
+      document.getElementById('evExpected').textContent = evConnection.toFixed(2);
+      document.getElementById('evVerdict').textContent =
+        `Speaking: ${(evConnection * 100).toFixed(0)}% chance of something real. Silence: 0%. Always speak.`;
+
+      // Funnel
+      const funnelData = [
+        { label: 'Hellos', count: fHello, color: 'var(--accent)' },
+        { label: 'Real convos', count: fConvo, color: 'var(--blue)' },
+        { label: 'Numbers', count: fNumber, color: 'var(--purple)' },
+        { label: 'Dates', count: fDate, color: 'var(--success)' },
+        { label: 'Relationships', count: fRel, color: '#f472b6' },
+      ];
+      const maxFunnel = Math.max(1, fHello);
+      const funnelEl = document.getElementById('funnelSteps');
+      funnelEl.innerHTML = '';
+      funnelData.forEach(f => {
+        const pct = (f.count / maxFunnel) * 100;
+        funnelEl.innerHTML += `
+          <div class="funnel-step">
+            <span class="funnel-label">${f.label}</span>
+            <div class="funnel-bar-bg">
+              <div class="funnel-bar-fill" style="width:${Math.max(2, pct)}%;background:${f.color}"></div>
+              <span class="funnel-bar-text">${pct.toFixed(0)}%</span>
+            </div>
+            <span class="funnel-count" style="color:${f.color}">${f.count < 10 ? f.count.toFixed(1) : Math.round(f.count)}</span>
+          </div>`;
+      });
+
+      // Stats
+      document.getElementById('totalApproaches').textContent = totalApproaches;
+      document.getElementById('missedForever').textContent = goneForever.toLocaleString();
+      document.getElementById('expectedSecond').textContent = secondMeetings;
+      document.getElementById('expectedNumbers').textContent = fNumber < 10 ? fNumber.toFixed(1) : Math.round(fNumber);
+      document.getElementById('expectedDates').textContent = fDate < 10 ? fDate.toFixed(1) : Math.round(fDate);
+      document.getElementById('expectedRelationships').textContent = fRel.toFixed(1);
+
+      // Regret — uses real seen data
+      document.getElementById('regretTotal').textContent = goneForever.toLocaleString();
+      document.getElementById('regretSeen').textContent = totalSeen.toLocaleString();
+      document.getElementById('regretTalked').textContent = totalApproaches;
+      document.getElementById('regretIgnored').textContent = ignored.toLocaleString();
+      document.getElementById('regretGone').textContent = goneForever.toLocaleString();
+      document.getElementById('regretConnections').textContent = Math.round(regretConvo);
+      document.getElementById('regretDates').textContent = Math.round(regretDate);
+
+      // Decay
+      document.getElementById('decayMultiplier').textContent = urgency.toFixed(1) + 'x';
+      const pctGone = ((s.totalDays - daysLeft) / s.totalDays * 100).toFixed(0);
+      document.getElementById('decayExplain').textContent =
+        `${pctGone}% of your window is gone. Each day is worth ${urgency.toFixed(1)}x what it was on day 1. ${daysLeft} days left — compressed.`;
+
+      // Power Level
+      document.getElementById('powerNumber').textContent = pl.powerLevel.toLocaleString();
+      const decayWarn = document.getElementById('decayWarning');
+      if (pl.streakDead > 0) {
+        const pctLost = Math.round((1 - pl.decayFactor) * 100);
+        const msgs = [
+          '', // 0 unused
+          `⚠️ 1 day silent. Power draining −${pctLost}%. Talk to someone today.`,
+          `🔻 2 days silent. You've lost ${pctLost}% of your power. Skills are rusting.`,
+          `🩸 ${pl.streakDead} days silent. ${pctLost}% power gone. Your confidence is bleeding out.`,
+        ];
+        const msg = pl.streakDead <= 2 ? msgs[pl.streakDead] :
+          pl.streakDead <= 5 ? `🩸 ${pl.streakDead} days idle. ${pctLost}% power GONE. Every hour you wait, you get weaker.` :
+            `💀 ${pl.streakDead} days of silence. ${pctLost}% power destroyed. You're becoming invisible. SPEAK.`;
+        decayWarn.textContent = msg;
+        decayWarn.style.display = 'block';
+        if (pl.decayFactor < 0.5) {
+          decayWarn.style.borderColor = 'rgba(255,59,59,0.6)';
+          decayWarn.style.background = 'rgba(255,59,59,0.18)';
+        }
+      } else {
+        decayWarn.style.display = 'none';
+      }
+      const factorsEl = document.getElementById('powerFactors');
+      const decayLabel = pl.streakDead > 0 ? `${pl.streakDead}d idle` : 'active';
+      const decayColor = pl.decayFactor < 0.5 ? 'var(--danger)' : pl.decayFactor < 0.8 ? 'var(--yellow)' : 'var(--success)';
+      const factors = [
+        { name: 'Boldness', value: `${(pl.courageRatio * 100).toFixed(0)}%`, mult: `${pl.courageFactor.toFixed(1)}x` },
+        { name: 'Consistency', value: `${(pl.consistencyRatio * 100).toFixed(0)}%`, mult: `${pl.consistencyFactor.toFixed(1)}x` },
+        { name: 'Volume', value: `${pl.avgTalksPerActiveDay.toFixed(1)}/day`, mult: `${pl.volumeFactor.toFixed(1)}x` },
+        { name: 'Growth', value: daysPassed > 7 ? 'vs last 7d' : 'need data', mult: `${pl.growthFactor.toFixed(1)}x` },
+        { name: 'Urgency', value: `day ${daysPassed}`, mult: `${pl.urgencyBonus.toFixed(1)}x` },
+        { name: '🩸 Decay', value: decayLabel, mult: `${pl.decayFactor.toFixed(2)}x`, isDanger: pl.streakDead > 0 },
+        { name: 'Base Power', value: `${totalApproaches} talks`, mult: `${pl.basePower.toLocaleString()}`, fullWidth: true },
+      ];
+      factorsEl.innerHTML = '';
+      factors.forEach(f => {
+        const dangerStyle = f.isDanger ? ` style="border-color:${decayColor}; background: rgba(255,59,59,0.08)"` : '';
+        factorsEl.innerHTML += `
+          <div class="power-factor${f.fullWidth ? ' full-width' : ''}"${dangerStyle}>
+            <div class="power-factor-name">${f.name}</div>
+            <div class="power-factor-row">
+              <span class="power-factor-value">${f.value}</span>
+              <span class="power-factor-mult" ${f.isDanger ? `style="color:${decayColor}"` : ''}>${f.mult}</span>
+            </div>
+          </div>`;
+      });
+      const decayStr = pl.decayFactor < 1 ? ` × <span style="color:${decayColor}">${pl.decayFactor.toFixed(2)}</span>` : '';
+      document.getElementById('powerBase').innerHTML =
+        `Base <span>${pl.basePower.toLocaleString()}</span> × ${pl.courageFactor.toFixed(1)} × ${pl.consistencyFactor.toFixed(1)} × ${pl.volumeFactor.toFixed(1)} × ${pl.growthFactor.toFixed(1)} × ${pl.urgencyBonus.toFixed(1)}${decayStr} = <span>${pl.powerLevel.toLocaleString()}</span>`;
+
+      // History
+      const grid = document.getElementById('historyGrid');
+      grid.innerHTML = '';
+      for (let i = 27; i >= 0; i--) {
+        const d = new Date(); d.setDate(d.getDate() - i);
+        const ds = d.toISOString().slice(0, 10);
+        const count = data.days[ds] || 0;
+        const div = document.createElement('div');
+        div.className = 'history-day' + (count > 0 ? ' has-data' : '') + (ds === today ? ' today' : '') + (ds > today ? ' future' : '');
+        div.textContent = count > 0 ? count : '';
+        grid.appendChild(div);
+      }
+
+      // Settings
+      document.getElementById('setTotalDays').value = s.totalDays;
+      document.getElementById('setSecondChance').value = s.secondChance;
+      document.getElementById('setThirdChance').value = s.thirdChance;
+      document.getElementById('setConvoRate').value = s.convoRate;
+      document.getElementById('setNumberRate').value = s.numberRate;
+      document.getElementById('setDateRate').value = s.dateRate;
+      document.getElementById('setRelRate').value = s.relRate;
+    }
+
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js');
+    }
+
+    // --- NAVIGATION ---
+    function switchView(view) {
+      ['Home','Stats','Excuses','Go'].forEach(v => {
+        const k = v.toLowerCase();
+        document.getElementById('view' + v).classList.toggle('active', view === k);
+        document.getElementById('nav' + v).classList.toggle('active', view === k);
+      });
+      window.scrollTo(0, 0);
+      if (view === 'stats') renderStats();
+      if (view === 'excuses') renderExcuses(getData());
+      if (view === 'go') render();
+    }
+
+    // --- STATS RENDERING ---
+    function getMonthKey(dateStr) {
+      return dateStr.slice(0, 7); // "YYYY-MM"
+    }
+
+    function monthLabel(monthKey) {
+      const [y, m] = monthKey.split('-');
+      const names = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      return names[parseInt(m) - 1] + ' ' + y;
+    }
+
+    function renderStats() {
+      const data = getData();
+      const s = data.settings;
+      const today = todayStr();
+      const daysPassed = daysBetween(data.startDate, today);
+
+      // Gather all months from startDate to today
+      const allMonths = [];
+      const startMonth = data.startDate.slice(0, 7);
+      const endMonth = today.slice(0, 7);
+      let cursor = startMonth;
+      while (cursor <= endMonth) {
+        allMonths.push(cursor);
+        const [y, m] = cursor.split('-').map(Number);
+        const next = m === 12 ? `${y + 1}-01` : `${y}-${String(m + 1).padStart(2, '0')}`;
+        cursor = next;
+      }
+
+      // Aggregate data per month
+      const monthData = {};
+      allMonths.forEach(mk => {
+        monthData[mk] = { talked: 0, seen: 0, missed: 0, go: 0, days: 0, activeDays: 0 };
+      });
+
+      // Talked & Seen per month
+      Object.entries(data.days).forEach(([date, count]) => {
+        const mk = getMonthKey(date);
+        if (monthData[mk]) {
+          monthData[mk].talked += count;
+          if (count > 0) monthData[mk].activeDays++;
+        }
+      });
+      Object.entries(data.seen).forEach(([date, count]) => {
+        const mk = getMonthKey(date);
+        if (monthData[mk]) monthData[mk].seen += count;
+      });
+
+      // Missed per month
+      (data.missed || []).forEach(m => {
+        const mk = getMonthKey(m.date);
+        if (monthData[mk]) monthData[mk].missed++;
+      });
+
+      // GO attempts per month
+      (data.goAttempts || []).forEach(a => {
+        const mk = getMonthKey(a.date);
+        if (monthData[mk]) monthData[mk].go++;
+      });
+
+      // Count days per month
+      allMonths.forEach(mk => {
+        const [y, m] = mk.split('-').map(Number);
+        const lastDay = new Date(y, m, 0).getDate();
+        const monthStart = mk + '-01';
+        const monthEnd = mk + '-' + String(lastDay).padStart(2, '0');
+        if (monthEnd < data.startDate) { monthData[mk].days = 0; return; }
+        const effStart = monthStart < data.startDate ? data.startDate : monthStart;
+        const effEnd = monthEnd > today ? today : monthEnd;
+        monthData[mk].days = Math.max(0, daysBetween(effStart, effEnd) + 1);
+      });
+
+      // Totals
+      let totalTalked = 0, totalSeen = 0, totalMissed = 0, totalGo = 0;
+      allMonths.forEach(mk => {
+        totalTalked += monthData[mk].talked;
+        totalSeen += monthData[mk].seen;
+        totalMissed += monthData[mk].missed;
+        totalGo += monthData[mk].go;
+      });
+      const totalCourage = totalSeen > 0 ? Math.round((totalTalked / totalSeen) * 100) : 0;
+
+      // ===== Overview Cards =====
+      const ovEl = document.getElementById('statsOverview');
+      ovEl.innerHTML = `
+        <div class="stats-ov-card"><div class="ov-value" style="color:var(--accent)">${totalTalked}</div><div class="ov-label">Total Talks</div></div>
+        <div class="stats-ov-card"><div class="ov-value" style="color:var(--blue)">${totalSeen}</div><div class="ov-label">Total Seen</div></div>
+        <div class="stats-ov-card"><div class="ov-value" style="color:var(--success)">${totalCourage}%</div><div class="ov-label">Boldness</div></div>
+        <div class="stats-ov-card"><div class="ov-value" style="color:var(--danger)">${totalMissed}</div><div class="ov-label">Misses</div></div>
+        <div class="stats-ov-card"><div class="ov-value" style="color:var(--yellow)">${totalGo}</div><div class="ov-label">GO Mode</div></div>
+        <div class="stats-ov-card"><div class="ov-value" style="color:var(--purple)">${daysPassed}</div><div class="ov-label">Days In</div></div>
+      `;
+
+      // ===== Monthly Table =====
+      const tbodyEl = document.getElementById('statsMonthlyBody');
+      tbodyEl.innerHTML = '';
+      allMonths.forEach(mk => {
+        const md = monthData[mk];
+        const courage = md.seen > 0 ? Math.round((md.talked / md.seen) * 100) : (md.talked > 0 ? 100 : 0);
+        tbodyEl.innerHTML += `<tr>
+          <td class="month-name">${monthLabel(mk)}</td>
+          <td class="num-val accent">${md.talked}</td>
+          <td class="num-val blue">${md.seen}</td>
+          <td class="num-val success">${courage}%</td>
+          <td class="num-val danger">${md.missed}</td>
+          <td class="num-val yellow">${md.go}</td>
+        </tr>`;
+      });
+      // Totals row
+      tbodyEl.innerHTML += `<tr style="border-top:2px solid var(--border)">
+        <td class="month-name" style="color:var(--accent)">Total</td>
+        <td class="num-val accent">${totalTalked}</td>
+        <td class="num-val blue">${totalSeen}</td>
+        <td class="num-val success">${totalCourage}%</td>
+        <td class="num-val danger">${totalMissed}</td>
+        <td class="num-val yellow">${totalGo}</td>
+      </tr>`;
+
+      // ===== Approaches Bar Chart =====
+      const maxTalked = Math.max(1, ...allMonths.map(mk => monthData[mk].talked));
+      const appBarsEl = document.getElementById('statsApproachBars');
+      appBarsEl.innerHTML = '';
+      allMonths.forEach(mk => {
+        const md = monthData[mk];
+        const pct = (md.talked / maxTalked) * 100;
+        appBarsEl.innerHTML += `<div class="stats-bar-row">
+          <span class="stats-bar-label">${monthLabel(mk)}</span>
+          <div class="stats-bar-bg"><div class="stats-bar-fill" style="width:${pct}%;background:var(--accent)"></div></div>
+          <span class="stats-bar-val" style="color:var(--accent)">${md.talked}</span>
+        </div>`;
+      });
+
+      // ===== Seen Bar Chart =====
+      const maxSeen = Math.max(1, ...allMonths.map(mk => monthData[mk].seen));
+      const seenBarsEl = document.getElementById('statsSeenBars');
+      seenBarsEl.innerHTML = '';
+      allMonths.forEach(mk => {
+        const md = monthData[mk];
+        const pct = (md.seen / maxSeen) * 100;
+        seenBarsEl.innerHTML += `<div class="stats-bar-row">
+          <span class="stats-bar-label">${monthLabel(mk)}</span>
+          <div class="stats-bar-bg"><div class="stats-bar-fill" style="width:${pct}%;background:var(--blue)"></div></div>
+          <span class="stats-bar-val" style="color:var(--blue)">${md.seen}</span>
+        </div>`;
+      });
+
+      // ===== Courage Bar Chart =====
+      const courageBarsEl = document.getElementById('statsCourageBars');
+      courageBarsEl.innerHTML = '';
+      allMonths.forEach(mk => {
+        const md = monthData[mk];
+        const courage = md.seen > 0 ? Math.round((md.talked / md.seen) * 100) : (md.talked > 0 ? 100 : 0);
+        const color = courage >= 50 ? 'var(--success)' : courage >= 20 ? 'var(--yellow)' : 'var(--danger)';
+        courageBarsEl.innerHTML += `<div class="stats-bar-row">
+          <span class="stats-bar-label">${monthLabel(mk)}</span>
+          <div class="stats-bar-bg"><div class="stats-bar-fill" style="width:${courage}%;background:${color}"></div></div>
+          <span class="stats-bar-val" style="color:${color}">${courage}%</span>
+        </div>`;
+      });
+
+      // ===== Personal Records =====
+      let bestDay = { date: '-', count: 0 };
+      let bestSeenDay = { date: '-', count: 0 };
+      let currentStreak = 0, longestStreak = 0;
+      const sortedDates = Object.keys(data.days).sort();
+
+      Object.entries(data.days).forEach(([date, count]) => {
+        if (count > bestDay.count) bestDay = { date, count };
+      });
+      Object.entries(data.seen).forEach(([date, count]) => {
+        if (count > bestSeenDay.count) bestSeenDay = { date, count };
+      });
+
+      // Streak calculation
+      for (let i = 0; i < 365; i++) {
+        const d = new Date(); d.setDate(d.getDate() - i);
+        const ds = d.toISOString().slice(0, 10);
+        if (ds < data.startDate) break;
+        if ((data.days[ds] || 0) > 0) {
+          currentStreak = (i === 0 || currentStreak > 0) ? currentStreak + 1 : 1;
+          longestStreak = Math.max(longestStreak, currentStreak);
+        } else {
+          if (i > 0) currentStreak = 0; // don't break streak on today
+        }
+      }
+
+      // Active days total
+      let totalActiveDays = 0;
+      Object.values(data.days).forEach(v => { if (v > 0) totalActiveDays++; });
+      const avgPerActiveDay = totalActiveDays > 0 ? (totalTalked / totalActiveDays).toFixed(1) : '0';
+
+      const recsEl = document.getElementById('statsRecords');
+      recsEl.innerHTML = `
+        <div class="stats-record"><div class="rec-value" style="color:var(--accent)">${bestDay.count}</div><div class="rec-label">Most active day (Talks))</div><div class="rec-date">${bestDay.date !== '-' ? bestDay.date.slice(5) : '-'}</div></div>
+        <div class="stats-record"><div class="rec-value" style="color:var(--blue)">${bestSeenDay.count}</div><div class="rec-label">Most Seen</div><div class="rec-date">${bestSeenDay.date !== '-' ? bestSeenDay.date.slice(5) : '-'}</div></div>
+        <div class="stats-record"><div class="rec-value" style="color:var(--success)">${longestStreak}</div><div class="rec-label">Longest Streak</div><div class="rec-date">days in a row</div></div>
+        <div class="stats-record"><div class="rec-value" style="color:var(--yellow)">${avgPerActiveDay}</div><div class="rec-label">Avg / Active Day</div><div class="rec-date">${totalActiveDays} active days</div></div>
+      `;
+
+      // ===== Day of Week =====
+      const dowTalked = [0, 0, 0, 0, 0, 0, 0];
+      const dowSeen = [0, 0, 0, 0, 0, 0, 0];
+      const dowCount = [0, 0, 0, 0, 0, 0, 0];
+      const dowNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+      // Walk all days from start to today
+      const startD = new Date(data.startDate + 'T12:00:00');
+      const todayD = new Date(today + 'T12:00:00');
+      for (let d = new Date(startD); d <= todayD; d.setDate(d.getDate() + 1)) {
+        const ds = d.toISOString().slice(0, 10);
+        const dow = d.getDay();
+        dowCount[dow]++;
+        dowTalked[dow] += (data.days[ds] || 0);
+        dowSeen[dow] += (data.seen[ds] || 0);
+      }
+
+      const dowEl = document.getElementById('statsDow');
+      dowEl.innerHTML = '';
+      for (let i = 1; i <= 7; i++) {
+        const di = i % 7; // Mon=1 to Sun=0
+        const avg = dowCount[di] > 0 ? (dowTalked[di] / dowCount[di]).toFixed(1) : '0';
+        const avgS = dowCount[di] > 0 ? (dowSeen[di] / dowCount[di]).toFixed(1) : '0';
+        dowEl.innerHTML += `<div class="stats-dow">
+          <div class="dow-name">${dowNames[di]}</div>
+          <div class="dow-val">${avg}</div>
+          <div class="dow-seen">${avgS}s</div>
+        </div>`;
+      }
+
+      // ===== Weekly Trend =====
+      const weeks = [];
+      const missedArr = data.missed || [];
+      const goArr = data.goAttempts || [];
+      const weekStartDate = new Date(data.startDate + 'T12:00:00');
+      let weekNum = 1;
+      while (weekStartDate <= todayD) {
+        const weekEnd = new Date(weekStartDate);
+        weekEnd.setDate(weekEnd.getDate() + 6);
+        const wStart = weekStartDate.toISOString().slice(0, 10);
+        const wEnd = (weekEnd <= todayD ? weekEnd : todayD).toISOString().slice(0, 10);
+        let talked = 0, seen = 0;
+        for (let d = new Date(weekStartDate); d <= weekEnd && d <= todayD; d.setDate(d.getDate() + 1)) {
+          const ds = d.toISOString().slice(0, 10);
+          talked += (data.days[ds] || 0);
+          seen += (data.seen[ds] || 0);
+        }
+        const missed = missedArr.filter(m => m.date >= wStart && m.date <= wEnd).length;
+        const go = goArr.filter(a => a.date >= wStart && a.date <= wEnd).length;
+        const boldness = seen > 0 ? Math.round((talked / seen) * 100) : (talked > 0 ? 100 : 0);
+        weeks.push({ label: 'W' + weekNum, talked, seen, missed, go, boldness, start: wStart });
+        weekNum++;
+        weekStartDate.setDate(weekStartDate.getDate() + 7);
+      }
+
+      // Weekly Breakdown Table
+      const wTbody = document.getElementById('statsWeeklyBody');
+      wTbody.innerHTML = '';
+      let wTotalTalked = 0, wTotalSeen = 0, wTotalMissed = 0, wTotalGo = 0;
+      weeks.forEach(w => {
+        wTotalTalked += w.talked; wTotalSeen += w.seen; wTotalMissed += w.missed; wTotalGo += w.go;
+        wTbody.innerHTML += `<tr>
+          <td class="month-name">${w.label}</td>
+          <td class="num-val accent">${w.talked}</td>
+          <td class="num-val blue">${w.seen}</td>
+          <td class="num-val success">${w.boldness}%</td>
+          <td class="num-val danger">${w.missed}</td>
+          <td class="num-val yellow">${w.go}</td>
+        </tr>`;
+      });
+      const wTotalBoldness = wTotalSeen > 0 ? Math.round((wTotalTalked / wTotalSeen) * 100) : 0;
+      wTbody.innerHTML += `<tr style="border-top:2px solid var(--border)">
+        <td class="month-name" style="color:var(--accent)">Total</td>
+        <td class="num-val accent">${wTotalTalked}</td>
+        <td class="num-val blue">${wTotalSeen}</td>
+        <td class="num-val success">${wTotalBoldness}%</td>
+        <td class="num-val danger">${wTotalMissed}</td>
+        <td class="num-val yellow">${wTotalGo}</td>
+      </tr>`;
+
+      // Weekly Trend Bar Chart (talked + seen + boldness)
+      const maxWeekTalked = Math.max(1, ...weeks.map(w => w.talked));
+      const weekBarsEl = document.getElementById('statsWeeklyBars');
+      weekBarsEl.innerHTML = '';
+      weeks.slice(-12).forEach(w => {
+        const pct = (w.talked / maxWeekTalked) * 100;
+        const bColor = w.boldness >= 50 ? 'var(--success)' : w.boldness >= 20 ? 'var(--yellow)' : 'var(--danger)';
+        weekBarsEl.innerHTML += `<div class="stats-bar-row">
+          <span class="stats-bar-label">${w.label}</span>
+          <div class="stats-bar-bg"><div class="stats-bar-fill" style="width:${pct}%;background:var(--accent)"></div></div>
+          <span class="stats-bar-val" style="color:var(--accent)">${w.talked}</span>
+          <span class="stats-bar-val" style="color:var(--blue);width:25px">${w.seen}s</span>
+          <span class="stats-bar-val" style="color:${bColor};width:30px">${w.boldness}%</span>
+        </div>`;
+      });
+
+      // ===== Milestones =====
+      const currentPace = daysPassed > 0 ? totalTalked / daysPassed : 0;
+      const milestonesDef = [
+        { label: 'Week 1', days: 7, quote: 'The hardest part is over. You started.' },
+        { label: 'Week 2', days: 14, quote: 'Fear is still there. But you know it lies.' },
+        { label: '1 Month', days: 30, quote: 'You\'re not the same person who started. Your voice is different now.' },
+        { label: '2 Months', days: 60, quote: 'This is normal now. You don\'t even think about it anymore.' },
+        { label: '3 Months', days: 90, quote: 'People who knew you before wouldn\'t recognize you.' },
+        { label: 'End of Window', days: s.totalDays, quote: 'You did it. Whatever happened — you didn\'t stay silent.' },
+      ];
+      const smEl = document.getElementById('statsMilestones');
+      smEl.innerHTML = '';
+      milestonesDef.forEach(ms => {
+        if (ms.days > s.totalDays) return;
+        const msTalks = Math.round(currentPace * ms.days);
+        const msSm = 1 + 0.15 * Math.log2(1 + msTalks);
+        const msConvos = msTalks * Math.min(0.9, (s.convoRate / 100) * msSm);
+        const msNums = msConvos * Math.min(0.9, (s.numberRate / 100) * msSm);
+        const msDates = msNums * Math.min(0.9, (s.dateRate / 100) * msSm);
+        const reached = daysPassed >= ms.days;
+        smEl.innerHTML += `
+          <div class="milestone${reached ? ' reached' : ''}">
+            <div class="milestone-header">
+              <span class="milestone-when">${ms.label}</span>
+              <span class="milestone-talks">${msTalks} talks${reached ? ' ✓' : ''}</span>
+            </div>
+            <div class="milestone-row"><span class="ml">Real conversations</span><span class="mv">${Math.round(msConvos)}</span></div>
+            <div class="milestone-row"><span class="ml">Phone numbers</span><span class="mv">${Math.round(msNums)}</span></div>
+            <div class="milestone-row"><span class="ml">Dates</span><span class="mv">${msDates.toFixed(1)}</span></div>
+            <div class="milestone-row"><span class="ml">Skill multiplier</span><span class="mv">${msSm.toFixed(1)}x</span></div>
+            <div class="milestone-quote">"${ms.quote}"</div>
+          </div>`;
+      });
+    }
+
+    render();
+  </script>
+</body>
+
+</html>
