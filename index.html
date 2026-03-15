@@ -597,6 +597,41 @@
       color: #000;
     }
 
+    .missed-xp {
+      display: flex;
+      gap: 8px;
+      margin-top: 6px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .missed-xp-lost {
+      color: var(--danger);
+    }
+
+    .missed-xp-avoided {
+      color: var(--success);
+    }
+
+    .missed-xp-summary {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      padding: 10px;
+      margin-bottom: 8px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .odds-xp-preview {
+      margin-top: 6px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
     .missed-entry-btn.delete {
       border-color: #333;
     }
@@ -3317,18 +3352,22 @@
           <button class="rc-odds-btn" onclick="logReencounterOdds('daily', 80)">
             <div><span class="odds-label">Same place daily</span><br><span class="odds-desc">Gym, class, commute, coffee shop</span></div>
             <span class="odds-pct">~80%</span>
+            <div class="odds-xp-preview"><span class="missed-xp-lost">-20 XP</span> · <span class="missed-xp-avoided">+24 saved</span></div>
           </button>
           <button class="rc-odds-btn" onclick="logReencounterOdds('weekly', 40)">
             <div><span class="odds-label">Same area sometimes</span><br><span class="odds-desc">Campus, neighborhood, regular spot</span></div>
             <span class="odds-pct">~40%</span>
+            <div class="odds-xp-preview"><span class="missed-xp-lost">-60 XP</span> · <span class="missed-xp-avoided">+12 saved</span></div>
           </button>
           <button class="rc-odds-btn" onclick="logReencounterOdds('random', 10)">
             <div><span class="odds-label">Random encounter</span><br><span class="odds-desc">Street, mall, one-time event</span></div>
             <span class="odds-pct">~10%</span>
+            <div class="odds-xp-preview"><span class="missed-xp-lost">-90 XP</span> · <span class="missed-xp-avoided">+3 saved</span></div>
           </button>
           <button class="rc-odds-btn" onclick="logReencounterOdds('never', 2)">
             <div><span class="odds-label">Probably never</span><br><span class="odds-desc">Tourist, traveler, passing through</span></div>
             <span class="odds-pct">~2%</span>
+            <div class="odds-xp-preview"><span class="missed-xp-lost">-98 XP</span> · <span class="missed-xp-avoided">+1 saved</span></div>
           </button>
         </div>
       </div>
@@ -3570,11 +3609,24 @@
       document.getElementById('rcOddsScreen').classList.add('active');
     }
 
+    function calcMissXP(reencounterPct) {
+      // Base XP for any approach opportunity
+      const BASE_XP = 100;
+      // Missed XP = how much you lost by not approaching (higher for rare encounters)
+      const missedXP = Math.round(BASE_XP * (1 - reencounterPct / 100));
+      // Avoided negative XP = risk you dodged by not rushing (higher for frequent encounters)
+      // e.g. classmate: rushing could burn the bridge, so waiting has value
+      const avoidedNegXP = Math.round(BASE_XP * (reencounterPct / 100) * 0.3);
+      return { missedXP, avoidedNegXP };
+    }
+
     function logReencounterOdds(type, pct) {
       const data = getData();
       const entry = data.missed.find(m => m.id === lastMissedEntryId);
       if (entry) {
+        const xp = calcMissXP(pct);
         entry.reencounter = { type: type, pct: pct };
+        entry.xp = { missed: xp.missedXP, avoided: xp.avoidedNegXP };
         saveData(data);
       }
       closeRealityCheck();
@@ -4520,7 +4572,23 @@
       // Missed Log
       if (missed.length > 0) {
         document.getElementById('missedLogSection').style.display = '';
-        document.getElementById('missedLogCount').textContent = `${missed.length} entries`;
+        // Calculate total XP
+        let totalMissedXP = 0, totalAvoidedXP = 0;
+        missed.forEach(m => {
+          if (m.xp) {
+            totalMissedXP += m.xp.missed;
+            totalAvoidedXP += m.xp.avoided;
+          } else if (m.reencounter) {
+            // Migrate old entries without xp
+            const xp = calcMissXP(m.reencounter.pct);
+            totalMissedXP += xp.missedXP;
+            totalAvoidedXP += xp.avoidedNegXP;
+          }
+        });
+        const xpCountText = totalMissedXP > 0
+          ? `${missed.length} entries · <span class="missed-xp-lost">-${totalMissedXP} XP lost</span> · <span class="missed-xp-avoided">+${totalAvoidedXP} avoided</span>`
+          : `${missed.length} entries`;
+        document.getElementById('missedLogCount').innerHTML = xpCountText;
         const listEl = document.getElementById('missedLogList');
         const recent = [...missed].reverse().slice(0, 50);
         listEl.innerHTML = '';
@@ -4530,6 +4598,14 @@
                <div class="missed-sighting-list">${m.sightings.join(', ')}</div>`
             : '';
           const sawAgainClass = m.sightings.length > 0 ? ' active' : '';
+          // XP display per entry
+          let xpHtml = '';
+          if (m.xp) {
+            xpHtml = `<div class="missed-xp"><span class="missed-xp-lost">-${m.xp.missed} XP</span><span class="missed-xp-avoided">+${m.xp.avoided} avoided</span></div>`;
+          } else if (m.reencounter) {
+            const xp = calcMissXP(m.reencounter.pct);
+            xpHtml = `<div class="missed-xp"><span class="missed-xp-lost">-${xp.missedXP} XP</span><span class="missed-xp-avoided">+${xp.avoidedNegXP} avoided</span></div>`;
+          }
           listEl.innerHTML += `
             <div class="missed-entry">
               <div class="missed-entry-header">
@@ -4537,6 +4613,7 @@
                 <span class="missed-entry-date">${m.date} ${m.time || ''}</span>
               </div>
               ${m.note ? `<div class="missed-entry-note">"${m.note}"</div>` : ''}
+              ${xpHtml}
               ${sightingHtml}
               <div class="missed-entry-actions">
                 <button class="missed-entry-btn saw-again${sawAgainClass}" onclick="markSawAgain(${m.id})">Saw her again</button>
