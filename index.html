@@ -2927,73 +2927,6 @@
       <!-- GO MODE Trigger -->
       <button class="go-trigger" id="goTrigger" onclick="openGoMode()">🔥 I SEE HER — GO MODE</button>
 
-      <!-- GO MODE Overlay -->
-      <div class="go-overlay" id="goOverlay">
-        <div class="go-panel">
-          <div class="go-header">
-            <h2>She's right there.</h2>
-            <div class="go-sub">Fill these 3 and you're good to approach.</div>
-          </div>
-
-          <div class="go-checkpoints">
-            <div class="go-checkpoint" id="goCheck1">
-              <div class="go-checkpoint-header">
-                <div class="go-checkpoint-num">1</div>
-                <div>
-                  <div class="go-checkpoint-label">Reason</div>
-                  <div class="go-checkpoint-hint">Why her? What caught your eye?</div>
-                </div>
-              </div>
-              <input type="text" id="goReason" placeholder="Her smile, her style, she looks interesting..."
-                oninput="checkGoReady()" maxlength="120">
-            </div>
-
-            <div class="go-checkpoint" id="goCheck2">
-              <div class="go-checkpoint-header">
-                <div class="go-checkpoint-num">2</div>
-                <div>
-                  <div class="go-checkpoint-label">First Line</div>
-                  <div class="go-checkpoint-hint">What will you say first?</div>
-                </div>
-              </div>
-              <input type="text" id="goFirstLine" placeholder="Hey, I just saw you and had to say…"
-                oninput="checkGoReady()" maxlength="120">
-            </div>
-
-            <div class="go-checkpoint" id="goCheck3">
-              <div class="go-checkpoint-header">
-                <div class="go-checkpoint-num">3</div>
-                <div>
-                  <div class="go-checkpoint-label">Excuse <span class="go-checkpoint-hint">— what are we gonna
-                      do?</span></div>
-                </div>
-              </div>
-              <input type="text" id="goExcuse" placeholder="Coffee right now, exchange numbers, walk together..."
-                oninput="checkGoReady()" maxlength="120">
-            </div>
-          </div>
-
-          <!-- What's holding me back -->
-          <div class="go-blocker">
-            <div class="go-blocker-toggle" onclick="toggleGoBlocker()">
-              <span>Why no?</span>
-              <span class="arrow" id="goBlockerArrow">▼</span>
-            </div>
-            <div class="go-blocker-body" id="goBlockerBody">
-              <div class="go-fear-grid" id="goFearGrid"></div>
-              <div class="go-reframe" id="goReframe" style="display:none"></div>
-            </div>
-          </div>
-
-          <button class="go-execute" id="goExecute" onclick="executeGo()" disabled>GO</button>
-          <button class="go-bail" onclick="closeGoMode()">Not now — I'll log the miss instead</button>
-        </div>
-      </div>
-
-      <!-- GO Success Flash -->
-      <div class="go-success-flash" id="goSuccessFlash">
-        <div class="go-success-text">GO! 🔥</div>
-      </div>
 
       <!-- GO MODE History -->
       <div class="go-history" id="goHistorySection" style="display:none">
@@ -5328,6 +5261,73 @@
 
     render();
   </script>
+  <!-- GO MODE Overlay — outside all views so display:none on tabs doesn't block it -->
+  <div class="go-overlay" id="goOverlay">
+    <div class="go-panel">
+      <div class="go-header">
+        <h2>She's right there.</h2>
+        <div class="go-sub">Fill these 3 and you're good to approach.</div>
+      </div>
+
+      <div class="go-checkpoints">
+        <div class="go-checkpoint" id="goCheck1">
+          <div class="go-checkpoint-header">
+            <div class="go-checkpoint-num">1</div>
+            <div>
+              <div class="go-checkpoint-label">Reason</div>
+              <div class="go-checkpoint-hint">Why her? What caught your eye?</div>
+            </div>
+          </div>
+          <input type="text" id="goReason" placeholder="Her smile, her style, she looks interesting..."
+            oninput="checkGoReady()" maxlength="120">
+        </div>
+
+        <div class="go-checkpoint" id="goCheck2">
+          <div class="go-checkpoint-header">
+            <div class="go-checkpoint-num">2</div>
+            <div>
+              <div class="go-checkpoint-label">First Line</div>
+              <div class="go-checkpoint-hint">What will you say first?</div>
+            </div>
+          </div>
+          <input type="text" id="goFirstLine" placeholder="Hey, I just saw you and had to say…"
+            oninput="checkGoReady()" maxlength="120">
+        </div>
+
+        <div class="go-checkpoint" id="goCheck3">
+          <div class="go-checkpoint-header">
+            <div class="go-checkpoint-num">3</div>
+            <div>
+              <div class="go-checkpoint-label">Excuse <span class="go-checkpoint-hint">— what are we gonna do?</span></div>
+            </div>
+          </div>
+          <input type="text" id="goExcuse" placeholder="Coffee right now, exchange numbers, walk together..."
+            oninput="checkGoReady()" maxlength="120">
+        </div>
+      </div>
+
+      <!-- What's holding me back -->
+      <div class="go-blocker">
+        <div class="go-blocker-toggle" onclick="toggleGoBlocker()">
+          <span>Why no?</span>
+          <span class="arrow" id="goBlockerArrow">▼</span>
+        </div>
+        <div class="go-blocker-body" id="goBlockerBody">
+          <div class="go-fear-grid" id="goFearGrid"></div>
+          <div class="go-reframe" id="goReframe" style="display:none"></div>
+        </div>
+      </div>
+
+      <button class="go-execute" id="goExecute" onclick="executeGo()" disabled>GO</button>
+      <button class="go-bail" onclick="closeGoMode()">Not now — I'll log the miss instead</button>
+    </div>
+  </div>
+
+  <!-- GO Success Flash -->
+  <div class="go-success-flash" id="goSuccessFlash">
+    <div class="go-success-text">GO! 🔥</div>
+  </div>
+
 </body>
 
 </html>
