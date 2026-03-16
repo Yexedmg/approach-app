@@ -3795,6 +3795,7 @@
         <button class="btn-add" style="width: 100%; height: 46px; border-radius: 12px; margin-bottom: 20px; font-size: 15px;" onclick="openPrettyModal()">
           + Log a Pretty Girl
         </button>
+        <div id="prettyAgeStats" style="margin-bottom:20px;"></div>
         <div id="prettyList" style="margin-top:10px;"></div>
       </div>
       
@@ -5350,6 +5351,50 @@
       const list = document.getElementById('prettyList');
       if (!list) return;
       const pgs = data.prettyGirls || [];
+      
+      // Age Stats
+      const ages = {};
+      pgs.forEach(pg => {
+         if (!pg.age) return;
+         const ag = pg.age;
+         if(!ages[ag]) ages[ag] = {count:0, totalRating:0};
+         ages[ag].count++;
+         ages[ag].totalRating += parseFloat(pg.rating) || 0;
+      });
+      
+      let maxAgeCount = 1;
+      Object.keys(ages).forEach(ag => {
+         if (ages[ag].count > maxAgeCount) maxAgeCount = ages[ag].count;
+      });
+
+      let htmlAges = '';
+      Object.keys(ages).sort((a,b)=>Number(a)-Number(b)).forEach(ag => {
+         const avgRating = (ages[ag].totalRating / ages[ag].count).toFixed(1);
+         const pct = (ages[ag].count / maxAgeCount) * 100;
+         htmlAges += `
+          <div class="funnel-step" style="align-items:center;">
+            <span class="funnel-label" style="width:60px;">${ag}</span>
+            <div class="funnel-bar-bg" style="flex:1;">
+              <div class="funnel-bar-fill" style="width:${Math.max(2, pct)}%;background:var(--blue)"></div>
+              <span class="funnel-bar-text" style="color:#fff; padding-left:6px; font-size:11px;">${ages[ag].count}x</span>
+            </div>
+            <div style="width:70px; text-align:right;">
+               <div style="font-size:18px; font-weight:800; color:var(--text); line-height:1;">${avgRating}</div>
+               <div style="font-size:9px; color:var(--dim); text-transform:uppercase; letter-spacing:0.5px; margin-top:4px;">Avg Rating</div>
+            </div>
+          </div>
+         `;
+      });
+      
+      const ageStatsEl = document.getElementById('prettyAgeStats');
+      if (ageStatsEl) {
+        if(Object.keys(ages).length === 0) {
+          ageStatsEl.innerHTML = '';
+        } else {
+          ageStatsEl.innerHTML = `<h3 style="font-size:14px; margin-bottom:12px; color:var(--text); border-bottom:1px solid var(--border); padding-bottom:6px;">Age Stats & Ratings</h3><div style="display:flex; flex-direction:column; gap:8px; width:100%; margin-top:8px;">${htmlAges}</div>`;
+        }
+      }
+
       if (pgs.length === 0) {
         list.innerHTML = '<div style="font-size:12px;color:var(--dim);text-align:center;">No pretty girls logged yet.</div>';
         return;
@@ -6489,13 +6534,16 @@
          const avgRating = (ages[ag].totalRating / ages[ag].count).toFixed(1);
          const pct = (ages[ag].count / maxAgeCount) * 100;
          htmlAges += `
-          <div class="funnel-step">
-            <span class="funnel-label" style="width:60px;">Age ${ag}</span>
+          <div class="funnel-step" style="align-items:center;">
+            <span class="funnel-label" style="width:60px;">${ag}</span>
             <div class="funnel-bar-bg" style="flex:1;">
               <div class="funnel-bar-fill" style="width:${Math.max(2, pct)}%;background:var(--blue)"></div>
               <span class="funnel-bar-text" style="color:#fff; padding-left:6px; font-size:11px;">${ages[ag].count}x</span>
             </div>
-            <span class="funnel-count" style="color:var(--dim); font-size:10px; width:70px; text-align:right;">Avg ${avgRating}/10</span>
+            <div style="width:70px; text-align:right;">
+               <div style="font-size:18px; font-weight:800; color:var(--text); line-height:1;">${avgRating}</div>
+               <div style="font-size:9px; color:var(--dim); text-transform:uppercase; letter-spacing:0.5px; margin-top:4px;">Avg Rating</div>
+            </div>
           </div>
          `;
       });
