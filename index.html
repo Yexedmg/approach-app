@@ -2447,6 +2447,176 @@
       display: block;
     }
 
+    /* ===== GO TAB ACTION HUB ===== */
+    .go-status-bar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 14px;
+      padding: 14px 0;
+      margin-bottom: 16px;
+    }
+    .go-status-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+    }
+    .go-status-num {
+      font-size: 22px;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1;
+    }
+    .go-status-lbl {
+      font-size: 11px;
+      color: rgba(255,255,255,0.4);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .go-status-divider {
+      width: 1px;
+      height: 32px;
+      background: rgba(255,255,255,0.1);
+    }
+    .go-trigger-tab {
+      width: 100%;
+      margin-bottom: 20px;
+    }
+    .go-toolkit-section {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 14px;
+    }
+    .go-toolkit-header {
+      margin-bottom: 12px;
+    }
+    .go-toolkit-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: 0.02em;
+      margin-bottom: 2px;
+    }
+    .go-toolkit-sub {
+      font-size: 12px;
+      color: rgba(255,255,255,0.4);
+    }
+    /* Fear cards */
+    .go-fear-cards {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .go-fear-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 10px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: border-color 0.15s;
+    }
+    .go-fear-card.open {
+      border-color: rgba(255,107,53,0.4);
+    }
+    .go-fear-card-trigger {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 11px 14px;
+      font-size: 14px;
+      font-weight: 500;
+      color: rgba(255,255,255,0.85);
+      user-select: none;
+    }
+    .go-fear-card-arrow {
+      font-size: 11px;
+      color: rgba(255,255,255,0.3);
+      transition: transform 0.2s;
+    }
+    .go-fear-card.open .go-fear-card-arrow {
+      transform: rotate(180deg);
+      color: var(--accent);
+    }
+    .go-fear-card-reframe {
+      display: none;
+      padding: 0 14px 12px;
+      font-size: 13px;
+      line-height: 1.55;
+      color: rgba(255,255,255,0.7);
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding-top: 10px;
+    }
+    .go-fear-card.open .go-fear-card-reframe {
+      display: block;
+    }
+    /* Plans chips */
+    .go-plans-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .go-plan-chip {
+      background: rgba(52,211,153,0.12);
+      border: 1px solid rgba(52,211,153,0.25);
+      border-radius: 20px;
+      padding: 6px 12px;
+      font-size: 13px;
+      color: var(--success);
+      font-weight: 500;
+    }
+    .go-plans-empty {
+      font-size: 13px;
+      color: rgba(255,255,255,0.3);
+      padding: 4px 0;
+    }
+    .go-plans-edit-btn {
+      background: none;
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 8px;
+      color: rgba(255,255,255,0.5);
+      font-size: 13px;
+      padding: 7px 14px;
+      cursor: pointer;
+      width: 100%;
+      text-align: center;
+      transition: border-color 0.15s, color 0.15s;
+    }
+    .go-plans-edit-btn:active {
+      border-color: rgba(255,255,255,0.3);
+      color: rgba(255,255,255,0.8);
+    }
+    /* Opening lines */
+    .go-openers-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .go-opener-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 10px;
+      padding: 12px 14px;
+    }
+    .go-opener-text {
+      font-size: 13px;
+      color: rgba(255,255,255,0.85);
+      line-height: 1.5;
+      margin-bottom: 5px;
+      font-style: italic;
+    }
+    .go-opener-note {
+      font-size: 11px;
+      color: rgba(255,255,255,0.35);
+    }
+
     /* ===== STATS PAGE ===== */
     .stats-page {
       max-width: 430px;
@@ -3010,73 +3180,72 @@
   <div class="view-go" id="viewGo">
     <div class="go-page" style="max-width:430px; margin:0 auto; padding:16px; padding-bottom:80px;">
 
-      <!-- Two Futures -->
-      <div class="futures-section">
-        <h3>Two Futures</h3>
-        <div class="futures-sub" id="futuresSub">Same person. Same 195 days. One choice.</div>
-        <div class="futures-split">
-          <div class="future-col speak">
-            <div class="future-col-title">You Who Speaks</div>
-            <div class="future-big" id="futSpeakDates">0</div>
-            <div class="future-big-label">projected dates</div>
-            <div class="future-divider"></div>
-            <div class="future-row"><span class="fl">Talks</span><span class="fv" id="futSpeakTalks">0</span></div>
-            <div class="future-row"><span class="fl">Real convos</span><span class="fv" id="futSpeakConvos">0</span></div>
-            <div class="future-row"><span class="fl">Numbers</span><span class="fv" id="futSpeakNumbers">0</span></div>
-            <div class="future-row"><span class="fl">Relationships</span><span class="fv" id="futSpeakRels">0</span></div>
-            <div class="future-row"><span class="fl">Skill level</span><span class="fv" id="futSpeakSkill">1.0x</span></div>
-          </div>
-          <div class="future-col silent">
-            <div class="future-col-title">You Who Stays Silent</div>
-            <div class="future-big" id="futSilentDates">0</div>
-            <div class="future-big-label">dates</div>
-            <div class="future-divider"></div>
-            <div class="future-row"><span class="fl">Talks</span><span class="fv">0</span></div>
-            <div class="future-row"><span class="fl">Real convos</span><span class="fv">0</span></div>
-            <div class="future-row"><span class="fl">Numbers</span><span class="fv">0</span></div>
-            <div class="future-row"><span class="fl">Relationships</span><span class="fv">0</span></div>
-            <div class="future-row"><span class="fl">Gone forever</span><span class="fv" id="futSilentGone">0</span></div>
-          </div>
+      <!-- Status Bar -->
+      <div class="go-status-bar">
+        <div class="go-status-item">
+          <span class="go-status-num" id="goTabTodayCount">0</span>
+          <span class="go-status-lbl">today</span>
         </div>
-        <h3 style="font-size:14px; margin-bottom:8px;">Your Journey — Milestones</h3>
-        <div class="milestones" id="milestones"></div>
+        <div class="go-status-divider"></div>
+        <div class="go-status-item">
+          <span class="go-status-num" id="goTabDaysLeft">—</span>
+          <span class="go-status-lbl">days left</span>
+        </div>
+        <div class="go-status-divider"></div>
+        <div class="go-status-item">
+          <span class="go-status-num" id="goTabPower">0</span>
+          <span class="go-status-lbl">power</span>
+        </div>
       </div>
 
-      <!-- Fear Reframe -->
-      <div class="fear-reframe" id="fearReframe">
-        <h3>When Fear Hits — Read This</h3>
-        <div id="fearContent"></div>
+      <!-- Primary CTA -->
+      <button class="go-trigger go-trigger-tab" onclick="openGoMode()">🔥 I SEE HER — GO MODE</button>
+
+      <!-- Fear Kit -->
+      <div class="go-toolkit-section">
+        <div class="go-toolkit-header">
+          <div class="go-toolkit-title">Fear Kit</div>
+          <div class="go-toolkit-sub">Tap a fear. Read the reframe. Go anyway.</div>
+        </div>
+        <div class="go-fear-cards" id="goFearCards"></div>
       </div>
 
-      <!-- EV Section -->
-      <div class="ev-section">
-        <h3>What One Hello Is Worth</h3>
-        <div class="ev-row">
-          <span class="ev-label">Chance she vanishes forever if you don't speak</span>
-          <span class="ev-value negative" id="evVanish">90%</span>
+      <!-- My Plans -->
+      <div class="go-toolkit-section">
+        <div class="go-toolkit-header">
+          <div class="go-toolkit-title">My Plans</div>
+          <div class="go-toolkit-sub">What you'll invite her to.</div>
         </div>
-        <div class="ev-row">
-          <span class="ev-label">Your current success rate (hello → real convo)</span>
-          <span class="ev-value neutral" id="evSuccessRate">--</span>
+        <div class="go-plans-chips" id="goPlansChips">
+          <div class="go-plans-empty">No plans yet.</div>
         </div>
-        <div class="ev-row">
-          <span class="ev-label">Expected connections from this one hello</span>
-          <span class="ev-value positive" id="evExpected">--</span>
+        <button class="go-plans-edit-btn" onclick="switchView('excuses')">+ Add plans</button>
+      </div>
+
+      <!-- Opening Lines -->
+      <div class="go-toolkit-section">
+        <div class="go-toolkit-header">
+          <div class="go-toolkit-title">Opening Lines</div>
+          <div class="go-toolkit-sub">Steal one. Say it. Works every time.</div>
         </div>
-        <div class="ev-row">
-          <span class="ev-label">Expected connections from staying silent</span>
-          <span class="ev-value negative">0</span>
+        <div class="go-openers-list">
+          <div class="go-opener-card">
+            <div class="go-opener-text">"Hey — I saw you and had to say something. You look really [specific thing]."</div>
+            <div class="go-opener-note">Direct. Honest. The specific thing makes it real.</div>
+          </div>
+          <div class="go-opener-card">
+            <div class="go-opener-text">"Excuse me — sorry to interrupt. I just noticed you and thought you seemed really interesting."</div>
+            <div class="go-opener-note">Works anywhere. The apology disarms her.</div>
+          </div>
+          <div class="go-opener-card">
+            <div class="go-opener-text">"Hey, random question — do you know anywhere good around here for [coffee/food/etc]?"</div>
+            <div class="go-opener-note">Low pressure opener. Easy to transition into conversation.</div>
+          </div>
+          <div class="go-opener-card">
+            <div class="go-opener-text">"Hey — this is a bit forward but you caught my eye. I'm [name]."</div>
+            <div class="go-opener-note">Owning it shows confidence. Short and to the point.</div>
+          </div>
         </div>
-        <div class="ev-divider"></div>
-        <div class="ev-row">
-          <span class="ev-label">Cost of speaking (5 seconds + mild discomfort)</span>
-          <span class="ev-value neutral">5 sec</span>
-        </div>
-        <div class="ev-row">
-          <span class="ev-label">Cost of silence (she's gone, permanently)</span>
-          <span class="ev-value negative">∞</span>
-        </div>
-        <div class="ev-verdict" id="evVerdict"></div>
       </div>
 
     </div>
@@ -4223,6 +4392,63 @@
 
     function escHtml(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
 
+    function renderGoTab(data) {
+      const s = data.settings;
+      const today = todayStr();
+      const daysPassed = daysBetween(data.startDate, today);
+      const daysLeft = Math.max(0, s.totalDays - daysPassed);
+      const todayCount = data.days[today] || 0;
+
+      let totalApproaches = 0;
+      Object.values(data.days).forEach(v => totalApproaches += v);
+      let totalSeen = 0;
+      Object.values(data.seen).forEach(v => totalSeen += v);
+      let activeDays = 0;
+      Object.values(data.days).forEach(v => { if (v > 0) activeDays++; });
+      const avgTalksPerActiveDay = activeDays > 0 ? totalApproaches / activeDays : 0;
+      const pl = calcPowerLevel(totalApproaches, totalSeen, activeDays, daysPassed, s.totalDays, avgTalksPerActiveDay, data);
+
+      // Status bar
+      const tc = document.getElementById('goTabTodayCount');
+      if (tc) tc.textContent = todayCount;
+      const dl = document.getElementById('goTabDaysLeft');
+      if (dl) dl.textContent = daysLeft;
+      const pw = document.getElementById('goTabPower');
+      if (pw) pw.textContent = pl.powerLevel.toLocaleString();
+
+      // Fear cards
+      const fearCards = document.getElementById('goFearCards');
+      if (fearCards) {
+        fearCards.innerHTML = '';
+        GO_FEARS.forEach(fear => {
+          const reframe = GO_REFRAMES[fear] || '';
+          const card = document.createElement('div');
+          card.className = 'go-fear-card';
+          card.innerHTML = `
+            <div class="go-fear-card-trigger" onclick="this.parentElement.classList.toggle('open')">
+              <span>${escHtml(fear)}</span>
+              <span class="go-fear-card-arrow">▼</span>
+            </div>
+            <div class="go-fear-card-reframe">${escHtml(reframe)}</div>
+          `;
+          fearCards.appendChild(card);
+        });
+      }
+
+      // Plans chips
+      const chipsEl = document.getElementById('goPlansChips');
+      if (chipsEl) {
+        const excuses = data.excuses || [];
+        if (excuses.length === 0) {
+          chipsEl.innerHTML = '<div class="go-plans-empty">No plans yet. Add some in the Excuses tab.</div>';
+        } else {
+          chipsEl.innerHTML = excuses.map(ex =>
+            `<div class="go-plan-chip">${escHtml(ex.title)}</div>`
+          ).join('');
+        }
+      }
+    }
+
     function renderExcuses(data) {
       const list = document.getElementById('excuseList');
       const excuses = data.excuses || [];
@@ -4632,84 +4858,6 @@
       renderPeople(data);
       renderExcuses(data);
 
-      // ===== TWO FUTURES =====
-      // Project forward using current pace (or default 3/day if no data yet)
-      const currentPace = activeDays > 0 ? avgTalksPerActiveDay : 3;
-      const currentSeenPace = activeDays > 0 ? (totalSeen / Math.max(1, daysPassed)) : 10;
-      const projTalks = Math.round(currentPace * daysLeft) + totalApproaches;
-      const projSeen = Math.round(currentSeenPace * daysLeft) + totalSeen;
-
-      // Simulate the speaking future with skill compounding
-      let futConvos = 0, futNumbers = 0, futDates = 0, futRels = 0;
-      let runningTalks = totalApproaches;
-      for (let d = 0; d < daysLeft; d++) {
-        const sm = 1 + 0.15 * Math.log2(1 + runningTalks);
-        for (let t = 0; t < currentPace; t++) {
-          runningTalks++;
-          const rc = Math.min(0.9, (s.convoRate / 100) * sm);
-          const rn = Math.min(0.9, (s.numberRate / 100) * sm);
-          const rd = Math.min(0.9, (s.dateRate / 100) * sm);
-          const rr = Math.min(0.9, (s.relRate / 100) * sm);
-          futConvos += rc;
-          futNumbers += rc * rn;
-          futDates += rc * rn * rd;
-          futRels += rc * rn * rd * rr;
-        }
-      }
-      // Add what you already earned
-      futConvos += fConvo; futNumbers += fNumber; futDates += fDate; futRels += fRel;
-      const finalSkill = 1 + 0.15 * Math.log2(1 + projTalks);
-
-      document.getElementById('futuresSub').textContent = `Same person. Same ${daysLeft} days. One choice.`;
-      document.getElementById('futSpeakTalks').textContent = projTalks.toLocaleString();
-      document.getElementById('futSpeakConvos').textContent = Math.round(futConvos).toLocaleString();
-      document.getElementById('futSpeakNumbers').textContent = Math.round(futNumbers).toLocaleString();
-      document.getElementById('futSpeakDates').textContent = futDates.toFixed(1);
-      document.getElementById('futSpeakRels').textContent = futRels.toFixed(1);
-      document.getElementById('futSpeakSkill').textContent = finalSkill.toFixed(1) + 'x';
-
-      const silentGone = Math.round(projSeen * vanishRate);
-      document.getElementById('futSilentDates').textContent = '0';
-      document.getElementById('futSilentGone').textContent = silentGone.toLocaleString();
-
-      // ===== FEAR REFRAME =====
-      const peopleLeft = Math.round(currentSeenPace * daysLeft);
-      const fearEl = document.getElementById('fearContent');
-      fearEl.innerHTML = `
-        <div class="fear-line">
-          Right now you're scared of <strong>one person</strong>.
-          <br><span class="dim">But she is 1 of ${peopleLeft.toLocaleString()} you'll see before this ends.</span>
-        </div>
-        <div class="fear-line">
-          If this one says no — you still have <strong>${(peopleLeft - 1).toLocaleString()} more chances</strong>.
-          <br><span class="dim">The fear is treating this like your only shot. It's not even close.</span>
-        </div>
-        <div class="fear-highlight">
-          ${projTalks} talks → ${Math.round(futNumbers)} numbers → ${futDates.toFixed(1)} dates
-        </div>
-        <div class="fear-line">
-          That's your future if you keep going.
-          <br><strong>This one interaction doesn't matter.</strong>
-          <br><span class="dim">What matters is that you don't stop.</span>
-        </div>
-        <div class="fear-line" style="margin-top:12px; padding-top:10px; border-top: 1px solid rgba(167,139,250,0.15);">
-          The worst outcome of saying hello: <strong>5 seconds of awkwardness</strong>
-          <br>The worst outcome of silence: <strong>she's gone forever</strong>
-          <br><span class="dim">90% of the people you don't talk to — you will never see again.</span>
-        </div>
-        <div class="fear-line" style="margin-top:10px;">
-          You are not risking rejection.
-          <br><strong>You are risking permanent invisibility.</strong>
-        </div>
-      `;
-
-      // EV
-      document.getElementById('evVanish').textContent = `${(vanishRate * 100).toFixed(0)}%`;
-      document.getElementById('evSuccessRate').textContent = `${(evConvo * 100).toFixed(0)}%`;
-      document.getElementById('evExpected').textContent = evConnection.toFixed(2);
-      document.getElementById('evVerdict').textContent =
-        `Speaking: ${(evConnection * 100).toFixed(0)}% chance of something real. Silence: 0%. Always speak.`;
-
       // Funnel
       const funnelData = [
         { label: 'Hellos', count: fHello, color: 'var(--accent)' },
@@ -4845,7 +4993,7 @@
       window.scrollTo(0, 0);
       if (view === 'stats') renderStats();
       if (view === 'excuses') renderExcuses(getData());
-      if (view === 'go') render();
+      if (view === 'go') renderGoTab(getData());
     }
 
     // --- STATS RENDERING ---
