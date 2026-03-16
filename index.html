@@ -3445,7 +3445,10 @@
           <div class="modal-sub" id="goReviewSubtitle" style="margin-bottom:12px;"></div>
           
           <div class="review-fields" style="display:flex; flex-direction:column; gap:8px; font-size:12px;">
-            <label style="color:var(--dim);">Weakpoints</label>
+            <label style="color:var(--dim);">Full Story / Overview</label>
+            <textarea id="goReviewDesc" class="modal-note" style="min-height:60px; resize:vertical; background:var(--bg); border:1px solid var(--border); color:var(--text); border-radius:8px; padding:8px 10px; font-family:inherit; font-size:13px;" placeholder="Full description of what happened..."></textarea>
+            
+            <label style="color:var(--dim);margin-top:4px;">Weakpoints</label>
             <input type="text" id="goReviewWeak" class="modal-note" style="height:36px" placeholder="Talked too fast, fidgeted...">
             
             <label style="color:var(--dim);margin-top:4px;">Goodpoints</label>
@@ -5285,6 +5288,90 @@
       }).join('');
     }
 
+    // --- PRETTY GIRLS ---
+    let editingPrettyId = null;
+
+    function openPrettyModal(id = null) {
+      editingPrettyId = id;
+      const data = getData();
+      if (id) {
+        const pg = (data.prettyGirls || []).find(p => p.id === id);
+        if (pg) {
+          document.getElementById('prettyRating').value = pg.rating || '';
+          document.getElementById('prettyAge').value = pg.age || '';
+          document.getElementById('prettyAppearance').value = pg.appearance || '';
+          document.getElementById('prettySituation').value = pg.situation || '';
+        }
+      } else {
+        document.getElementById('prettyRating').value = '';
+        document.getElementById('prettyAge').value = '';
+        document.getElementById('prettyAppearance').value = '';
+        document.getElementById('prettySituation').value = '';
+      }
+      document.getElementById('prettyModal').classList.add('open');
+    }
+
+    function closePrettyModal() {
+      document.getElementById('prettyModal').classList.remove('open');
+      editingPrettyId = null;
+    }
+
+    function confirmPretty() {
+      const data = getData();
+      if (!data.prettyGirls) data.prettyGirls = [];
+      const rating = document.getElementById('prettyRating').value;
+      const age = document.getElementById('prettyAge').value;
+      const appearance = document.getElementById('prettyAppearance').value.trim();
+      const situation = document.getElementById('prettySituation').value.trim();
+      if (!rating && !appearance && !situation) return closePrettyModal();
+      
+      if (editingPrettyId) {
+        const pg = data.prettyGirls.find(p => p.id === editingPrettyId);
+        if (pg) {
+          pg.rating = rating; pg.age = age; pg.appearance = appearance; pg.situation = situation;
+        }
+      } else {
+        data.prettyGirls.push({ id: Date.now(), date: todayStr(), time: toHHMM(), rating, age, appearance, situation });
+      }
+      saveData(data);
+      closePrettyModal();
+      render();
+    }
+
+    function deletePrettyGirl(id) {
+      if (!confirm('Delete this pretty girl?')) return;
+      const data = getData();
+      data.prettyGirls = (data.prettyGirls || []).filter(p => p.id !== id);
+      saveData(data);
+      render();
+    }
+
+    function renderPrettyGirls(data) {
+      const list = document.getElementById('prettyList');
+      if (!list) return;
+      const pgs = data.prettyGirls || [];
+      if (pgs.length === 0) {
+        list.innerHTML = '<div style="font-size:12px;color:var(--dim);text-align:center;">No pretty girls logged yet.</div>';
+        return;
+      }
+      list.innerHTML = [...pgs].sort((a,b) => b.id - a.id).map(pg => `
+        <div style="background:var(--card); border:1px solid var(--border); border-radius:12px; padding:12px; margin-bottom:10px;">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+             <div style="font-size:11px; color:var(--dim);">${pg.date} ${pg.time||''}</div>
+             <div>
+               <button onclick="openPrettyModal(${pg.id})" style="background:none;border:none;color:var(--accent);font-size:12px;cursor:pointer;margin-right:10px;">Edit</button>
+               <button onclick="deletePrettyGirl(${pg.id})" style="background:none;border:none;color:var(--danger);font-size:12px;cursor:pointer;">Delete</button>
+             </div>
+          </div>
+          <div style="margin-top:8px; font-size:13px;">
+             <div>Rating ${pg.rating}/10 ${pg.age ? `— Age ${pg.age}` : ''}</div>
+             ${pg.appearance ? `<div style="margin-top:4px; color:var(--dim);">Looks: ${pg.appearance}</div>` : ''}
+             ${pg.situation ? `<div style="margin-top:4px; font-style:italic;">"${pg.situation}"</div>` : ''}
+          </div>
+        </div>
+      `).join('');
+    }
+
     // --- GO MODE ---
     const GO_FEARS = [
       'Scared of rejection',
@@ -5807,6 +5894,7 @@
       // People Log
       renderPeople(data);
       renderExcuses(data);
+      renderPrettyGirls(data);
 
       // Funnel
       const funnelData = [
@@ -6371,7 +6459,15 @@
       const totalLooksEver = looks.length + totalQuickLooks;
       
       const lookRate = totalSeen > 0 ? ((totalLooksEver / totalSeen) * 100).toFixed(1) : 0;
-      document.getElementById('looksLookRate').textContent = lookRate + '%';
+      const deaths = Math.max(1, totalSeen - totalLooksEver);
+      const kdRatio = (totalLooksEver / deaths).toFixed(2);
+      
+      let ratioDisplay = '0';
+      if (totalLooksEver > 0) {
+        ratioDisplay = `1 in ${(totalSeen / totalLooksEver).toFixed(1)}`;
+      }
+      
+      document.getElementById('looksLookRate').innerHTML = `${totalLooksEver}/${totalSeen} (${lookRate}%)<br><span style="font-size:14px; color:var(--dim);">${ratioDisplay} · ${kdRatio} K/D</span>`;
       document.getElementById('looksTotalCount').textContent = totalLooksEver;
       document.getElementById('looksSeenCount').textContent = totalSeen;
       
@@ -6382,20 +6478,32 @@
          ages[ag].count++;
          ages[ag].totalRating += parseFloat(l.her) || 0;
       });
+      
+      let maxAgeCount = 1;
+      Object.keys(ages).forEach(ag => {
+         if (ages[ag].count > maxAgeCount) maxAgeCount = ages[ag].count;
+      });
+
       let htmlAges = '';
       Object.keys(ages).sort().forEach(ag => {
          const avgRating = (ages[ag].totalRating / ages[ag].count).toFixed(1);
+         const pct = (ages[ag].count / maxAgeCount) * 100;
          htmlAges += `
-         <div class="stat-card blue">
-           <div class="stat-value">${ages[ag].count}x</div>
-           <div class="stat-label">Age ${ag} <br><span style="color:var(--dim); font-size:10px;">Avg ${avgRating}/10</span></div>
-         </div>
+          <div class="funnel-step">
+            <span class="funnel-label" style="width:60px;">Age ${ag}</span>
+            <div class="funnel-bar-bg" style="flex:1;">
+              <div class="funnel-bar-fill" style="width:${Math.max(2, pct)}%;background:var(--blue)"></div>
+              <span class="funnel-bar-text" style="color:#fff; padding-left:6px; font-size:11px;">${ages[ag].count}x</span>
+            </div>
+            <span class="funnel-count" style="color:var(--dim); font-size:10px; width:70px; text-align:right;">Avg ${avgRating}/10</span>
+          </div>
          `;
       });
       if(Object.keys(ages).length === 0) {
-        htmlAges = '<div style="color:var(--dim); font-size:12px; grid-column:span 2;">No data yet.</div>';
+        htmlAges = '<div style="color:var(--dim); font-size:12px;">No data yet.</div>';
       }
-      document.getElementById('looksAgeStats').innerHTML = htmlAges;
+      // Wrap it in a funnel container style if needed or just dump into the grid
+      document.getElementById('looksAgeStats').innerHTML = `<div style="display:flex; flex-direction:column; gap:8px; width:100%; grid-column:1 / -1; margin-top:8px;">${htmlAges}</div>`;
       
       const list = document.getElementById('looksList');
       if (looks.length === 0) {
@@ -6444,6 +6552,34 @@
         if (reviews.length === 0) {
            html = '<div style="color:var(--dim);font-size:13px;text-align:center;margin-top:20px;">No approach reviews logged yet.<br>Add them from the Go Mode history in Encounters.</div>';
         } else {
+           // Full Reviews Section
+           html += `<div style="margin-bottom:30px;">
+             <h3 style="font-size:16px; color:var(--text); margin-bottom:12px; border-bottom:1px solid var(--border); padding-bottom:6px;">Full Reviews</h3>`;
+           
+           reviews.forEach(r => {
+             // Only show the Full Review box if there is a description OR if they want it anyway. 
+             // We'll show all reviews as a full box.
+             html += `<div style="background:var(--card); border:1px solid var(--border); border-radius:12px; padding:14px; margin-bottom:12px;">
+               <div style="font-weight:700; font-size:14px; margin-bottom:4px; color:var(--accent);">${r.personName}</div>
+               <div style="font-size:11px; color:var(--dim); margin-bottom:10px;">${r.date}</div>
+               ${r.desc ? `<div style="font-size:13px; margin-bottom:12px; line-height:1.5;">${r.desc.replace(/\\n/g, '<br>')}</div>` : ''}
+               
+               <div style="font-size:12px; display:flex; flex-direction:column; gap:4px; padding-top:10px; border-top:1px solid var(--border);">
+                 ${r.weakpoints ? `<div><span style="color:var(--dim);">Weakpoints:</span> ${r.weakpoints}</div>` : ''}
+                 ${r.goodpoints ? `<div><span style="color:var(--dim);">Goodpoints:</span> ${r.goodpoints}</div>` : ''}
+                 ${r.more ? `<div><span style="color:var(--dim);">More:</span> ${r.more}</div>` : ''}
+                 ${r.less ? `<div><span style="color:var(--dim);">Less:</span> ${r.less}</div>` : ''}
+                 ${r.better ? `<div><span style="color:var(--dim);">Better:</span> ${r.better}</div>` : ''}
+               </div>
+             </div>`;
+           });
+           html += `</div>`;
+           
+           // Grouped Categories
+           html += `<div style="margin-bottom:20px;">
+             <h3 style="font-size:16px; color:var(--text); margin-bottom:12px; border-bottom:1px solid var(--border); padding-bottom:6px;">Collected Points</h3>
+           </div>`;
+           
            html += buildReviewCategory('Weakpoints', reviews.map(r => ({txt:r.weakpoints, t:r.personName, d:r.date})).filter(x=>x.txt));
            html += buildReviewCategory('Goodpoints', reviews.map(r => ({txt:r.goodpoints, t:r.personName, d:r.date})).filter(x=>x.txt));
            html += buildReviewCategory('Could Have Done More', reviews.map(r => ({txt:r.more, t:r.personName, d:r.date})).filter(x=>x.txt));
@@ -6473,12 +6609,14 @@
       document.getElementById('goReviewSubtitle').textContent = attempt.date + (attempt.time ? ` ${attempt.time}` : '');
       
       if (attempt.review) {
+        document.getElementById('goReviewDesc').value = attempt.review.desc || '';
         document.getElementById('goReviewWeak').value = attempt.review.weakpoints || '';
         document.getElementById('goReviewGood').value = attempt.review.goodpoints || '';
         document.getElementById('goReviewMore').value = attempt.review.more || '';
         document.getElementById('goReviewLess').value = attempt.review.less || '';
         document.getElementById('goReviewBetter').value = attempt.review.better || '';
       } else {
+        document.getElementById('goReviewDesc').value = '';
         document.getElementById('goReviewWeak').value = '';
         document.getElementById('goReviewGood').value = '';
         document.getElementById('goReviewMore').value = '';
@@ -6498,6 +6636,7 @@
       if (!editingGoReviewId) return;
       
       const review = {
+        desc: document.getElementById('goReviewDesc').value.trim(),
         weakpoints: document.getElementById('goReviewWeak').value.trim(),
         goodpoints: document.getElementById('goReviewGood').value.trim(),
         more: document.getElementById('goReviewMore').value.trim(),
