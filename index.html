@@ -2378,6 +2378,30 @@
       text-shadow: 0 0 40px rgba(52, 211, 153, 0.6);
     }
 
+    .go-bail-flash {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 300;
+      background: rgba(100, 100, 120, 0.18);
+      align-items: center;
+      justify-content: center;
+      animation: go-flash 1s ease-out forwards;
+    }
+    .go-bail-flash.show { display: flex; }
+    .go-bail-flash-text {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--dim);
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px 28px;
+    }
+
     @keyframes go-flash {
       0% {
         opacity: 0;
@@ -4789,6 +4813,8 @@
     function renderEncounters(data) {
       const myAge = getUserAge();
       const attempts = (data.goAttempts || []).filter(a => a.herAge);
+      const approached = attempts.filter(a => !a.bailed);
+      const bailedEnc = attempts.filter(a => a.bailed);
       const listEl = document.getElementById('encList');
       const summaryEl = document.getElementById('encSummary');
       const bannerEl = document.getElementById('encUrgencyBanner');
@@ -4802,8 +4828,12 @@
 
       summaryEl.innerHTML = `
         <div class="enc-summary-card">
-          <div class="enc-summary-num">${totalEnc}</div>
-          <div class="enc-summary-lbl">Encounters</div>
+          <div class="enc-summary-num">${approached.length}</div>
+          <div class="enc-summary-lbl">Approached</div>
+        </div>
+        <div class="enc-summary-card">
+          <div class="enc-summary-num">${bailedEnc.length}</div>
+          <div class="enc-summary-lbl">Missed</div>
         </div>
         <div class="enc-summary-card">
           <div class="enc-summary-num">${avgAge || '—'}</div>
@@ -4841,21 +4871,27 @@
 
       const sorted = [...attempts].sort((a, b) => b.id - a.id);
       listEl.innerHTML = sorted.map(a => {
+        const isBail = !!a.bailed;
         const gap = myAge ? myAge - a.herAge : null;
         const seeAgain = a.seeAgain || 0;
         const gapClass = gap === null ? 'neutral' : (seeAgain > 60 ? 'ok' : (gap >= 5 ? 'urgent' : 'neutral'));
         const gapText = gap !== null ? `${gap}yr gap` : '';
         const seeLabel = seeAgain > 60 ? 'Will see again' : seeAgain > 0 ? 'Unlikely to see again' : '';
-        return `<div class="enc-card">
+        const statusBadge = isBail
+          ? `<span style="font-size:10px;font-weight:700;color:var(--dim);background:rgba(100,100,120,0.25);padding:2px 7px;border-radius:6px;letter-spacing:0.5px">MISSED</span>`
+          : '';
+        const blockerNote = isBail && a.blocker ? `<div class="enc-card-see-again" style="color:var(--dim)">Held back: ${escHtml(a.blocker)}</div>` : '';
+        return `<div class="enc-card" style="${isBail ? 'opacity:0.65' : ''}">
           <div class="enc-card-top">
-            <div class="enc-card-age">Age ${a.herAge}</div>
+            <div class="enc-card-age">Age ${a.herAge} ${statusBadge}</div>
             ${gapText ? `<div class="enc-card-gap ${gapClass}">${gapText}</div>` : ''}
           </div>
-          <div class="enc-card-reason">${escHtml(a.reason)}</div>
+          ${a.reason ? `<div class="enc-card-reason">${escHtml(a.reason)}</div>` : ''}
           <div class="enc-card-meta">
             <span>${a.date}</span>
             <span>${a.time}</span>
           </div>
+          ${blockerNote}
           ${seeLabel ? `<div class="enc-card-see-again" style="color: ${seeAgain > 60 ? 'var(--success)' : 'var(--dim)'}">${seeLabel}</div>` : ''}
         </div>`;
       }).join('');
@@ -5050,6 +5086,38 @@
       render();
     }
 
+    function executeBail() {
+      const data = getData();
+      const herAgeVal = parseInt(document.getElementById('goHerAge').value) || null;
+      const attempt = {
+        id: Date.now(),
+        date: todayStr(),
+        time: nowTimeStr(),
+        reason: document.getElementById('goReason').value.trim(),
+        firstLine: document.getElementById('goFirstLine').value.trim(),
+        excuse: document.getElementById('goExcuse').value.trim(),
+        blocker: selectedGoFear || null,
+        herAge: herAgeVal,
+        seeAgain: selectedSeeAgain || 0,
+        bailed: true,
+      };
+      data.goAttempts.push(attempt);
+
+      // Increase scared level — bailing reinforces fear
+      if (data.scaredLevel == null) data.scaredLevel = 5;
+      if (data.scaredLevel < 10) data.scaredLevel++;
+
+      saveData(data);
+      closeGoMode();
+
+      const flash = document.getElementById('goBailFlash');
+      flash.classList.add('show');
+      setTimeout(() => flash.classList.remove('show'), 1200);
+
+      if (navigator.vibrate) navigator.vibrate([80]);
+      render();
+    }
+
     function toggleGoHistory() {
       document.getElementById('goHistoryList').classList.toggle('open');
     }
@@ -5069,22 +5137,33 @@
         return;
       }
       document.getElementById('goHistorySection').style.display = '';
-      document.getElementById('goHistoryCount').textContent = `${attempts.length} approaches`;
+      const approached = attempts.filter(a => !a.bailed).length;
+      const bailed = attempts.filter(a => a.bailed).length;
+      document.getElementById('goHistoryCount').textContent =
+        bailed > 0 ? `${approached} approached · ${bailed} missed` : `${approached} approaches`;
 
       const listEl = document.getElementById('goHistoryList');
       const recent = [...attempts].reverse().slice(0, 30);
       listEl.innerHTML = '';
       recent.forEach(a => {
-        const blockerHtml = a.blocker ? `<div class="go-entry-blocker">⚡ Overcame: ${a.blocker}</div>` : '';
+        const isBail = !!a.bailed;
+        const blockerHtml = a.blocker
+          ? `<div class="go-entry-blocker">${isBail ? '✗ Blocker: ' : '⚡ Overcame: '}${a.blocker}</div>`
+          : '';
+        const badge = isBail
+          ? `<span class="go-entry-badge" style="background:rgba(100,100,120,0.3);color:var(--dim)">MISSED</span>`
+          : `<span class="go-entry-badge">APPROACHED</span>`;
+        const rows = [];
+        if (a.reason) rows.push(`<div class="go-entry-row"><span class="go-lbl">Reason</span><span class="go-val">${escHtml(a.reason)}</span></div>`);
+        if (a.firstLine) rows.push(`<div class="go-entry-row"><span class="go-lbl">Line</span><span class="go-val">${escHtml(a.firstLine)}</span></div>`);
+        if (a.excuse) rows.push(`<div class="go-entry-row"><span class="go-lbl">Plan</span><span class="go-val">${escHtml(a.excuse)}</span></div>`);
         listEl.innerHTML += `
-          <div class="go-entry">
+          <div class="go-entry" style="${isBail ? 'opacity:0.7' : ''}">
             <div class="go-entry-header">
-              <span class="go-entry-badge">APPROACHED</span>
+              ${badge}
               <span class="go-entry-date">${a.date} ${a.time || ''}</span>
             </div>
-            <div class="go-entry-row"><span class="go-lbl">Reason</span><span class="go-val">${a.reason}</span></div>
-            <div class="go-entry-row"><span class="go-lbl">Line</span><span class="go-val">${a.firstLine}</span></div>
-            <div class="go-entry-row"><span class="go-lbl">Plan</span><span class="go-val">${a.excuse}</span></div>
+            ${rows.join('')}
             ${blockerHtml}
             <div style="margin-top:6px"><button class="missed-entry-btn delete" onclick="deleteGoAttempt(${a.id})">Delete</button></div>
           </div>`;
@@ -5835,13 +5914,18 @@
       </div>
 
       <button class="go-execute" id="goExecute" onclick="executeGo()" disabled>GO</button>
-      <button class="go-bail" onclick="closeGoMode()">Not now — I'll log the miss instead</button>
+      <button class="go-bail" onclick="executeBail()">I didn't do it — log the miss</button>
     </div>
   </div>
 
   <!-- GO Success Flash -->
   <div class="go-success-flash" id="goSuccessFlash">
     <div class="go-success-text">GO! 🔥</div>
+  </div>
+
+  <!-- GO Bail Flash -->
+  <div class="go-bail-flash" id="goBailFlash">
+    <div class="go-bail-flash-text">Logged as a miss.</div>
   </div>
 
 </body>
