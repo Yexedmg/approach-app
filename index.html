@@ -2460,14 +2460,18 @@
     .view-home,
     .view-stats,
     .view-excuses,
-    .view-go {
+    .view-go,
+    .view-looks,
+    .view-reviews {
       display: none;
     }
 
     .view-home.active,
     .view-stats.active,
     .view-excuses.active,
-    .view-go.active {
+    .view-go.active,
+    .view-looks.active,
+    .view-reviews.active {
       display: block;
     }
 
@@ -3240,6 +3244,17 @@
         <div class="truth-sub" id="truthSub"></div>
       </div>
 
+      <!-- Boldness Section -->
+      <div class="today-section" style="margin-top: 16px; text-align: center;">
+        <h2 style="font-size:16px; color:var(--accent);">Boldness Stat</h2>
+        <div style="font-size:42px; font-weight:800; margin:10px 0; color:var(--accent);" id="boldnessScore">0</div>
+        <div style="font-size:12px; color:var(--dim); margin-bottom:16px;">This increases your boldness stat that decreases through the days if you don't keep it up.</div>
+        <button class="btn-add" style="width: 100%; height: 40px; border-radius: 10px; font-size: 14px;" onclick="openBoldnessModal()">
+          + Log Bold Action
+        </button>
+        <div id="boldnessTimeline" style="margin-top:20px; text-align:left;"></div>
+      </div>
+
       <!-- Today: Dual Counter -->
       <div class="today-section">
         <h2 id="todayHeading">Today</h2>
@@ -3392,7 +3407,17 @@
             maxlength="80">
           <textarea id="interactionNote"
             placeholder="She lent me her phone, got her number, quick chat about..."></textarea>
-          <div class="modal-actions">
+          
+          <div class="review-fields" style="margin-top:10px; display:flex; flex-direction:column; gap:6px; font-size:12px;">
+            <div style="font-weight:600; color:var(--accent);">Interaction Review (Optional)</div>
+            <input type="text" id="intReviewWeak" class="modal-note" style="height:32px" placeholder="Weakpoints">
+            <input type="text" id="intReviewGood" class="modal-note" style="height:32px" placeholder="Goodpoints">
+            <input type="text" id="intReviewMore" class="modal-note" style="height:32px" placeholder="Could have done more">
+            <input type="text" id="intReviewLess" class="modal-note" style="height:32px" placeholder="Could have done less">
+            <input type="text" id="intReviewBetter" class="modal-note" style="height:32px" placeholder="Better than expected">
+          </div>
+          
+          <div class="modal-actions" style="margin-top:12px;">
             <button class="modal-cancel" onclick="closeInteractionModal()">Cancel</button>
             <button class="modal-confirm" onclick="confirmInteraction()">Log It</button>
           </div>
@@ -3776,6 +3801,99 @@
     </div>
   </div>
 
+  <!-- ===== VIEW: LOOKS ===== -->
+  <div class="view-looks" id="viewLooks">
+    <div class="header" style="padding-top: 10px;">
+      <h1>Who Looked At You</h1>
+      <div class="subtitle">Log the girls that stared</div>
+    </div>
+    
+    <div style="padding: 16px;">
+      <button class="btn-add" style="width: 100%; height: 50px; border-radius: 12px; margin-bottom: 20px; font-size: 16px;" onclick="openLookModal()">
+        + Log a Look
+      </button>
+
+      <div id="looksStats" class="stats-grid" style="margin-bottom: 20px;">
+        <div class="stat-card accent" style="grid-column: span 2;">
+          <div class="stat-value" id="looksLookRate" style="font-size:42px;">0%</div>
+          <div class="stat-label">Look Rate (<span id="looksTotalCount">0</span> stared / <span id="looksSeenCount">0</span> seen)</div>
+        </div>
+      </div>
+      
+      <h3 style="font-size:14px; margin-bottom:10px;">Age Distribution & Ratings</h3>
+      <div id="looksAgeStats" class="stats-grid" style="margin-bottom: 20px;"></div>
+      
+      <h3>Recent Looks</h3>
+      <div id="looksList" style="margin-top:10px;"></div>
+    </div>
+  </div>
+
+  <!-- ===== VIEW: REVIEWS ===== -->
+  <div class="view-reviews" id="viewReviews">
+    <div class="header" style="padding-top: 10px;">
+      <h1>Interaction Reviews</h1>
+      <div class="subtitle">Reflect and improve</div>
+    </div>
+    <div style="padding: 16px;" id="reviewsInventoryContainer">
+      <!-- Inventory goes here -->
+    </div>
+  </div>
+
+  <!-- Look Modal -->
+  <div class="modal-overlay" id="lookModal">
+    <div class="modal" style="text-align: left;">
+      <h3>Log a Look</h3>
+      <div style="margin: 10px 0;">
+        <label style="font-size: 12px; color: var(--dim);">Your Rating that day (1-10)</label>
+        <input type="number" id="lookSelfRating" class="modal-note" style="height:40px" min="1" max="10" placeholder="e.g. 7">
+      </div>
+      <div style="margin: 10px 0;">
+        <label style="font-size: 12px; color: var(--dim);">What you wore</label>
+        <input type="text" id="lookOutfit" class="modal-note" style="height:40px" placeholder="Black hoodie, jeans...">
+      </div>
+      <div style="margin: 10px 0;">
+        <label style="font-size: 12px; color: var(--dim);">Description of situation</label>
+        <textarea id="lookSituation" class="modal-note" placeholder="Walking out the gym..."></textarea>
+      </div>
+      <div style="margin: 10px 0;">
+        <label style="font-size: 12px; color: var(--dim);">Her Rating (1-10)</label>
+        <input type="number" id="lookHerRating" class="modal-note" style="height:40px" min="1" max="10" placeholder="e.g. 8">
+      </div>
+      <div style="margin: 10px 0;">
+        <label style="font-size: 12px; color: var(--dim);">Her Age</label>
+        <input type="number" id="lookHerAge" class="modal-note" style="height:40px" placeholder="e.g. 21">
+      </div>
+      <div style="margin: 10px 0;">
+        <label style="font-size: 12px; color: var(--dim);">Her Appearance</label>
+        <textarea id="lookAppearance" class="modal-note" placeholder="Brunette, fit..."></textarea>
+      </div>
+      <div style="margin: 10px 0; display:flex; align-items:center; justify-content: space-between;">
+        <label style="font-size: 12px; color: var(--dim);">Would you do her?</label>
+        <select id="lookDoHer" class="modal-note" style="width:100px; height:40px; margin-bottom:0px;">
+          <option value="yes">Yes</option>
+          <option value="no">No</option>
+        </select>
+      </div>
+      <div class="modal-actions" style="margin-top: 20px;">
+        <button class="modal-cancel" onclick="document.getElementById('lookModal').classList.remove('open')">Cancel</button>
+        <button class="modal-confirm" onclick="confirmLook()">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Boldness Modal -->
+  <div class="modal-overlay" id="boldnessModal">
+    <div class="modal" style="text-align: left;">
+      <h3 style="text-align: center;">Log Bold Action</h3>
+      <div style="margin: 10px 0; font-size: 12px; color: var(--dim); text-align:center;">What did you do?</div>
+      <textarea id="boldnessText" class="modal-note" placeholder="Approached a group, spoke loud..."></textarea>
+      <div class="modal-actions" style="margin-top: 20px;">
+        <button class="modal-cancel" onclick="document.getElementById('boldnessModal').classList.remove('open')">Cancel</button>
+        <button class="modal-confirm" onclick="confirmBoldAction()">Save</button>
+      </div>
+    </div>
+  </div>
+
   <!-- ===== BOTTOM NAV ===== -->
   <div class="bottom-nav">
     <button class="active" id="navHome" onclick="switchView('home')">
@@ -3790,9 +3908,17 @@
       <span class="nav-icon">👩</span>
       Girls
     </button>
+    <button id="navLooks" onclick="switchView('looks')">
+      <span class="nav-icon">👀</span>
+      Looks
+    </button>
     <button id="navExcuses" onclick="switchView('excuses')">
       <span class="nav-icon">☕</span>
       Excuses
+    </button>
+    <button id="navReviews" onclick="switchView('reviews')">
+      <span class="nav-icon">📝</span>
+      Reviews
     </button>
     <button id="navStats" onclick="switchView('stats')">
       <span class="nav-icon">📊</span>
@@ -3911,17 +4037,17 @@
       if (!data.people) data.people = [];
       if (!data.goAttempts) data.goAttempts = [];
       if (!data.excuses) data.excuses = [];
-      // Migrate: add seen tracking if missing
       if (!data.seen) data.seen = {};
       // Migrate: add scared level if missing
       if (data.scaredLevel == null) data.scaredLevel = 5;
-      // Remove deprecated girlsPerDay from settings
+      if (!data.looks) data.looks = [];
+      if (!data.boldnessLogs) data.boldnessLogs = [];
       delete data.settings.girlsPerDay;
       return data;
     }
 
     function createFreshData() {
-      const data = { startDate: todayStr(), settings: { ...DEFAULTS }, days: {}, seen: {}, missed: [], people: [], goAttempts: [], excuses: [], scaredLevel: 5 };
+      const data = { startDate: todayStr(), settings: { ...DEFAULTS }, days: {}, seen: {}, missed: [], people: [], goAttempts: [], excuses: [], scaredLevel: 5, looks: [], boldnessLogs: [] };
       localStorage.setItem('approachData', JSON.stringify(data));
       return data;
     }
@@ -4351,6 +4477,11 @@
       document.getElementById('interactionTime').value = toHHMM();
       document.getElementById('interactionNote').value = '';
       document.getElementById('interactionLocation').value = '';
+      document.getElementById('intReviewWeak').value = '';
+      document.getElementById('intReviewGood').value = '';
+      document.getElementById('intReviewMore').value = '';
+      document.getElementById('intReviewLess').value = '';
+      document.getElementById('intReviewBetter').value = '';
       document.getElementById('interactionModal').classList.add('open');
       setTimeout(() => document.getElementById('interactionNote').focus(), 100);
     }
@@ -4370,7 +4501,24 @@
       const p = (data.people || []).find(x => x.id === pendingInteractionId);
       if (!p) return;
       const displayTime = hhmmToDisplay(pickedTime);
-      p.interactions.push({ date: pickedDate, time: displayTime, note: note || '(talked)', location: location });
+      
+      const review = {
+        weakpoints: document.getElementById('intReviewWeak').value.trim(),
+        goodpoints: document.getElementById('intReviewGood').value.trim(),
+        more: document.getElementById('intReviewMore').value.trim(),
+        less: document.getElementById('intReviewLess').value.trim(),
+        better: document.getElementById('intReviewBetter').value.trim()
+      };
+      
+      const hasReview = Object.values(review).some(v => v !== '');
+
+      p.interactions.push({ 
+        date: pickedDate, 
+        time: displayTime, 
+        note: note || '(talked)', 
+        location: location,
+        review: hasReview ? review : null
+      });
       p.status = 'talked';
       // Update lastSeen to the latest date across all entries
       let maxDate = p.created;
@@ -5414,6 +5562,9 @@
       // Missed today count
       document.getElementById('missedTodayCount').textContent = missedToday.length;
 
+      // Boldness
+      calculateBoldness();
+
       // Re-encounter Reality Check
       if (missed.length > 0) {
         document.getElementById('reencounterSection').style.display = '';
@@ -5657,7 +5808,7 @@
 
     // --- NAVIGATION ---
     function switchView(view) {
-      ['Home','Stats','Excuses','Go','Encounters'].forEach(v => {
+      ['Home','Stats','Excuses','Go','Encounters','Looks','Reviews'].forEach(v => {
         const k = v.toLowerCase();
         document.getElementById('view' + v).classList.toggle('active', view === k);
         document.getElementById('nav' + v).classList.toggle('active', view === k);
@@ -5667,6 +5818,8 @@
       if (view === 'excuses') renderExcuses(getData());
       if (view === 'go') renderGoTab(getData());
       if (view === 'encounters') renderEncounters(getData());
+      if (view === 'looks') renderLooks();
+      if (view === 'reviews') renderReviews();
     }
 
     // --- STATS RENDERING ---
@@ -6000,6 +6153,173 @@
     }
 
     render();
+
+    // --- BOLDNESS ---
+    function openBoldnessModal() {
+      document.getElementById('boldnessText').value = '';
+      document.getElementById('boldnessModal').classList.add('open');
+    }
+
+    function confirmBoldAction() {
+      const text = document.getElementById('boldnessText').value.trim();
+      if (!text) return alert('Enter what you did.');
+      const data = getData();
+      data.boldnessLogs.unshift({ id: Date.now(), date: todayStr(), text: text, points: 10 });
+      saveData(data);
+      document.getElementById('boldnessModal').classList.remove('open');
+      render();
+    }
+
+    function calculateBoldness() {
+      const data = getData();
+      let score = 0;
+      const today = new Date(todayStr());
+      let timelineHtml = '';
+      const validLogs = [];
+      
+      (data.boldnessLogs || []).forEach(log => {
+        const logDate = new Date(log.date);
+        const daysAgo = Math.round((today - logDate) / 86400000);
+        const currentPoints = Math.max(0, log.points - daysAgo);
+        
+        if (currentPoints > 0) {
+          score += currentPoints;
+        }
+        
+        timelineHtml += `<div style="padding: 10px; border-left: 2px solid var(--accent); margin-bottom: 10px; background: rgba(255,107,53,0.05); border-radius: 0 8px 8px 0;">
+          <div style="font-size: 10px; color: var(--dim);">${log.date}</div>
+          <div style="font-size: 14px; font-weight: 600;">${log.text}</div>
+          <div style="font-size: 12px; color: var(--accent); margin-top: 4px;">+${currentPoints} pts (decayed by ${Math.min(daysAgo, log.points)})</div>
+        </div>`;
+      });
+      
+      document.getElementById('boldnessScore').textContent = score;
+      document.getElementById('boldnessTimeline').innerHTML = timelineHtml || '<div style="color:var(--dim);font-size:12px;">No bold actions logged yet. Start doing bold things!</div>';
+    }
+
+    // --- LOOKS ---
+    function openLookModal() {
+      document.getElementById('lookSelfRating').value = '';
+      document.getElementById('lookOutfit').value = '';
+      document.getElementById('lookSituation').value = '';
+      document.getElementById('lookHerRating').value = '';
+      document.getElementById('lookHerAge').value = '';
+      document.getElementById('lookAppearance').value = '';
+      document.getElementById('lookDoHer').value = 'yes';
+      document.getElementById('lookModal').classList.add('open');
+    }
+
+    function confirmLook() {
+      const self = document.getElementById('lookSelfRating').value;
+      const outfit = document.getElementById('lookOutfit').value;
+      const sit = document.getElementById('lookSituation').value;
+      const her = document.getElementById('lookHerRating').value;
+      const age = document.getElementById('lookHerAge').value;
+      const app = document.getElementById('lookAppearance').value;
+      const doHer = document.getElementById('lookDoHer').value;
+      
+      const data = getData();
+      data.looks.push({ id: Date.now(), date: todayStr(), time: toHHMM(), self, outfit, sit, her, age, app, doHer });
+      saveData(data);
+      document.getElementById('lookModal').classList.remove('open');
+      renderLooks();
+    }
+
+    function renderLooks() {
+      const data = getData();
+      const looks = data.looks || [];
+      document.getElementById('looksTotalCount').textContent = looks.length;
+      
+      const totalSeenList = Object.values(data.seen || {});
+      const totalSeen = totalSeenList.reduce((a,b)=>a+b, 0);
+      const lookRate = totalSeen > 0 ? ((looks.length / totalSeen) * 100).toFixed(1) : 0;
+      document.getElementById('looksLookRate').textContent = lookRate + '%';
+      document.getElementById('looksSeenCount').textContent = totalSeen;
+      
+      const ages = {};
+      looks.forEach(l => {
+         const ag = l.age || 'Unknown';
+         if(!ages[ag]) ages[ag] = {count:0, totalRating:0};
+         ages[ag].count++;
+         ages[ag].totalRating += parseFloat(l.her) || 0;
+      });
+      let htmlAges = '';
+      Object.keys(ages).sort().forEach(ag => {
+         const avgRating = (ages[ag].totalRating / ages[ag].count).toFixed(1);
+         htmlAges += `
+         <div class="stat-card blue">
+           <div class="stat-value">${ages[ag].count}x</div>
+           <div class="stat-label">Age ${ag} <br><span style="color:var(--dim); font-size:10px;">Avg ${avgRating}/10</span></div>
+         </div>
+         `;
+      });
+      if(Object.keys(ages).length === 0) {
+        htmlAges = '<div style="color:var(--dim); font-size:12px; grid-column:span 2;">No data yet.</div>';
+      }
+      document.getElementById('looksAgeStats').innerHTML = htmlAges;
+      
+      const list = document.getElementById('looksList');
+      if (looks.length === 0) {
+        list.innerHTML = '<div style="color:var(--dim); font-size:12px;">No logs yet.</div>';
+        return;
+      }
+      list.innerHTML = [...looks].sort((a,b)=>b.id - a.id).map(l => `
+        <div style="background:var(--card); border:1px solid var(--border); border-radius:12px; padding:12px; margin-bottom:10px;">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div style="font-size:11px; color:var(--dim);">${l.date} ${l.time || ''}</div>
+            <button onclick="deleteLook(${l.id})" style="background:none;border:none;color:var(--danger);font-size:12px;cursor:pointer;">Delete</button>
+          </div>
+          <div style="margin-top:8px; font-size:13px;">
+            <div><span style="color:var(--dim)">Me:</span> Rating ${l.self}/10 - ${l.outfit}</div>
+            <div style="margin-top:4px; font-style:italic;">"${l.sit}"</div>
+            <div style="margin-top:8px; padding-top:8px; border-top:1px solid var(--border);">
+              <span style="color:var(--dim)">Her:</span> Age ${l.age}, Rating ${l.her}/10, Do her? <b style="color:${l.doHer === 'yes' ? 'var(--success)' : 'var(--danger)'}">${(l.doHer || 'no').toUpperCase()}</b>
+              <br><span style="font-style:italic;">"${l.app}"</span>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function deleteLook(id) {
+      if(!confirm('Delete this look log?')) return;
+      const data = getData();
+      data.looks = data.looks.filter(l => l.id !== id);
+      saveData(data);
+      renderLooks();
+    }
+    
+    // --- REVIEWS ---
+    function renderReviews() {
+        const data = getData();
+        const reviews = [];
+        (data.people || []).forEach(p => {
+            (p.interactions || []).forEach(i => {
+                if(i.review) reviews.push({ ...i.review, personName: p.nickname, date: i.date });
+            });
+        });
+        
+        let html = '';
+        if (reviews.length === 0) {
+           html = '<div style="color:var(--dim);font-size:13px;text-align:center;margin-top:20px;">No interaction reviews logged yet.<br>Add them when logging an interaction.</div>';
+        } else {
+           html += buildReviewCategory('Weakpoints', reviews.map(r => ({txt:r.weakpoints, t:r.personName, d:r.date})).filter(x=>x.txt));
+           html += buildReviewCategory('Goodpoints', reviews.map(r => ({txt:r.goodpoints, t:r.personName, d:r.date})).filter(x=>x.txt));
+           html += buildReviewCategory('Could Have Done More', reviews.map(r => ({txt:r.more, t:r.personName, d:r.date})).filter(x=>x.txt));
+           html += buildReviewCategory('Could Have Done Less', reviews.map(r => ({txt:r.less, t:r.personName, d:r.date})).filter(x=>x.txt));
+           html += buildReviewCategory('Better Than Expected', reviews.map(r => ({txt:r.better, t:r.personName, d:r.date})).filter(x=>x.txt));
+        }
+        document.getElementById('reviewsInventoryContainer').innerHTML = html;
+    }
+    
+    function buildReviewCategory(title, items) {
+       if(items.length===0) return '';
+       return `<div style="margin-bottom:20px;">
+         <h3 style="font-size:15px; color:var(--accent); margin-bottom:10px; border-bottom:1px solid var(--border); padding-bottom:4px;">${title}</h3>
+         ${items.map(i => `<div style="background:var(--card); font-size:13px; padding:10px; border-radius:8px; margin-bottom:6px;">"${i.txt}" <div style="font-size:10px; color:var(--dim);text-align:right;margin-top:4px;">— ${i.t} (${i.d})</div></div>`).join('')}
+       </div>`;
+    }
+
   </script>
   <!-- GO MODE Overlay — outside all views so display:none on tabs doesn't block it -->
   <div class="go-overlay" id="goOverlay">
