@@ -3408,15 +3408,6 @@
           <textarea id="interactionNote"
             placeholder="She lent me her phone, got her number, quick chat about..."></textarea>
           
-          <div class="review-fields" style="margin-top:10px; display:flex; flex-direction:column; gap:6px; font-size:12px;">
-            <div style="font-weight:600; color:var(--accent);">Interaction Review (Optional)</div>
-            <input type="text" id="intReviewWeak" class="modal-note" style="height:32px" placeholder="Weakpoints">
-            <input type="text" id="intReviewGood" class="modal-note" style="height:32px" placeholder="Goodpoints">
-            <input type="text" id="intReviewMore" class="modal-note" style="height:32px" placeholder="Could have done more">
-            <input type="text" id="intReviewLess" class="modal-note" style="height:32px" placeholder="Could have done less">
-            <input type="text" id="intReviewBetter" class="modal-note" style="height:32px" placeholder="Better than expected">
-          </div>
-          
           <div class="modal-actions" style="margin-top:12px;">
             <button class="modal-cancel" onclick="closeInteractionModal()">Cancel</button>
             <button class="modal-confirm" onclick="confirmInteraction()">Log It</button>
@@ -3443,6 +3434,36 @@
           <div class="modal-actions">
             <button class="modal-cancel" onclick="closeSightingModal()">Cancel</button>
             <button class="modal-confirm" onclick="confirmSighting()">Log It</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Go Attempt Review Modal -->
+      <div class="modal-overlay" id="goReviewModal">
+        <div class="person-modal">
+          <h3>Approach Review</h3>
+          <div class="modal-sub" id="goReviewSubtitle" style="margin-bottom:12px;"></div>
+          
+          <div class="review-fields" style="display:flex; flex-direction:column; gap:8px; font-size:12px;">
+            <label style="color:var(--dim);">Weakpoints</label>
+            <input type="text" id="goReviewWeak" class="modal-note" style="height:36px" placeholder="Talked too fast, fidgeted...">
+            
+            <label style="color:var(--dim);margin-top:4px;">Goodpoints</label>
+            <input type="text" id="goReviewGood" class="modal-note" style="height:36px" placeholder="Eye contact, smiled, clear voice...">
+            
+            <label style="color:var(--dim);margin-top:4px;">Could have done more</label>
+            <input type="text" id="goReviewMore" class="modal-note" style="height:36px" placeholder="Escalated, held silence longer...">
+            
+            <label style="color:var(--dim);margin-top:4px;">Could have done less</label>
+            <input type="text" id="goReviewLess" class="modal-note" style="height:36px" placeholder="Less apologizing, less interview questions...">
+            
+            <label style="color:var(--dim);margin-top:4px;">Better than expected</label>
+            <input type="text" id="goReviewBetter" class="modal-note" style="height:36px" placeholder="She was actually friendly, didn't stutter...">
+          </div>
+          
+          <div class="modal-actions" style="margin-top:16px;">
+            <button class="modal-cancel" onclick="closeGoReviewModal()">Cancel</button>
+            <button class="modal-confirm" onclick="confirmGoReview()">Save Review</button>
           </div>
         </div>
       </div>
@@ -4520,11 +4541,6 @@
       document.getElementById('interactionTime').value = toHHMM();
       document.getElementById('interactionNote').value = '';
       document.getElementById('interactionLocation').value = '';
-      document.getElementById('intReviewWeak').value = '';
-      document.getElementById('intReviewGood').value = '';
-      document.getElementById('intReviewMore').value = '';
-      document.getElementById('intReviewLess').value = '';
-      document.getElementById('intReviewBetter').value = '';
       document.getElementById('interactionModal').classList.add('open');
       setTimeout(() => document.getElementById('interactionNote').focus(), 100);
     }
@@ -4544,23 +4560,12 @@
       const p = (data.people || []).find(x => x.id === pendingInteractionId);
       if (!p) return;
       const displayTime = hhmmToDisplay(pickedTime);
-      
-      const review = {
-        weakpoints: document.getElementById('intReviewWeak').value.trim(),
-        goodpoints: document.getElementById('intReviewGood').value.trim(),
-        more: document.getElementById('intReviewMore').value.trim(),
-        less: document.getElementById('intReviewLess').value.trim(),
-        better: document.getElementById('intReviewBetter').value.trim()
-      };
-      
-      const hasReview = Object.values(review).some(v => v !== '');
 
       p.interactions.push({ 
         date: pickedDate, 
         time: displayTime, 
         note: note || '(talked)', 
-        location: location,
-        review: hasReview ? review : null
+        location: location
       });
       p.status = 'talked';
       // Update lastSeen to the latest date across all entries
@@ -5518,7 +5523,10 @@
             </div>
             ${rows.join('')}
             ${blockerHtml}
-            <div style="margin-top:6px"><button class="missed-entry-btn delete" onclick="deleteGoAttempt(${a.id})">Delete</button></div>
+            <div style="margin-top:8px; display:flex; gap:8px;">
+              ${!isBail ? `<button class="person-action-btn primary" onclick="openGoReviewModal(${a.id})" style="font-size:11px; padding:4px 8px; height:auto;">${a.review ? 'Edit Review' : '+ Add Review'}</button>` : ''}
+              <button class="missed-entry-btn delete" onclick="deleteGoAttempt(${a.id})" style="margin-top:0;">Delete</button>
+            </div>
           </div>`;
       });
     }
@@ -6424,15 +6432,17 @@
     function renderReviews() {
         const data = getData();
         const reviews = [];
-        (data.people || []).forEach(p => {
-            (p.interactions || []).forEach(i => {
-                if(i.review) reviews.push({ ...i.review, personName: p.nickname, date: i.date });
-            });
+        (data.goAttempts || []).forEach(a => {
+            if (!a.bailed && a.review) {
+                // Use firstLine as the identifier, or 'Approach' if empty
+                const identifier = a.firstLine ? a.firstLine : 'Approach';
+                reviews.push({ ...a.review, personName: `"${identifier}"`, date: a.date });
+            }
         });
         
         let html = '';
         if (reviews.length === 0) {
-           html = '<div style="color:var(--dim);font-size:13px;text-align:center;margin-top:20px;">No interaction reviews logged yet.<br>Add them when logging an interaction.</div>';
+           html = '<div style="color:var(--dim);font-size:13px;text-align:center;margin-top:20px;">No approach reviews logged yet.<br>Add them from the Go Mode history in Encounters.</div>';
         } else {
            html += buildReviewCategory('Weakpoints', reviews.map(r => ({txt:r.weakpoints, t:r.personName, d:r.date})).filter(x=>x.txt));
            html += buildReviewCategory('Goodpoints', reviews.map(r => ({txt:r.goodpoints, t:r.personName, d:r.date})).filter(x=>x.txt));
@@ -6447,8 +6457,65 @@
        if(items.length===0) return '';
        return `<div style="margin-bottom:20px;">
          <h3 style="font-size:15px; color:var(--accent); margin-bottom:10px; border-bottom:1px solid var(--border); padding-bottom:4px;">${title}</h3>
-         ${items.map(i => `<div style="background:var(--card); font-size:13px; padding:10px; border-radius:8px; margin-bottom:6px;">"${i.txt}" <div style="font-size:10px; color:var(--dim);text-align:right;margin-top:4px;">— ${i.t} (${i.d})</div></div>`).join('')}
+         ${items.map(i => `<div style="background:var(--card); font-size:13px; padding:10px; border-radius:8px; margin-bottom:6px;">"${i.txt}" <div style="font-size:10px; color:var(--dim);text-align:right;margin-top:4px;">${i.t} (${i.d})</div></div>`).join('')}
        </div>`;
+    }
+
+    let editingGoReviewId = null;
+
+    function openGoReviewModal(id) {
+      const data = getData();
+      const attempt = (data.goAttempts || []).find(a => a.id === id);
+      if (!attempt) return;
+      
+      editingGoReviewId = id;
+      
+      document.getElementById('goReviewSubtitle').textContent = attempt.date + (attempt.time ? ` ${attempt.time}` : '');
+      
+      if (attempt.review) {
+        document.getElementById('goReviewWeak').value = attempt.review.weakpoints || '';
+        document.getElementById('goReviewGood').value = attempt.review.goodpoints || '';
+        document.getElementById('goReviewMore').value = attempt.review.more || '';
+        document.getElementById('goReviewLess').value = attempt.review.less || '';
+        document.getElementById('goReviewBetter').value = attempt.review.better || '';
+      } else {
+        document.getElementById('goReviewWeak').value = '';
+        document.getElementById('goReviewGood').value = '';
+        document.getElementById('goReviewMore').value = '';
+        document.getElementById('goReviewLess').value = '';
+        document.getElementById('goReviewBetter').value = '';
+      }
+      
+      document.getElementById('goReviewModal').classList.add('open');
+    }
+
+    function closeGoReviewModal() {
+      document.getElementById('goReviewModal').classList.remove('open');
+      editingGoReviewId = null;
+    }
+
+    function confirmGoReview() {
+      if (!editingGoReviewId) return;
+      
+      const review = {
+        weakpoints: document.getElementById('goReviewWeak').value.trim(),
+        goodpoints: document.getElementById('goReviewGood').value.trim(),
+        more: document.getElementById('goReviewMore').value.trim(),
+        less: document.getElementById('goReviewLess').value.trim(),
+        better: document.getElementById('goReviewBetter').value.trim()
+      };
+      
+      const hasReview = Object.values(review).some(v => v !== '');
+      
+      const data = getData();
+      const attempt = (data.goAttempts || []).find(a => a.id === editingGoReviewId);
+      if (attempt) {
+        attempt.review = hasReview ? review : null;
+        saveData(data);
+        render(); // Re-render to update the button state in Encounters view & Reviews view
+      }
+      
+      closeGoReviewModal();
     }
 
     function adjustQuickLooks(delta) {
