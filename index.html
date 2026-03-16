@@ -3961,10 +3961,6 @@
       <span class="nav-icon">📝</span>
       Reviews
     </button>
-    <button id="navPretty" onclick="switchView('pretty')">
-      <span class="nav-icon">✨</span>
-      Pretty
-    </button>
     <button id="navStats" onclick="switchView('stats')">
       <span class="nav-icon">📊</span>
       Stats
@@ -4157,108 +4153,6 @@
       document.getElementById('seenTodayNum').textContent = seenVal;
       document.getElementById('talkedTodayNum').textContent = count;
       document.getElementById('letGoTodayNum').textContent = letGo;
-    }
-
-    // --- Pretty Girls Modal ---
-    let editingPrettyId = null;
-
-    function openPrettyModal(id = null) {
-      const data = getData();
-      editingPrettyId = id;
-      if (id) {
-        const pg = data.prettyGirls.find(p => p.id === id);
-        if (!pg) return;
-        document.getElementById('prettyModalTitle').textContent = 'Edit Pretty Girl';
-        document.getElementById('prettyName').value = pg.name || '';
-        document.getElementById('prettyLocation').value = pg.location || '';
-        document.getElementById('prettyNote').value = pg.note || '';
-        document.getElementById('prettyDate').value = pg.date || todayStr();
-        document.getElementById('prettyTime').value = pg.time || toHHMM();
-        document.getElementById('prettyRating').value = pg.rating || 5;
-      } else {
-        document.getElementById('prettyModalTitle').textContent = 'Log a Pretty Girl';
-        document.getElementById('prettyName').value = '';
-        document.getElementById('prettyLocation').value = '';
-        document.getElementById('prettyNote').value = '';
-        document.getElementById('prettyDate').value = todayStr();
-        document.getElementById('prettyTime').value = toHHMM();
-        document.getElementById('prettyRating').value = 5;
-      }
-      document.getElementById('prettyModal').classList.add('open');
-      setTimeout(() => document.getElementById('prettyName').focus(), 100);
-    }
-
-    function closePrettyModal() {
-      document.getElementById('prettyModal').classList.remove('open');
-      editingPrettyId = null;
-    }
-
-    function confirmPretty() {
-      const name = document.getElementById('prettyName').value.trim();
-      const location = document.getElementById('prettyLocation').value.trim();
-      const note = document.getElementById('prettyNote').value.trim();
-      const date = document.getElementById('prettyDate').value || todayStr();
-      const time = document.getElementById('prettyTime').value || toHHMM();
-      const rating = parseInt(document.getElementById('prettyRating').value) || 5;
-
-      if (!name) { alert('Please enter a name or identifier.'); return; }
-
-      const data = getData();
-      if (!data.prettyGirls) data.prettyGirls = [];
-
-      if (editingPrettyId) {
-        const pg = data.prettyGirls.find(p => p.id === editingPrettyId);
-        if (pg) {
-          pg.name = name;
-          pg.location = location;
-          pg.note = note;
-          pg.date = date;
-          pg.time = hhmmToDisplay(time);
-          pg.rating = rating;
-        }
-      } else {
-        data.prettyGirls.push({
-          id: Date.now(),
-          name,
-          location,
-          note,
-          date,
-          time: hhmmToDisplay(time),
-          rating,
-          created: todayStr(),
-          looks: []
-        });
-      }
-      saveData(data);
-      closePrettyModal();
-      render();
-    }
-
-    function deletePrettyGirl(id) {
-      if (!confirm('Delete this pretty girl entry?')) return;
-      const data = getData();
-      data.prettyGirls = data.prettyGirls.filter(p => p.id !== id);
-      saveData(data);
-      render();
-    }
-
-    function addPrettyLook(id) {
-      const data = getData();
-      const pg = data.prettyGirls.find(p => p.id === id);
-      if (!pg) return;
-      pg.looks.push({ date: todayStr(), time: nowTimeStr() });
-      saveData(data);
-      render();
-    }
-
-    function deletePrettyLook(pgId, lookIdx) {
-      if (!confirm('Delete this look?')) return;
-      const data = getData();
-      const pg = data.prettyGirls.find(p => p.id === pgId);
-      if (!pg) return;
-      pg.looks.splice(lookIdx, 1);
-      saveData(data);
-      render();
     }
 
     // --- Missed Modal ---
@@ -6034,7 +5928,7 @@
 
     // --- NAVIGATION ---
     function switchView(view) {
-      ['Home','Stats','Excuses','Go','Encounters','Looks','Reviews','Pretty'].forEach(v => {
+      ['Home','Stats','Excuses','Go','Encounters','Looks','Reviews'].forEach(v => {
         const k = v.toLowerCase();
         document.getElementById('view' + v).classList.toggle('active', view === k);
         document.getElementById('nav' + v).classList.toggle('active', view === k);
@@ -6046,7 +5940,6 @@
       if (view === 'encounters') renderEncounters(getData());
       if (view === 'looks') renderLooks();
       if (view === 'reviews') renderReviews();
-      if (view === 'pretty') renderLooks(); // Pretty tab uses renderLooks for now
     }
 
     // --- STATS RENDERING ---
@@ -6565,11 +6458,6 @@
       data.quickLooks[today] = Math.max(0, data.quickLooks[today] + delta);
       saveData(data);
       renderLooks();
-    }
-      const data = getData();
-      data.prettyGirls = data.prettyGirls.filter(g => g.id !== id);
-      saveData(data);
-      renderEncounters(data);
     }
   </script>
   <!-- GO MODE Overlay — outside all views so display:none on tabs doesn't block it -->
