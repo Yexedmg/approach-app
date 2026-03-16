@@ -2409,7 +2409,7 @@
 
     .bottom-nav button {
       flex: 1;
-      max-width: 215px;
+      max-width: 120px;
       background: none;
       border: none;
       color: var(--dim);
@@ -2854,6 +2854,203 @@
       color: var(--blue);
       font-weight: 600;
     }
+    /* ===== GO EXTRAS (age + see again) ===== */
+    .go-extras {
+      margin-top: 10px;
+      padding: 10px 12px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+    }
+    .go-extra-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    .go-extra-row:last-of-type { margin-bottom: 0; }
+    .go-extra-label {
+      font-size: 12px;
+      color: var(--dim);
+      flex-shrink: 0;
+    }
+    .go-extra-input {
+      width: 60px;
+      text-align: center;
+      padding: 6px 8px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .go-see-again-btns {
+      display: flex;
+      gap: 4px;
+    }
+    .go-see-btn {
+      padding: 5px 10px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: var(--bg);
+      color: var(--dim);
+      font-size: 11px;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      transition: all 0.15s;
+    }
+    .go-see-btn.selected {
+      border-color: var(--yellow);
+      color: var(--yellow);
+      background: rgba(251, 191, 36, 0.08);
+    }
+    .go-urgency-hint {
+      margin-top: 8px;
+      padding: 8px 10px;
+      border-radius: 8px;
+      font-size: 11px;
+      line-height: 1.4;
+    }
+    .go-urgency-hint.urgent {
+      background: rgba(255, 59, 59, 0.1);
+      border: 1px solid rgba(255, 59, 59, 0.25);
+      color: var(--danger);
+    }
+    .go-urgency-hint.ok {
+      background: rgba(52, 211, 153, 0.08);
+      border: 1px solid rgba(52, 211, 153, 0.2);
+      color: var(--success);
+    }
+
+    /* ===== ENCOUNTERS VIEW ===== */
+    .view-encounters { display: none; }
+    .view-encounters.active { display: block; }
+    .encounters-page {
+      max-width: 430px;
+      margin: 0 auto;
+      padding: 16px;
+      padding-bottom: 80px;
+    }
+    .encounters-header {
+      margin-bottom: 16px;
+    }
+    .encounters-header h1 {
+      font-size: 22px;
+      margin: 0 0 4px;
+    }
+    .encounters-header p {
+      font-size: 12px;
+      color: var(--dim);
+      margin: 0;
+    }
+    .encounters-summary {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+    .enc-summary-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 8px;
+      text-align: center;
+    }
+    .enc-summary-num {
+      font-size: 24px;
+      font-weight: 800;
+    }
+    .enc-summary-lbl {
+      font-size: 10px;
+      color: var(--dim);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .enc-urgency-banner {
+      background: rgba(255, 59, 59, 0.08);
+      border: 1px solid rgba(255, 59, 59, 0.2);
+      border-radius: 10px;
+      padding: 12px;
+      margin-bottom: 14px;
+    }
+    .enc-urgency-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--danger);
+      margin-bottom: 6px;
+    }
+    .enc-urgency-line {
+      font-size: 12px;
+      color: var(--text);
+      margin-bottom: 4px;
+      line-height: 1.4;
+    }
+    .enc-urgency-line .gap-num {
+      font-weight: 700;
+      color: var(--danger);
+    }
+    .enc-urgency-line .year-tag {
+      font-size: 10px;
+      color: var(--dim);
+    }
+    .enc-list-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--dim);
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .enc-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px;
+      margin-bottom: 8px;
+    }
+    .enc-card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 4px;
+    }
+    .enc-card-age {
+      font-size: 18px;
+      font-weight: 800;
+    }
+    .enc-card-gap {
+      font-size: 12px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 6px;
+    }
+    .enc-card-gap.urgent { background: rgba(255,59,59,0.15); color: var(--danger); }
+    .enc-card-gap.ok { background: rgba(52,211,153,0.1); color: var(--success); }
+    .enc-card-gap.neutral { background: rgba(255,255,255,0.05); color: var(--dim); }
+    .enc-card-reason {
+      font-size: 12px;
+      color: var(--dim);
+      margin-bottom: 2px;
+    }
+    .enc-card-meta {
+      font-size: 11px;
+      color: var(--dim);
+      display: flex;
+      gap: 10px;
+    }
+    .enc-card-see-again {
+      font-size: 11px;
+      margin-top: 4px;
+    }
+    .enc-empty {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--dim);
+      font-size: 13px;
+    }
+
     /* ===== SCARED STAT ===== */
     .scared-widget {
       background: var(--card);
@@ -3169,6 +3366,8 @@
             onchange="saveSetting('dateRate', this.value)"></div>
         <div class="setting-row"><label>Date → relationship (%)</label><input type="number" id="setRelRate" value="10"
             onchange="saveSetting('relRate', this.value)"></div>
+        <div class="setting-row"><label>Your birthday</label><input type="date" id="setBirthday"
+            onchange="saveBirthday(this.value)"></div>
       </div>
 
       <div class="reset-section">
@@ -3430,6 +3629,20 @@
     </div>
   </div> <!-- /view-stats -->
 
+  <!-- ===== ENCOUNTERS VIEW ===== -->
+  <div class="view-encounters" id="viewEncounters">
+    <div class="encounters-page">
+      <div class="encounters-header">
+        <h1>Encounters</h1>
+        <p>Every girl you approached, her age, and why time matters.</p>
+      </div>
+      <div class="encounters-summary" id="encSummary"></div>
+      <div class="enc-urgency-banner" id="encUrgencyBanner" style="display:none"></div>
+      <div class="enc-list-title">All Encounters</div>
+      <div id="encList"></div>
+    </div>
+  </div> <!-- /view-encounters -->
+
   <!-- ===== EXCUSES VIEW ===== -->
   <div class="view-excuses" id="viewExcuses">
     <div class="excuses-page">
@@ -3476,6 +3689,10 @@
     <button id="navGo" onclick="switchView('go')">
       <span class="nav-icon">🔥</span>
       Go
+    </button>
+    <button id="navEncounters" onclick="switchView('encounters')">
+      <span class="nav-icon">👩</span>
+      Girls
     </button>
     <button id="navExcuses" onclick="switchView('excuses')">
       <span class="nav-icon">☕</span>
@@ -3585,7 +3802,8 @@
     const DEFAULTS = {
       totalDays: 195,
       secondChance: 10, thirdChance: 5,
-      convoRate: 40, numberRate: 30, dateRate: 40, relRate: 10
+      convoRate: 40, numberRate: 30, dateRate: 40, relRate: 10,
+      birthday: ''
     };
 
     function getData() {
@@ -3881,6 +4099,13 @@
     function saveSetting(key, value) {
       const data = getData();
       data.settings[key] = parseFloat(value) || DEFAULTS[key];
+      saveData(data);
+      render();
+    }
+
+    function saveBirthday(value) {
+      const data = getData();
+      data.settings.birthday = value || '';
       saveData(data);
       render();
     }
@@ -4492,6 +4717,150 @@
       renderScaredLevel(data);
     }
 
+    // --- ENCOUNTERS: age + see-again logic ---
+    let selectedSeeAgain = null;
+
+    function pickSeeAgain(pct, btn) {
+      selectedSeeAgain = pct;
+      document.querySelectorAll('.go-see-btn').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      updateGoUrgencyHint();
+    }
+
+    function getUserAge() {
+      const data = getData();
+      const bd = data.settings.birthday;
+      if (!bd) return null;
+      const born = new Date(bd);
+      const now = new Date();
+      let age = now.getFullYear() - born.getFullYear();
+      const m = now.getMonth() - born.getMonth();
+      if (m < 0 || (m === 0 && now.getDate() < born.getDate())) age--;
+      return age;
+    }
+
+    function getNextBirthday() {
+      const data = getData();
+      const bd = data.settings.birthday;
+      if (!bd) return null;
+      const born = new Date(bd);
+      const now = new Date();
+      let next = new Date(now.getFullYear(), born.getMonth(), born.getDate());
+      if (next <= now) next = new Date(now.getFullYear() + 1, born.getMonth(), born.getDate());
+      return next;
+    }
+
+    function daysUntilNextBirthday() {
+      const next = getNextBirthday();
+      if (!next) return null;
+      return Math.ceil((next - new Date()) / 86400000);
+    }
+
+    function updateGoUrgencyHint() {
+      const hint = document.getElementById('goUrgencyHint');
+      const ageInput = document.getElementById('goHerAge');
+      const herAge = parseInt(ageInput.value);
+      const myAge = getUserAge();
+      if (!herAge || !myAge) { hint.style.display = 'none'; return; }
+
+      const gap = myAge - herAge;
+      if (gap <= 0) { hint.style.display = 'none'; return; }
+
+      const daysLeft = daysUntilNextBirthday();
+      const seeAgain = selectedSeeAgain || 0;
+
+      if (seeAgain > 60) {
+        hint.style.display = 'block';
+        hint.className = 'go-urgency-hint ok';
+        hint.textContent = `${gap}yr gap — you'll likely see her again, no rush.`;
+        return;
+      }
+
+      hint.style.display = 'block';
+      hint.className = 'go-urgency-hint urgent';
+      if (daysLeft !== null) {
+        hint.innerHTML = `<strong>${gap}yr gap.</strong> In ${daysLeft} days you turn ${myAge + 1} — girls ${gap}yrs younger won't be this close again. This is the time.`;
+      } else {
+        hint.innerHTML = `<strong>${gap}yr gap.</strong> Set your birthday in settings to see when this window closes.`;
+      }
+    }
+
+
+    function renderEncounters(data) {
+      const myAge = getUserAge();
+      const attempts = (data.goAttempts || []).filter(a => a.herAge);
+      const listEl = document.getElementById('encList');
+      const summaryEl = document.getElementById('encSummary');
+      const bannerEl = document.getElementById('encUrgencyBanner');
+
+      // Summary cards
+      const totalEnc = attempts.length;
+      const ages = attempts.map(a => a.herAge);
+      const avgAge = ages.length ? Math.round(ages.reduce((a, b) => a + b, 0) / ages.length) : 0;
+      const gaps = myAge ? ages.map(a => myAge - a).filter(g => g > 0) : [];
+      const maxGap = gaps.length ? Math.max(...gaps) : 0;
+
+      summaryEl.innerHTML = `
+        <div class="enc-summary-card">
+          <div class="enc-summary-num">${totalEnc}</div>
+          <div class="enc-summary-lbl">Encounters</div>
+        </div>
+        <div class="enc-summary-card">
+          <div class="enc-summary-num">${avgAge || '—'}</div>
+          <div class="enc-summary-lbl">Avg Age</div>
+        </div>
+        <div class="enc-summary-card">
+          <div class="enc-summary-num">${maxGap || '—'}</div>
+          <div class="enc-summary-lbl">Max Gap</div>
+        </div>
+      `;
+
+      // Urgency banner
+      if (myAge && gaps.length > 0) {
+        const daysLeft = daysUntilNextBirthday();
+        const uniqueGaps = [...new Set(gaps)].sort((a, b) => b - a);
+        let bannerHtml = `<div class="enc-urgency-title">Window closing — you're ${myAge}</div>`;
+        uniqueGaps.forEach((g, i) => {
+          const expiresIn = i + 1;
+          const yearLabel = expiresIn === 1
+            ? (daysLeft !== null ? `${daysLeft} days left` : 'this year')
+            : `in ~${expiresIn} years`;
+          bannerHtml += `<div class="enc-urgency-line"><span class="gap-num">${g}yr younger</span> — expires <span class="year-tag">${yearLabel}</span></div>`;
+        });
+        bannerEl.innerHTML = bannerHtml;
+        bannerEl.style.display = 'block';
+      } else {
+        bannerEl.style.display = 'none';
+      }
+
+      // List
+      if (attempts.length === 0) {
+        listEl.innerHTML = '<div class="enc-empty">No encounters with ages logged yet.<br>Hit GO MODE and enter her age to start tracking.</div>';
+        return;
+      }
+
+      const sorted = [...attempts].sort((a, b) => b.id - a.id);
+      listEl.innerHTML = sorted.map(a => {
+        const gap = myAge ? myAge - a.herAge : null;
+        const seeAgain = a.seeAgain || 0;
+        const gapClass = gap === null ? 'neutral' : (seeAgain > 60 ? 'ok' : (gap >= 5 ? 'urgent' : 'neutral'));
+        const gapText = gap !== null ? `${gap}yr gap` : '';
+        const seeLabel = seeAgain > 60 ? 'Will see again' : seeAgain > 0 ? 'Unlikely to see again' : '';
+        return `<div class="enc-card">
+          <div class="enc-card-top">
+            <div class="enc-card-age">Age ${a.herAge}</div>
+            ${gapText ? `<div class="enc-card-gap ${gapClass}">${gapText}</div>` : ''}
+          </div>
+          <div class="enc-card-reason">${escHtml(a.reason)}</div>
+          <div class="enc-card-meta">
+            <span>${a.date}</span>
+            <span>${a.time}</span>
+          </div>
+          ${seeLabel ? `<div class="enc-card-see-again" style="color: ${seeAgain > 60 ? 'var(--success)' : 'var(--dim)'}">${seeLabel}</div>` : ''}
+        </div>`;
+      }).join('');
+    }
+
     function renderExcuses(data) {
       const list = document.getElementById('excuseList');
       const excuses = data.excuses || [];
@@ -4562,6 +4931,10 @@
       document.getElementById('goBlockerBody').classList.remove('open');
       document.getElementById('goBlockerArrow').textContent = '▼';
       document.getElementById('goReframe').style.display = 'none';
+      document.getElementById('goHerAge').value = '';
+      document.getElementById('goUrgencyHint').style.display = 'none';
+      selectedSeeAgain = null;
+      document.querySelectorAll('.go-see-btn').forEach(b => b.classList.remove('selected'));
 
       // Render fear buttons
       const grid = document.getElementById('goFearGrid');
@@ -4573,6 +4946,13 @@
         btn.onclick = () => selectGoFear(fear, btn);
         grid.appendChild(btn);
       });
+
+      // Attach age listener if not already
+      const ageIn = document.getElementById('goHerAge');
+      if (ageIn && !ageIn._hasListener) {
+        ageIn.addEventListener('input', updateGoUrgencyHint);
+        ageIn._hasListener = true;
+      }
 
       document.getElementById('goOverlay').classList.add('open');
       setTimeout(() => document.getElementById('goReason').focus(), 350);
@@ -4636,6 +5016,7 @@
       const target = selectedCounterDate;
 
       // Log the GO attempt
+      const herAgeVal = parseInt(document.getElementById('goHerAge').value) || null;
       const attempt = {
         id: Date.now(),
         date: todayStr(),
@@ -4644,6 +5025,8 @@
         firstLine: firstLine,
         excuse: excuse,
         blocker: selectedGoFear || null,
+        herAge: herAgeVal,
+        seeAgain: selectedSeeAgain || 0,
       };
       data.goAttempts.push(attempt);
 
@@ -5024,6 +5407,7 @@
       document.getElementById('setNumberRate').value = s.numberRate;
       document.getElementById('setDateRate').value = s.dateRate;
       document.getElementById('setRelRate').value = s.relRate;
+      document.getElementById('setBirthday').value = s.birthday || '';
     }
 
     if ('serviceWorker' in navigator) {
@@ -5032,7 +5416,7 @@
 
     // --- NAVIGATION ---
     function switchView(view) {
-      ['Home','Stats','Excuses','Go'].forEach(v => {
+      ['Home','Stats','Excuses','Go','Encounters'].forEach(v => {
         const k = v.toLowerCase();
         document.getElementById('view' + v).classList.toggle('active', view === k);
         document.getElementById('nav' + v).classList.toggle('active', view === k);
@@ -5041,6 +5425,7 @@
       if (view === 'stats') renderStats();
       if (view === 'excuses') renderExcuses(getData());
       if (view === 'go') renderGoTab(getData());
+      if (view === 'encounters') renderEncounters(getData());
     }
 
     // --- STATS RENDERING ---
@@ -5418,6 +5803,23 @@
           <input type="text" id="goExcuse" placeholder="Coffee right now, exchange numbers, walk together..."
             oninput="checkGoReady()" maxlength="120">
         </div>
+      </div>
+
+      <!-- Optional: her age + see again -->
+      <div class="go-extras">
+        <div class="go-extra-row">
+          <label class="go-extra-label">Her age (estimate)</label>
+          <input type="number" id="goHerAge" min="18" max="99" placeholder="—" class="go-extra-input">
+        </div>
+        <div class="go-extra-row">
+          <label class="go-extra-label">Chance of seeing again</label>
+          <div class="go-see-again-btns" id="goSeeAgainBtns">
+            <button class="go-see-btn" onclick="pickSeeAgain(20, this)">Low</button>
+            <button class="go-see-btn" onclick="pickSeeAgain(50, this)">Maybe</button>
+            <button class="go-see-btn" onclick="pickSeeAgain(80, this)">Likely</button>
+          </div>
+        </div>
+        <div class="go-urgency-hint" id="goUrgencyHint" style="display:none"></div>
       </div>
 
       <!-- What's holding me back -->
