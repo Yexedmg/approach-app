@@ -3074,6 +3074,69 @@
       color: var(--dim);
       font-size: 13px;
     }
+    .enc-inventory {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px;
+      margin-bottom: 12px;
+    }
+    .enc-inventory h3 {
+      font-size: 13px;
+      margin-bottom: 8px;
+    }
+    .enc-kv {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      padding: 4px 0;
+      border-bottom: 1px dashed rgba(255,255,255,0.05);
+    }
+    .enc-kv:last-child { border-bottom: none; }
+    .enc-kv .k { color: var(--dim); }
+    .enc-kv .v { font-weight: 700; }
+    .enc-review {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px;
+      margin-bottom: 12px;
+    }
+    .enc-review h3 {
+      font-size: 13px;
+      margin-bottom: 8px;
+    }
+    .enc-review-text {
+      white-space: pre-wrap;
+      font-size: 12px;
+      line-height: 1.5;
+      color: var(--text);
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px;
+      margin-top: 8px;
+    }
+    .enc-review-empty {
+      font-size: 12px;
+      color: var(--dim);
+      line-height: 1.4;
+    }
+    .enc-card-actions {
+      margin-top: 8px;
+      display: flex;
+      justify-content: flex-end;
+    }
+    .enc-delete-btn {
+      border: 1px solid rgba(255, 59, 59, 0.3);
+      color: var(--danger);
+      background: rgba(255, 59, 59, 0.08);
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 5px 9px;
+      cursor: pointer;
+    }
 
     /* ===== SCARED STAT ===== */
     .scared-widget {
@@ -3662,6 +3725,15 @@
       </div>
       <div class="encounters-summary" id="encSummary"></div>
       <div class="enc-urgency-banner" id="encUrgencyBanner" style="display:none"></div>
+
+      <div class="enc-inventory" id="encInventory"></div>
+
+      <div class="enc-review">
+        <h3>Talk Review Draft</h3>
+        <div class="enc-review-empty" id="encReviewEmpty">Once you log at least one talked encounter, this page will draft a self-review with good points, weak points, where you could do more/less, and what went better than expected.</div>
+        <div class="enc-review-text" id="encReviewText" style="display:none"></div>
+      </div>
+
       <div class="enc-list-title">All Encounters</div>
       <div id="encList"></div>
     </div>
@@ -4810,6 +4882,62 @@
     }
 
 
+    function buildEncounterReview(talkedAttempts) {
+      if (!talkedAttempts || talkedAttempts.length === 0) return '';
+
+      const total = talkedAttempts.length;
+      const withReason = talkedAttempts.filter(a => (a.reason || '').trim()).length;
+      const withLine = talkedAttempts.filter(a => (a.firstLine || '').trim()).length;
+      const withPlan = talkedAttempts.filter(a => (a.excuse || '').trim()).length;
+      const lowSee = talkedAttempts.filter(a => (a.seeAgain || 0) > 0 && (a.seeAgain || 0) <= 60).length;
+      const highSee = talkedAttempts.filter(a => (a.seeAgain || 0) > 60).length;
+      const blocked = talkedAttempts.filter(a => a.blocker).length;
+
+      const pct = (n) => Math.round((n / total) * 100);
+      const strongPrep = (withReason === total && withLine === total && withPlan === total);
+
+      const lines = [
+        `From ${total} talked encounter${total === 1 ? '' : 's'}, here's your review:`,
+        '',
+        '✅ Good points',
+        `• You took action ${total} time${total === 1 ? '' : 's'} instead of staying silent.`,
+        `• You logged your "why" in ${withReason}/${total} and your opener in ${withLine}/${total} — that is solid self-awareness.`,
+        `• ${lowSee} of your talks were in likely one-time windows (low re-encounter odds), which means you acted when it mattered.`,
+        '',
+        '⚠️ Weak points',
+        `• ${total - withPlan}/${total} talked logs missed a clear plan/invite.`,
+        `• ${blocked}/${total} logs still show a blocker/fear tag, so fear management can be improved.`,
+        `• ${highSee}/${total} talks were in high "see again" situations — easier reps. Keep balancing with harder, rarer shots.`,
+        '',
+        '📈 Where you could do more',
+        `• Add a stronger concrete plan in every encounter (currently ${pct(withPlan)}%).`,
+        '• Keep pushing immediate action when chance of seeing her again is low.',
+        '• Keep writing a short post-encounter note to capture what worked.',
+        '',
+        '🧘 Where you could do less',
+        '• Do less overthinking before acting — your better logs already prove simple + direct works.',
+        '• Do less waiting for "perfect timing"; momentum beats perfect conditions.',
+        '',
+        '🚀 Better than expected',
+        strongPrep
+          ? '• Your prep consistency is excellent: every talked encounter had reason + line + plan.'
+          : `• Your prep consistency is better than average already: reason ${pct(withReason)}%, line ${pct(withLine)}%, plan ${pct(withPlan)}%.`,
+        lowSee > 0
+          ? `• You handled ${lowSee} high-pressure opportunities that you likely would not see again.`
+          : '• You are building consistency first — now convert more of that into rare-opportunity action.'
+      ];
+
+      return lines.join('\n');
+    }
+
+    function deleteEncounter(id) {
+      if (!confirm('Delete this encounter? This cannot be undone.')) return;
+      const data = getData();
+      data.goAttempts = (data.goAttempts || []).filter(a => a.id !== id);
+      saveData(data);
+      render();
+    }
+
     function renderEncounters(data) {
       const myAge = getUserAge();
       const attempts = (data.goAttempts || []).filter(a => a.herAge);
@@ -4818,6 +4946,9 @@
       const listEl = document.getElementById('encList');
       const summaryEl = document.getElementById('encSummary');
       const bannerEl = document.getElementById('encUrgencyBanner');
+      const inventoryEl = document.getElementById('encInventory');
+      const reviewTextEl = document.getElementById('encReviewText');
+      const reviewEmptyEl = document.getElementById('encReviewEmpty');
 
       // Summary cards
       const totalEnc = attempts.length;
@@ -4844,6 +4975,34 @@
           <div class="enc-summary-lbl">Max Gap</div>
         </div>
       `;
+
+      // Combined inventory
+      const ageCounts = {};
+      attempts.forEach(a => {
+        ageCounts[a.herAge] = (ageCounts[a.herAge] || 0) + 1;
+      });
+      const ageInventory = Object.entries(ageCounts)
+        .sort((a, b) => Number(a[0]) - Number(b[0]))
+        .map(([age, count]) => `<div class="enc-kv"><span class="k">Age ${age}</span><span class="v">${count}x</span></div>`)
+        .join('');
+
+      inventoryEl.innerHTML = `
+        <h3>All Girls Inventory</h3>
+        <div class="enc-kv"><span class="k">Total encounters with age logged</span><span class="v">${totalEnc}</span></div>
+        <div class="enc-kv"><span class="k">Talked</span><span class="v">${approached.length}</span></div>
+        <div class="enc-kv"><span class="k">Missed</span><span class="v">${bailedEnc.length}</span></div>
+        ${ageInventory || '<div class="enc-kv"><span class="k">Ages</span><span class="v">No age data yet</span></div>'}
+      `;
+
+      const review = buildEncounterReview(approached);
+      if (review) {
+        reviewTextEl.textContent = review;
+        reviewTextEl.style.display = '';
+        reviewEmptyEl.style.display = 'none';
+      } else {
+        reviewTextEl.style.display = 'none';
+        reviewEmptyEl.style.display = '';
+      }
 
       // Urgency banner
       if (myAge && gaps.length > 0) {
@@ -4893,6 +5052,9 @@
           </div>
           ${blockerNote}
           ${seeLabel ? `<div class="enc-card-see-again" style="color: ${seeAgain > 60 ? 'var(--success)' : 'var(--dim)'}">${seeLabel}</div>` : ''}
+          <div class="enc-card-actions">
+            <button class="enc-delete-btn" onclick="deleteEncounter(${a.id})">Delete</button>
+          </div>
         </div>`;
       }).join('');
     }
