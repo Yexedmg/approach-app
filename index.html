@@ -2854,6 +2854,77 @@
       color: var(--blue);
       font-weight: 600;
     }
+    /* ===== SCARED STAT ===== */
+    .scared-widget {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px 16px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .scared-label-col {
+      flex: 1;
+      min-width: 0;
+    }
+    .scared-title {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--dim);
+      margin-bottom: 2px;
+    }
+    .scared-desc {
+      font-size: 11px;
+      color: var(--dim);
+      line-height: 1.3;
+    }
+    .scared-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+    .scared-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--text);
+      font-size: 20px;
+      line-height: 1;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      -webkit-tap-highlight-color: transparent;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .scared-btn:active { background: var(--border); }
+    .scared-num-wrap {
+      text-align: center;
+      min-width: 52px;
+    }
+    .scared-num {
+      font-size: 36px;
+      font-weight: 800;
+      line-height: 1;
+      transition: color 0.3s;
+    }
+    .scared-num.level-low  { color: var(--success); }
+    .scared-num.level-mid  { color: var(--yellow); }
+    .scared-num.level-high { color: var(--danger); }
+    .scared-out-of {
+      font-size: 11px;
+      color: var(--dim);
+      margin-top: 1px;
+    }
+
   </style>
 </head>
 
@@ -3128,6 +3199,22 @@
         <div class="go-status-item">
           <span class="go-status-num" id="goTabPower">0</span>
           <span class="go-status-lbl">power</span>
+        </div>
+      </div>
+
+      <!-- Scared Stat -->
+      <div class="scared-widget">
+        <div class="scared-label-col">
+          <div class="scared-title">😰 Scared Level</div>
+          <div class="scared-desc" id="scaredDesc">Honest self-assessment.<br>Drops when you actually GO.</div>
+        </div>
+        <div class="scared-controls">
+          <button class="scared-btn" onclick="adjustScaredLevel(-1)">−</button>
+          <div class="scared-num-wrap">
+            <div class="scared-num" id="scaredNum">5</div>
+            <div class="scared-out-of">out of 10</div>
+          </div>
+          <button class="scared-btn" onclick="adjustScaredLevel(1)">+</button>
         </div>
       </div>
 
@@ -3512,13 +3599,15 @@
       if (!data.excuses) data.excuses = [];
       // Migrate: add seen tracking if missing
       if (!data.seen) data.seen = {};
+      // Migrate: add scared level if missing
+      if (data.scaredLevel == null) data.scaredLevel = 5;
       // Remove deprecated girlsPerDay from settings
       delete data.settings.girlsPerDay;
       return data;
     }
 
     function createFreshData() {
-      const data = { startDate: todayStr(), settings: { ...DEFAULTS }, days: {}, seen: {}, missed: [], people: [], goAttempts: [], excuses: [] };
+      const data = { startDate: todayStr(), settings: { ...DEFAULTS }, days: {}, seen: {}, missed: [], people: [], goAttempts: [], excuses: [], scaredLevel: 5 };
       localStorage.setItem('approachData', JSON.stringify(data));
       return data;
     }
@@ -4380,6 +4469,27 @@
           ).join('');
         }
       }
+
+      renderScaredLevel(data);
+    }
+
+    const SCARED_LABELS = ['', 'Fearless', 'Very calm', 'Minor nerves', 'Some anxiety', 'Noticeably scared', 'Quite scared', 'Heart pounding', 'Borderline frozen', 'Fully frozen', 'Complete shutdown'];
+
+    function renderScaredLevel(data) {
+      const level = data.scaredLevel;
+      const numEl = document.getElementById('scaredNum');
+      const descEl = document.getElementById('scaredDesc');
+      if (!numEl) return;
+      numEl.textContent = level;
+      numEl.className = 'scared-num ' + (level <= 3 ? 'level-low' : level <= 6 ? 'level-mid' : 'level-high');
+      if (descEl) descEl.textContent = SCARED_LABELS[level] + ' — drops when you actually GO';
+    }
+
+    function adjustScaredLevel(delta) {
+      const data = getData();
+      data.scaredLevel = Math.max(1, Math.min(10, (data.scaredLevel || 5) + delta));
+      saveData(data);
+      renderScaredLevel(data);
     }
 
     function renderExcuses(data) {
@@ -4540,6 +4650,10 @@
       // Auto-increment today's talked counter
       if (!data.days[todayStr()]) data.days[todayStr()] = 0;
       data.days[todayStr()]++;
+
+      // Decrease scared level — doing builds confidence
+      if (data.scaredLevel == null) data.scaredLevel = 5;
+      if (data.scaredLevel > 1) data.scaredLevel--;
 
       saveData(data);
       closeGoMode();
