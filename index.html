@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="theme-color" content="#0a0a0a">
+  <meta name="theme-color" content="#080814">
   <link rel="manifest" href="manifest.json">
   <link rel="apple-touch-icon" href="icon-192.png">
   <title>Approach</title>
@@ -18,35 +18,95 @@
     }
 
     :root {
-      --bg: #0a0a0a;
-      --card: #151515;
-      --border: #222;
-      --text: #e0e0e0;
-      --dim: #666;
+      --bg: rgba(10, 10, 28, 0.88);
+      --card: rgba(255, 255, 255, 0.08);
+      --border: rgba(255, 255, 255, 0.14);
+      --text: rgba(255, 255, 255, 0.95);
+      --dim: rgba(255, 255, 255, 0.42);
       --accent: #ff6b35;
-      --accent-glow: rgba(255, 107, 53, 0.15);
-      --danger: #ff3b3b;
-      --success: #34d399;
-      --blue: #60a5fa;
-      --purple: #a78bfa;
-      --yellow: #fbbf24;
+      --accent-glow: rgba(255, 107, 53, 0.28);
+      --danger: #ff453a;
+      --success: #30d158;
+      --blue: #0a84ff;
+      --purple: #bf5af2;
+      --yellow: #ffd60a;
+      --glass-bg: rgba(255, 255, 255, 0.07);
+      --glass-border: rgba(255, 255, 255, 0.18);
+      --glass-specular: inset 0 1px 0 rgba(255, 255, 255, 0.22);
+      --glass-blur: blur(24px) saturate(180%);
+      --radius-xl: 28px;
+      --radius-lg: 22px;
+      --radius-md: 16px;
+      --radius-sm: 12px;
     }
 
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
-      background: var(--bg);
+      background: #080814;
       color: var(--text);
       min-height: 100vh;
       min-height: 100dvh;
       overflow-x: hidden;
       padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+      position: relative;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 65% 55% at 20% 25%, rgba(110, 50, 230, 0.38) 0%, transparent 100%),
+        radial-gradient(ellipse 55% 65% at 80% 75%, rgba(220, 45, 95, 0.25) 0%, transparent 100%),
+        radial-gradient(ellipse 75% 45% at 65% 15%, rgba(15, 110, 230, 0.22) 0%, transparent 100%),
+        radial-gradient(ellipse 45% 55% at 15% 80%, rgba(15, 180, 160, 0.2) 0%, transparent 100%),
+        radial-gradient(ellipse 50% 50% at 50% 50%, rgba(80, 30, 160, 0.15) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+      animation: liquid-mesh 18s ease-in-out infinite alternate;
+    }
+
+    @keyframes liquid-mesh {
+      0%   { transform: scale(1) translate(0%, 0%); opacity: 1; }
+      25%  { transform: scale(1.04) translate(-1.5%, 2%); opacity: 0.85; }
+      50%  { transform: scale(0.97) translate(2%, -1.5%); opacity: 0.95; }
+      75%  { transform: scale(1.03) translate(-2%, -1%); opacity: 0.88; }
+      100% { transform: scale(1.01) translate(1.5%, 2%); opacity: 1; }
     }
 
     .app {
       max-width: 430px;
       margin: 0 auto;
       padding: 16px;
-      padding-bottom: 100px;
+      padding-bottom: 130px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ===== LIQUID GLASS BASE STYLES ===== */
+
+    /* Glass morphism for all cards and panels */
+    .stat-card, .today-section, .missed-section, .missed-log, .people-section,
+    .reencounter-section, .regret-section, .decay-section, .excuse-section,
+    .ev-section, .funnel-section, .fear-reframe, .excuses-section,
+    .go-history, .go-checkpoint, .go-blocker, .go-status-bar,
+    .truth-banner, .settings-panel, .history-section,
+    .milestone, .futures-section .future-col, .power-section,
+    .person-card, .missed-entry, .missed-xp-summary, .excuse-card,
+    .go-history-entry, .stats-ov-card, .stats-section,
+    .enc-summary-card, .enc-card, .enc-urgency-banner,
+    .looks-card, .looks-section, .review-section, .review-card {
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      box-shadow: var(--glass-specular), 0 4px 24px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Glass border overrides for key sections */
+    .stat-card, .today-section, .missed-section, .missed-log, .people-section,
+    .ev-section, .funnel-section, .excuse-section, .decay-section,
+    .go-history, .settings-panel, .go-status-bar,
+    .stats-ov-card, .stats-section, .enc-summary-card, .enc-card {
+      border: 1px solid var(--glass-border);
     }
 
     /* Header */
@@ -56,15 +116,20 @@
     }
 
     .header h1 {
-      font-size: 28px;
-      font-weight: 700;
-      letter-spacing: -0.5px;
+      font-size: 30px;
+      font-weight: 800;
+      letter-spacing: -1px;
+      background: linear-gradient(135deg, #fff 0%, rgba(255,255,255,0.75) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
 
     .header .subtitle {
       color: var(--dim);
       font-size: 13px;
       margin-top: 4px;
+      letter-spacing: 0.2px;
     }
 
     /* Countdown Ring */
@@ -87,7 +152,7 @@
 
     .ring-bg {
       fill: none;
-      stroke: var(--border);
+      stroke: rgba(255, 255, 255, 0.1);
       stroke-width: 8;
     }
 
@@ -111,7 +176,10 @@
     .ring-text .days-left {
       font-size: 42px;
       font-weight: 800;
-      color: var(--accent);
+      background: linear-gradient(135deg, #ff6b35, #ff9f0a);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
       line-height: 1;
     }
 
@@ -124,12 +192,15 @@
 
     /* Truth Banner */
     .truth-banner {
-      background: linear-gradient(135deg, rgba(255, 59, 59, 0.1), rgba(255, 107, 53, 0.1));
-      border: 1px solid rgba(255, 59, 59, 0.2);
-      border-radius: 12px;
+      background: linear-gradient(135deg, rgba(255, 69, 58, 0.14), rgba(255, 107, 53, 0.1));
+      border: 1px solid rgba(255, 69, 58, 0.28);
+      border-radius: var(--radius-md);
       padding: 14px;
       text-align: center;
       margin: 16px 0;
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      box-shadow: var(--glass-specular), 0 4px 20px rgba(255, 69, 58, 0.1);
     }
 
     .truth-banner .truth-text {
@@ -155,8 +226,8 @@
 
     .stat-card {
       background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 12px;
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-md);
       padding: 14px;
       text-align: center;
     }
@@ -202,8 +273,8 @@
     /* Today Section — Dual Counter */
     .today-section {
       background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 16px;
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-lg);
       padding: 20px;
       margin: 16px 0;
       text-align: center;
@@ -293,17 +364,20 @@
     .btn-add {
       background: var(--accent);
       color: #fff;
-      box-shadow: 0 4px 20px var(--accent-glow);
+      box-shadow: 0 4px 20px var(--accent-glow), inset 0 1px 0 rgba(255,255,255,0.25);
     }
 
     .btn-add.seen-add {
       background: var(--blue);
-      box-shadow: 0 4px 20px rgba(96, 165, 250, 0.2);
+      box-shadow: 0 4px 20px rgba(10, 132, 255, 0.3), inset 0 1px 0 rgba(255,255,255,0.25);
     }
 
     .btn-sub {
-      background: #222;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.15);
       color: var(--dim);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
     }
 
     .courage-row {
@@ -336,8 +410,8 @@
     /* Missed Section */
     .missed-section {
       background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 16px;
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-lg);
       padding: 20px;
       margin: 16px 0;
     }
@@ -359,15 +433,17 @@
     .missed-btn {
       width: 100%;
       padding: 14px;
-      border: 2px dashed var(--danger);
-      background: rgba(255, 59, 59, 0.05);
-      border-radius: 12px;
+      border: 1.5px dashed rgba(255, 69, 58, 0.6);
+      background: rgba(255, 69, 58, 0.08);
+      border-radius: var(--radius-md);
       color: var(--danger);
       font-size: 15px;
       font-weight: 700;
       cursor: pointer;
       -webkit-tap-highlight-color: transparent;
       transition: transform 0.1s;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
     }
 
     .missed-btn:active {
@@ -394,7 +470,9 @@
       left: 0;
       right: 0;
       bottom: 0;
-      background: rgba(0, 0, 0, 0.7);
+      background: rgba(0, 0, 8, 0.72);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
       z-index: 100;
       align-items: flex-end;
       justify-content: center;
@@ -406,14 +484,18 @@
     }
 
     .modal {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 20px 20px 12px 12px;
+      background: rgba(22, 22, 44, 0.82);
+      border: 1px solid var(--glass-border);
+      border-bottom: none;
+      border-radius: var(--radius-xl) var(--radius-xl) 0 0;
       width: 100%;
       max-width: 430px;
       padding: 20px;
       max-height: 85vh;
       overflow-y: auto;
+      backdrop-filter: blur(40px) saturate(200%);
+      -webkit-backdrop-filter: blur(40px) saturate(200%);
+      box-shadow: 0 -2px 60px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255,255,255,0.2);
     }
 
     .modal h3 {
@@ -439,9 +521,9 @@
 
     .reason-btn {
       padding: 12px 8px;
-      border: 1px solid var(--border);
-      background: var(--bg);
-      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.06);
+      border-radius: var(--radius-sm);
       color: var(--text);
       font-size: 13px;
       font-weight: 500;
@@ -459,9 +541,9 @@
 
     .modal-note {
       width: 100%;
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: 10px;
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: var(--radius-sm);
       padding: 10px;
       color: var(--text);
       font-size: 13px;
@@ -491,20 +573,22 @@
     }
 
     .modal-cancel {
-      background: var(--border);
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.12);
       color: var(--dim);
     }
 
     .modal-confirm {
       background: var(--danger);
       color: #fff;
+      box-shadow: 0 4px 20px rgba(255, 69, 58, 0.35), inset 0 1px 0 rgba(255,255,255,0.2);
     }
 
     /* Missed Log */
     .missed-log {
       background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 12px;
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-md);
       padding: 16px;
       margin: 16px 0;
     }
@@ -538,9 +622,9 @@
     }
 
     .missed-entry {
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: 10px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: var(--radius-sm);
       padding: 12px;
       margin-bottom: 8px;
     }
@@ -577,12 +661,12 @@
 
     .missed-entry-btn {
       padding: 5px 10px;
-      border-radius: 6px;
+      border-radius: 8px;
       font-size: 11px;
       font-weight: 600;
       cursor: pointer;
-      border: 1px solid var(--border);
-      background: var(--card);
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.06);
       color: var(--dim);
       -webkit-tap-highlight-color: transparent;
     }
@@ -619,9 +703,9 @@
       justify-content: center;
       padding: 10px;
       margin-bottom: 8px;
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: 10px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: var(--radius-sm);
       font-size: 12px;
       font-weight: 700;
     }
@@ -651,11 +735,14 @@
 
     /* Re-encounter Reality Check */
     .reencounter-section {
-      background: linear-gradient(135deg, rgba(251, 191, 36, 0.05), rgba(251, 191, 36, 0.1));
-      border: 1px solid rgba(251, 191, 36, 0.15);
-      border-radius: 12px;
+      background: linear-gradient(135deg, rgba(255, 214, 10, 0.08), rgba(255, 214, 10, 0.13));
+      border: 1px solid rgba(255, 214, 10, 0.22);
+      border-radius: var(--radius-md);
       padding: 16px;
       margin: 16px 0;
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      box-shadow: var(--glass-specular), 0 4px 20px rgba(255, 214, 10, 0.06);
     }
 
     .reencounter-section h3 {
@@ -872,9 +959,9 @@
 
     /* Regret Meter */
     .regret-section {
-      background: linear-gradient(135deg, rgba(255, 59, 59, 0.05), rgba(255, 59, 59, 0.1));
-      border: 1px solid rgba(255, 59, 59, 0.15);
-      border-radius: 12px;
+      background: linear-gradient(135deg, rgba(255, 69, 58, 0.08), rgba(255, 69, 58, 0.13));
+      border: 1px solid rgba(255, 69, 58, 0.25);
+      border-radius: var(--radius-md);
       padding: 16px;
       margin: 16px 0;
     }
@@ -959,14 +1046,17 @@
 
     /* Power Level */
     .power-section {
-      background: linear-gradient(135deg, rgba(255, 160, 0, 0.08), rgba(255, 107, 53, 0.12));
-      border: 1px solid rgba(255, 160, 0, 0.25);
-      border-radius: 16px;
+      background: linear-gradient(135deg, rgba(255, 160, 0, 0.1), rgba(255, 107, 53, 0.14));
+      border: 1px solid rgba(255, 160, 0, 0.3);
+      border-radius: var(--radius-lg);
       padding: 20px;
       margin: 16px 0;
       text-align: center;
       overflow: hidden;
       position: relative;
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      box-shadow: var(--glass-specular), 0 8px 40px rgba(255, 160, 0, 0.1);
     }
 
     .power-section::before {
@@ -1030,10 +1120,12 @@
     }
 
     .power-factor {
-      background: rgba(0, 0, 0, 0.3);
-      border: 1px solid rgba(255, 160, 0, 0.1);
-      border-radius: 8px;
+      background: rgba(0, 0, 0, 0.25);
+      border: 1px solid rgba(255, 160, 0, 0.18);
+      border-radius: var(--radius-sm);
       padding: 10px;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
     }
 
     .power-factor-name {
@@ -1110,13 +1202,13 @@
     }
 
     .future-col.speak {
-      background: linear-gradient(135deg, rgba(52, 211, 153, 0.08), rgba(52, 211, 153, 0.15));
-      border: 1px solid rgba(52, 211, 153, 0.2);
+      background: linear-gradient(135deg, rgba(48, 209, 88, 0.1), rgba(48, 209, 88, 0.16));
+      border: 1px solid rgba(48, 209, 88, 0.28);
     }
 
     .future-col.silent {
-      background: linear-gradient(135deg, rgba(255, 59, 59, 0.08), rgba(255, 59, 59, 0.15));
-      border: 1px solid rgba(255, 59, 59, 0.2);
+      background: linear-gradient(135deg, rgba(255, 69, 58, 0.1), rgba(255, 69, 58, 0.16));
+      border: 1px solid rgba(255, 69, 58, 0.28);
     }
 
     .future-col-title {
@@ -1191,8 +1283,8 @@
 
     .milestone {
       background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 10px;
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-sm);
       padding: 12px;
       margin-bottom: 8px;
       position: relative;
@@ -1200,8 +1292,8 @@
     }
 
     .milestone.reached {
-      border-color: var(--success);
-      background: rgba(52, 211, 153, 0.05);
+      border-color: rgba(48, 209, 88, 0.35);
+      background: rgba(48, 209, 88, 0.07);
     }
 
     .milestone-header {
@@ -1255,9 +1347,9 @@
 
     /* Fear reframe */
     .fear-reframe {
-      background: linear-gradient(135deg, rgba(167, 139, 250, 0.08), rgba(96, 165, 250, 0.08));
-      border: 1px solid rgba(167, 139, 250, 0.2);
-      border-radius: 12px;
+      background: linear-gradient(135deg, rgba(191, 90, 242, 0.1), rgba(10, 132, 255, 0.08));
+      border: 1px solid rgba(191, 90, 242, 0.25);
+      border-radius: var(--radius-md);
       padding: 16px;
       margin: 16px 0;
       text-align: center;
@@ -1296,8 +1388,8 @@
     /* People Log */
     .people-section {
       background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 16px;
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-lg);
       padding: 16px;
       margin: 16px 0;
     }
@@ -1335,15 +1427,17 @@
     .people-add-btn {
       width: 100%;
       padding: 10px;
-      border: 2px dashed var(--accent);
-      background: rgba(255, 107, 53, 0.05);
-      border-radius: 10px;
+      border: 1.5px dashed rgba(255, 107, 53, 0.5);
+      background: rgba(255, 107, 53, 0.08);
+      border-radius: var(--radius-sm);
       color: var(--accent);
       font-size: 13px;
       font-weight: 700;
       cursor: pointer;
       -webkit-tap-highlight-color: transparent;
       margin-bottom: 10px;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
     }
 
     .people-add-btn:active {
@@ -1356,14 +1450,14 @@
     }
 
     .person-card {
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: 10px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: var(--radius-sm);
       padding: 10px 12px;
       margin-bottom: 6px;
       cursor: pointer;
       -webkit-tap-highlight-color: transparent;
-      transition: border-color 0.15s;
+      transition: border-color 0.15s, background 0.15s;
     }
 
     .person-card:active {
@@ -1459,7 +1553,7 @@
     .rc-odds-title { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
     .rc-odds-sub { font-size: 12px; color: var(--dim); margin-bottom: 14px; }
     .rc-odds-grid { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
-    .rc-odds-btn { display: flex; justify-content: space-between; align-items: center; padding: 12px 14px; border: 1px solid var(--border); background: var(--bg); border-radius: 10px; color: var(--text); font-size: 13px; cursor: pointer; -webkit-tap-highlight-color: transparent; transition: border-color 0.15s; }
+    .rc-odds-btn { display: flex; justify-content: space-between; align-items: center; padding: 12px 14px; border: 1px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.06); border-radius: var(--radius-sm); color: var(--text); font-size: 13px; cursor: pointer; -webkit-tap-highlight-color: transparent; transition: border-color 0.15s, background 0.15s; }
     .rc-odds-btn:active, .rc-odds-btn.selected { border-color: var(--danger); background: rgba(255, 59, 59, 0.08); }
     .rc-odds-btn .odds-label { font-weight: 600; }
     .rc-odds-btn .odds-pct { color: var(--danger); font-weight: 800; font-size: 15px; }
@@ -1528,12 +1622,12 @@
 
     .person-action-btn {
       padding: 6px 10px;
-      border-radius: 6px;
+      border-radius: 8px;
       font-size: 11px;
       font-weight: 600;
       cursor: pointer;
-      border: 1px solid var(--border);
-      background: var(--card);
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.06);
       color: var(--dim);
       -webkit-tap-highlight-color: transparent;
     }
@@ -1555,12 +1649,16 @@
 
     /* Person Add Modal */
     .person-modal {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 20px 20px 12px 12px;
+      background: rgba(18, 18, 40, 0.88);
+      border: 1px solid var(--glass-border);
+      border-bottom: none;
+      border-radius: var(--radius-xl) var(--radius-xl) 0 0;
       width: 100%;
       max-width: 430px;
       padding: 20px;
+      backdrop-filter: blur(40px) saturate(180%);
+      -webkit-backdrop-filter: blur(40px) saturate(180%);
+      box-shadow: 0 -2px 50px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.2);
     }
 
     .person-modal h3 {
@@ -1573,9 +1671,9 @@
     .person-modal input,
     .person-modal textarea {
       width: 100%;
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: 10px;
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: var(--radius-sm);
       padding: 10px;
       color: var(--text);
       font-size: 13px;
@@ -1603,12 +1701,12 @@
     .status-toggle button {
       flex: 1;
       padding: 10px;
-      border-radius: 10px;
+      border-radius: var(--radius-sm);
       font-size: 13px;
       font-weight: 600;
       cursor: pointer;
-      border: 1px solid var(--border);
-      background: var(--bg);
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.06);
       color: var(--dim);
       -webkit-tap-highlight-color: transparent;
     }
@@ -1626,20 +1724,20 @@
     }
 
     /* Excuses / Plans */
-    .excuses-section { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; margin: 16px 0; }
+    .excuses-section { background: var(--card); border: 1px solid var(--glass-border); border-radius: var(--radius-md); padding: 16px; margin: 16px 0; }
     .excuses-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
     .excuses-header h3 { font-size: 14px; font-weight: 700; }
     .excuses-sub { font-size: 11px; color: var(--dim); margin-bottom: 10px; }
-    .excuse-add-btn { width: 100%; padding: 10px; border: 2px dashed var(--success); background: rgba(52,211,153,0.05); border-radius: 10px; color: var(--success); font-size: 13px; font-weight: 700; cursor: pointer; -webkit-tap-highlight-color: transparent; margin-bottom: 10px; }
+    .excuse-add-btn { width: 100%; padding: 10px; border: 1.5px dashed rgba(48,209,88,0.5); background: rgba(48,209,88,0.07); border-radius: var(--radius-sm); color: var(--success); font-size: 13px; font-weight: 700; cursor: pointer; -webkit-tap-highlight-color: transparent; margin-bottom: 10px; }
     .excuse-add-btn:active { transform: scale(0.97); }
     .excuse-list { display: flex; flex-direction: column; gap: 6px; }
-    .excuse-card { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; }
+    .excuse-card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: var(--radius-sm); padding: 10px 12px; }
     .excuse-card-top { display: flex; justify-content: space-between; align-items: center; }
     .excuse-title { font-size: 13px; font-weight: 700; color: var(--success); }
     .excuse-date { font-size: 10px; color: var(--dim); }
     .excuse-desc { font-size: 11px; color: var(--dim); margin-top: 4px; line-height: 1.4; }
     .excuse-actions { display: flex; gap: 6px; margin-top: 8px; }
-    .excuse-action-btn { padding: 4px 8px; border-radius: 6px; font-size: 10px; font-weight: 600; cursor: pointer; border: 1px solid var(--border); background: var(--card); color: var(--dim); -webkit-tap-highlight-color: transparent; }
+    .excuse-action-btn { padding: 4px 8px; border-radius: 8px; font-size: 10px; font-weight: 600; cursor: pointer; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.06); color: var(--dim); -webkit-tap-highlight-color: transparent; }
     .excuse-action-btn.danger { border-color: #333; color: #555; }
     .excuse-empty { text-align: center; padding: 16px; color: var(--dim); font-size: 12px; font-style: italic; }
     .excuses-page { max-width: 430px; margin: 0 auto; padding: 16px; padding-bottom: 80px; }
@@ -1651,7 +1749,7 @@
     .excuses-tip-title { font-size: 12px; font-weight: 700; color: var(--success); margin-bottom: 6px; }
     .excuses-tip-text { font-size: 11px; color: var(--dim); line-height: 1.5; }
     .excuse-desc { font-size: 11px; color: var(--dim); margin-top: 4px; line-height: 1.4; white-space: pre-line; }
-    .excuse-modal input, .excuse-modal textarea { width: 100%; background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 10px; color: var(--text); font-size: 13px; font-family: inherit; margin-bottom: 10px; box-sizing: border-box; }
+    .excuse-modal input, .excuse-modal textarea { width: 100%; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.14); border-radius: var(--radius-sm); padding: 10px; color: var(--text); font-size: 13px; font-family: inherit; margin-bottom: 10px; box-sizing: border-box; }
     .excuse-modal textarea { resize: none; height: 60px; }
     .excuse-modal input::placeholder, .excuse-modal textarea::placeholder { color: var(--dim); }
     .rc-excuses { margin-top: 12px; border-top: 1px solid var(--border); padding-top: 10px; }
@@ -1677,8 +1775,9 @@
 
     .history-day {
       aspect-ratio: 1;
-      border-radius: 4px;
-      background: var(--border);
+      border-radius: 6px;
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.06);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -1710,9 +1809,9 @@
     }
 
     .date-picker-row input[type="date"] {
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: 8px;
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: 10px;
       padding: 6px 10px;
       color: var(--text);
       font-size: 13px;
@@ -1755,9 +1854,9 @@
 
     .modal-datetime-row input {
       flex: 1;
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: 10px;
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: var(--radius-sm);
       padding: 10px;
       color: var(--text);
       font-size: 13px;
@@ -1908,8 +2007,8 @@
 
     .settings-panel {
       background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 12px;
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-md);
       padding: 16px;
       margin: 10px 0;
       display: none;
@@ -1938,9 +2037,9 @@
 
     .setting-row input {
       width: 70px;
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: 6px;
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: 8px;
       padding: 6px 8px;
       color: var(--text);
       font-size: 14px;
@@ -1950,16 +2049,19 @@
     /* ===== GO MODE ===== */
     .go-trigger {
       width: 100%;
-      padding: 18px;
+      padding: 20px;
       border: none;
-      border-radius: 16px;
+      border-radius: var(--radius-lg);
       font-size: 18px;
       font-weight: 800;
       letter-spacing: 0.5px;
       cursor: pointer;
       color: #fff;
-      background: linear-gradient(135deg, #ff6b35, #ff3b3b);
-      box-shadow: 0 6px 30px rgba(255, 107, 53, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+      background: linear-gradient(135deg, #ff6b35, #ff453a);
+      box-shadow:
+        0 8px 40px rgba(255, 107, 53, 0.45),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.15);
       margin: 20px 0;
       -webkit-tap-highlight-color: transparent;
       animation: go-pulse 2.5s ease-in-out infinite;
@@ -2002,7 +2104,9 @@
       left: 0;
       right: 0;
       bottom: 0;
-      background: rgba(0, 0, 0, 0.85);
+      background: rgba(0, 0, 8, 0.78);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
       z-index: 200;
       align-items: flex-end;
       justify-content: center;
@@ -2014,8 +2118,10 @@
     }
 
     .go-panel {
-      background: var(--bg);
-      border-radius: 24px 24px 0 0;
+      background: rgba(12, 12, 28, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-bottom: none;
+      border-radius: var(--radius-xl) var(--radius-xl) 0 0;
       width: 100%;
       max-width: 430px;
       max-height: 95vh;
@@ -2023,6 +2129,9 @@
       padding: 24px 20px;
       padding-bottom: calc(24px + env(safe-area-inset-bottom));
       animation: go-slide-up 0.3s ease-out;
+      backdrop-filter: blur(40px) saturate(200%);
+      -webkit-backdrop-filter: blur(40px) saturate(200%);
+      box-shadow: 0 -4px 60px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255,255,255,0.2);
     }
 
     @keyframes go-slide-up {
@@ -2063,9 +2172,9 @@
     }
 
     .go-checkpoint {
-      background: var(--card);
-      border: 2px solid var(--border);
-      border-radius: 14px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: var(--radius-md);
       padding: 14px;
       transition: border-color 0.3s, box-shadow 0.3s;
     }
@@ -2116,9 +2225,9 @@
 
     .go-checkpoint input {
       width: 100%;
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: 10px;
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: var(--radius-sm);
       padding: 11px 12px;
       color: var(--text);
       font-size: 14px;
@@ -2137,9 +2246,9 @@
 
     /* Blocker section */
     .go-blocker {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 14px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: var(--radius-md);
       margin-bottom: 20px;
       overflow: hidden;
     }
@@ -2183,9 +2292,9 @@
 
     .go-fear-btn {
       padding: 10px 8px;
-      border: 1px solid var(--border);
-      background: var(--bg);
-      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.06);
+      border-radius: var(--radius-sm);
       color: var(--text);
       font-size: 12px;
       font-weight: 500;
@@ -2217,14 +2326,14 @@
     .go-execute {
       width: 100%;
       padding: 18px;
-      border: none;
-      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: var(--radius-md);
       font-size: 20px;
       font-weight: 900;
       letter-spacing: 2px;
       cursor: pointer;
-      color: #555;
-      background: var(--border);
+      color: rgba(255,255,255,0.3);
+      background: rgba(255,255,255,0.08);
       -webkit-tap-highlight-color: transparent;
       transition: all 0.3s;
       margin-bottom: 8px;
@@ -2232,8 +2341,9 @@
 
     .go-execute.ready {
       color: #fff;
-      background: linear-gradient(135deg, #34d399, #22c55e);
-      box-shadow: 0 6px 30px rgba(52, 211, 153, 0.4);
+      background: linear-gradient(135deg, #30d158, #22c55e);
+      border: none;
+      box-shadow: 0 8px 40px rgba(48, 209, 88, 0.45), inset 0 1px 0 rgba(255,255,255,0.25);
       animation: go-ready-pulse 1.5s ease-in-out infinite;
     }
 
@@ -2256,9 +2366,9 @@
     .go-bail {
       width: 100%;
       padding: 12px;
-      border: 1px solid #333;
-      background: none;
-      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.04);
+      border-radius: var(--radius-sm);
       color: var(--dim);
       font-size: 13px;
       font-weight: 500;
@@ -2269,8 +2379,8 @@
     /* GO History */
     .go-history {
       background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 12px;
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-md);
       padding: 14px;
       margin: 16px 0;
     }
@@ -2299,9 +2409,9 @@
     }
 
     .go-entry {
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: 10px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: var(--radius-sm);
       padding: 12px;
       margin-bottom: 8px;
     }
@@ -2416,45 +2526,66 @@
       }
     }
 
-    /* ===== BOTTOM NAV ===== */
+    /* ===== BOTTOM NAV — Floating Glass Pill ===== */
     .bottom-nav {
       position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: #111;
-      border-top: 1px solid var(--border);
+      bottom: max(20px, calc(env(safe-area-inset-bottom) + 10px));
+      left: 50%;
+      transform: translateX(-50%);
+      width: calc(100% - 28px);
+      max-width: 402px;
+      background: rgba(18, 18, 36, 0.72);
+      backdrop-filter: blur(36px) saturate(200%);
+      -webkit-backdrop-filter: blur(36px) saturate(200%);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 32px;
       display: flex;
       justify-content: center;
       gap: 0;
       z-index: 50;
-      padding-bottom: env(safe-area-inset-bottom);
+      padding: 6px 8px;
+      box-shadow:
+        0 10px 50px rgba(0, 0, 0, 0.55),
+        0 2px 12px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.22),
+        inset 0 -1px 0 rgba(255, 255, 255, 0.06);
     }
 
     .bottom-nav button {
       flex: 1;
-      max-width: 120px;
       background: none;
       border: none;
-      color: var(--dim);
-      font-size: 11px;
+      color: rgba(255, 255, 255, 0.38);
+      font-size: 10px;
       font-weight: 600;
-      padding: 10px 0 8px;
+      padding: 7px 2px 6px;
       cursor: pointer;
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 2px;
       -webkit-tap-highlight-color: transparent;
-      transition: color 0.2s;
+      transition: color 0.2s, background 0.2s;
+      border-radius: 24px;
+      letter-spacing: 0.1px;
     }
 
     .bottom-nav button.active {
       color: var(--accent);
+      background: rgba(255, 107, 53, 0.14);
     }
 
     .bottom-nav button .nav-icon {
-      font-size: 20px;
+      font-size: 18px;
+      transition: transform 0.2s;
+    }
+
+    .bottom-nav button.active .nav-icon {
+      transform: scale(1.12);
+    }
+
+    .bottom-nav button:active {
+      transform: scale(0.94);
     }
 
     .view-home,
@@ -2734,7 +2865,7 @@
     .stats-table td {
       font-size: 13px;
       padding: 8px 4px;
-      border-bottom: 1px solid rgba(34, 34, 34, 0.5);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.07);
     }
 
     .stats-table tr:last-child td {
