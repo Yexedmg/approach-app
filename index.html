@@ -2588,19 +2588,23 @@
       transform: scale(0.94);
     }
 
-    .view-home,
+    .view-approach,
     .view-stats,
+    .view-report,
+    .view-internal,
     .view-excuses,
-    .view-go,
+    .view-encounters,
     .view-looks,
     .view-reviews {
       display: none;
     }
 
-    .view-home.active,
+    .view-approach.active,
     .view-stats.active,
+    .view-report.active,
+    .view-internal.active,
     .view-excuses.active,
-    .view-go.active,
+    .view-encounters.active,
     .view-looks.active,
     .view-reviews.active {
       display: block;
@@ -3348,42 +3352,121 @@
 </head>
 
 <body>
-  <!-- ===== HOME VIEW ===== -->
-  <div class="view-home active" id="viewHome">
+  <!-- ===== APPROACH VIEW (default) ===== -->
+  <div class="view-approach active" id="viewApproach">
     <div class="app">
       <div class="header">
         <h1>APPROACH</h1>
         <div class="subtitle">The window is closing</div>
       </div>
 
-      <div class="countdown-section">
-        <div class="ring-container">
-          <svg width="180" height="180" viewBox="0 0 180 180">
-            <circle class="ring-bg" cx="90" cy="90" r="78" />
-            <circle class="ring-progress" id="ringProgress" cx="90" cy="90" r="78" stroke-dasharray="490"
-              stroke-dashoffset="0" />
-          </svg>
-          <div class="ring-text">
-            <div class="days-left" id="daysLeft">--</div>
-            <div class="days-label">days left</div>
+      <!-- Scared Stat -->
+      <div class="scared-widget">
+        <div class="scared-label-col">
+          <div class="scared-title">😰 Scared Level</div>
+          <div class="scared-desc" id="scaredDesc">Honest self-assessment.<br>Drops when you actually GO.</div>
+        </div>
+        <div class="scared-controls">
+          <button class="scared-btn" onclick="adjustScaredLevel(-1)">−</button>
+          <div class="scared-num-wrap">
+            <div class="scared-num" id="scaredNum">5</div>
+            <div class="scared-out-of">out of 10</div>
+          </div>
+          <button class="scared-btn" onclick="adjustScaredLevel(1)">+</button>
+        </div>
+      </div>
+
+      <!-- Primary CTA -->
+      <button class="go-trigger go-trigger-tab" onclick="openGoMode()">🔥 I SEE HER — GO MODE</button>
+
+      <!-- Status Bar -->
+      <div class="go-status-bar">
+        <div class="go-status-item">
+          <span class="go-status-num" id="goTabTodayCount">0</span>
+          <span class="go-status-lbl">today</span>
+        </div>
+        <div class="go-status-divider"></div>
+        <div class="go-status-item">
+          <span class="go-status-num" id="goTabDaysLeft">—</span>
+          <span class="go-status-lbl">days left</span>
+        </div>
+        <div class="go-status-divider"></div>
+        <div class="go-status-item">
+          <span class="go-status-num" id="goTabPower">0</span>
+          <span class="go-status-lbl">power</span>
+        </div>
+      </div>
+
+      <!-- Fear Kit -->
+      <div class="go-toolkit-section">
+        <div class="go-toolkit-header">
+          <div class="go-toolkit-title">Fear Kit</div>
+          <div class="go-toolkit-sub">Tap a fear. Read the reframe. Go anyway.</div>
+        </div>
+        <div class="go-fear-cards" id="goFearCards"></div>
+      </div>
+
+      <!-- My Plans (Excuses redirect) -->
+      <div class="go-toolkit-section">
+        <div class="go-toolkit-header">
+          <div class="go-toolkit-title">My Plans</div>
+          <div class="go-toolkit-sub">What you'll invite her to.</div>
+        </div>
+        <div class="go-plans-chips" id="goPlansChips">
+          <div class="go-plans-empty">No plans yet.</div>
+        </div>
+        <button class="go-plans-edit-btn" onclick="switchView('excuses')">+ Add plans</button>
+      </div>
+
+      <!-- Redirect to Reasons -->
+      <button class="go-plans-edit-btn" style="width:100%; margin-top:12px; background:rgba(255,107,53,0.08); border:1px solid rgba(255,107,53,0.25); color:var(--accent); padding:12px; border-radius:12px; font-size:14px; font-weight:600; cursor:pointer;" onclick="switchView('report')">
+        Your Reasons Not to Approach →
+      </button>
+
+      <!-- Opening Lines -->
+      <div class="go-toolkit-section">
+        <div class="go-toolkit-header">
+          <div class="go-toolkit-title">Opening Lines</div>
+          <div class="go-toolkit-sub">Steal one. Say it. Works every time.</div>
+        </div>
+        <div class="go-openers-list">
+          <div class="go-opener-card">
+            <div class="go-opener-text">"Hey — I saw you and had to say something. You look really [specific thing]."</div>
+            <div class="go-opener-note">Direct. Honest. The specific thing makes it real.</div>
+          </div>
+          <div class="go-opener-card">
+            <div class="go-opener-text">"Excuse me — sorry to interrupt. I just noticed you and thought you seemed really interesting."</div>
+            <div class="go-opener-note">Works anywhere. The apology disarms her.</div>
+          </div>
+          <div class="go-opener-card">
+            <div class="go-opener-text">"Hey, random question — do you know anywhere good around here for [coffee/food/etc]?"</div>
+            <div class="go-opener-note">Low pressure opener. Easy to transition into conversation.</div>
+          </div>
+          <div class="go-opener-card">
+            <div class="go-opener-text">"Hey — this is a bit forward but you caught my eye. I'm [name]."</div>
+            <div class="go-opener-note">Owning it shows confidence. Short and to the point.</div>
           </div>
         </div>
       </div>
 
-      <div class="truth-banner">
-        <div class="truth-text" id="truthText"></div>
-        <div class="truth-sub" id="truthSub"></div>
+      <!-- GO MODE History -->
+      <div class="go-history" id="goHistorySection" style="display:none">
+        <div class="go-history-toggle" onclick="toggleGoHistory()">
+          <h3>🔥 Go Mode Log</h3>
+          <span class="count-badge" id="goHistoryCount">0</span>
+        </div>
+        <div class="go-history-list" id="goHistoryList"></div>
       </div>
 
-      <!-- Boldness Section -->
-      <div class="today-section" style="margin-top: 16px; text-align: center;">
-        <h2 style="font-size:16px; color:var(--accent);">Boldness Stat</h2>
-        <div style="font-size:42px; font-weight:800; margin:10px 0; color:var(--accent);" id="boldnessScore">0</div>
-        <div style="font-size:12px; color:var(--dim); margin-bottom:16px;">This increases your boldness stat that decreases through the days if you don't keep it up.</div>
-        <button class="btn-add" style="width: 100%; height: 40px; border-radius: 10px; font-size: 14px;" onclick="openBoldnessModal()">
-          + Log Bold Action
-        </button>
-        <div id="boldnessTimeline" style="margin-top:20px; text-align:left;"></div>
+    </div>
+  </div> <!-- /view-approach -->
+
+  <!-- ===== REPORT VIEW ===== -->
+  <div class="view-report" id="viewReport">
+    <div class="app">
+      <div class="header">
+        <h1>REPORT</h1>
+        <div class="subtitle">Track your numbers</div>
       </div>
 
       <!-- Today: Dual Counter -->
@@ -3425,25 +3508,17 @@
         </div>
       </div>
 
-      <!-- GO MODE Trigger -->
-      <button class="go-trigger" id="goTrigger" onclick="openGoMode()">🔥 I SEE HER — GO MODE</button>
-
-
-      <!-- GO MODE History -->
-      <div class="go-history" id="goHistorySection" style="display:none">
-        <div class="go-history-toggle" onclick="toggleGoHistory()">
-          <h3>🔥 Go Mode Log</h3>
-          <span class="count-badge" id="goHistoryCount">0</span>
-        </div>
-        <div class="go-history-list" id="goHistoryList"></div>
-      </div>
-
       <!-- Today: Missed -->
       <div class="missed-section">
         <h2>Log a Miss</h2>
-        <div class="missed-sub">Saw someone, said nothing. Log it. Own it.</div>
         <button class="missed-btn" onclick="openMissedModal()">+ I let one go</button>
         <div class="missed-today-count">Today: <span id="missedTodayCount">0</span> missed</div>
+      </div>
+
+      <!-- Reasons Breakdown (renamed from Excuses) -->
+      <div class="excuse-section" id="excuseSection" style="display:none">
+        <h3>Your Reasons — Ranked</h3>
+        <div id="excuseBars"></div>
       </div>
 
       <!-- Re-encounter Reality Check -->
@@ -3466,12 +3541,6 @@
         <div class="reencounter-verdict" id="reVerdict"></div>
       </div>
 
-      <!-- Excuse Breakdown -->
-      <div class="excuse-section" id="excuseSection" style="display:none">
-        <h3>Your Excuses — Ranked</h3>
-        <div id="excuseBars"></div>
-      </div>
-
       <!-- Missed Log -->
       <div class="missed-log" id="missedLogSection" style="display:none">
         <div class="missed-log-toggle" onclick="toggleMissedLog()">
@@ -3492,117 +3561,48 @@
         <div class="people-list" id="peopleList"></div>
       </div>
 
-      <!-- Person Add/Interaction Modal -->
-      <div class="modal-overlay" id="personModal">
-        <div class="person-modal">
-          <h3 id="personModalTitle">Log a Person</h3>
-          <input type="text" id="personNickname" placeholder="Quick ID: Red jacket, Starbucks" maxlength="60">
-          <div class="status-toggle" id="personStatusToggle">
-            <button onclick="setPersonStatus('seen')" id="pStatusSeen" class="active-seen">Just Seen</button>
-            <button onclick="setPersonStatus('talked')" id="pStatusTalked">Talked To</button>
-          </div>
-          <div class="modal-datetime-row">
-            <div class="datetime-field">
-              <label>Date</label>
-              <input type="date" id="personDate">
-            </div>
-            <div class="datetime-field">
-              <label>Time</label>
-              <input type="time" id="personTime">
-            </div>
-          </div>
-          <input type="text" id="personLocation" placeholder="Location: Starbucks, library, bus stop..." maxlength="80">
-          <textarea id="personNote" placeholder="Optional note..."></textarea>
-          <div class="modal-actions">
-            <button class="modal-cancel" onclick="closePersonModal()">Cancel</button>
-            <button class="modal-confirm" id="personModalConfirm" onclick="confirmPerson()">Log It</button>
+    </div>
+  </div> <!-- /view-report -->
+
+  <!-- ===== INTERNAL VIEW ===== -->
+  <div class="view-internal" id="viewInternal">
+    <div class="app">
+      <div class="header">
+        <h1>INTERNAL</h1>
+        <div class="subtitle">Your inner game</div>
+      </div>
+
+      <div class="countdown-section">
+        <div class="ring-container">
+          <svg width="180" height="180" viewBox="0 0 180 180">
+            <circle class="ring-bg" cx="90" cy="90" r="78" />
+            <circle class="ring-progress" id="ringProgress" cx="90" cy="90" r="78" stroke-dasharray="490"
+              stroke-dashoffset="0" />
+          </svg>
+          <div class="ring-text">
+            <div class="days-left" id="daysLeft">--</div>
+            <div class="days-label">days left</div>
           </div>
         </div>
       </div>
 
-      <!-- Interaction Note Modal -->
-      <div class="modal-overlay" id="interactionModal">
-        <div class="person-modal">
-          <h3>What happened?</h3>
-          <div class="modal-datetime-row">
-            <div class="datetime-field">
-              <label>Date</label>
-              <input type="date" id="interactionDate">
-            </div>
-            <div class="datetime-field">
-              <label>Time</label>
-              <input type="time" id="interactionTime">
-            </div>
-          </div>
-          <input type="text" id="interactionLocation" placeholder="Location: Starbucks, library, bus stop..."
-            maxlength="80">
-          <textarea id="interactionNote"
-            placeholder="She lent me her phone, got her number, quick chat about..."></textarea>
-          
-          <div class="modal-actions" style="margin-top:12px;">
-            <button class="modal-cancel" onclick="closeInteractionModal()">Cancel</button>
-            <button class="modal-confirm" onclick="confirmInteraction()">Log It</button>
-          </div>
-        </div>
+      <div class="truth-banner">
+        <div class="truth-text" id="truthText"></div>
+        <div class="truth-sub" id="truthSub"></div>
       </div>
 
-      <!-- Sighting Modal -->
-      <div class="modal-overlay" id="sightingModal">
-        <div class="person-modal">
-          <h3>Saw her again</h3>
-          <div class="modal-datetime-row">
-            <div class="datetime-field">
-              <label>Date</label>
-              <input type="date" id="sightingDate">
-            </div>
-            <div class="datetime-field">
-              <label>Time</label>
-              <input type="time" id="sightingTime">
-            </div>
-          </div>
-          <input type="text" id="sightingLocation" placeholder="Location (optional)" maxlength="80">
-          <textarea id="sightingNote" placeholder="Optional note..."></textarea>
-          <div class="modal-actions">
-            <button class="modal-cancel" onclick="closeSightingModal()">Cancel</button>
-            <button class="modal-confirm" onclick="confirmSighting()">Log It</button>
-          </div>
-        </div>
+      <!-- Boldness Section -->
+      <div class="today-section" style="margin-top: 16px; text-align: center;">
+        <h2 style="font-size:16px; color:var(--accent);">Boldness Stat</h2>
+        <div style="font-size:42px; font-weight:800; margin:10px 0; color:var(--accent);" id="boldnessScore">0</div>
+        <div style="font-size:12px; color:var(--dim); margin-bottom:16px;">This increases your boldness stat that decreases through the days if you don't keep it up.</div>
+        <button class="btn-add" style="width: 100%; height: 40px; border-radius: 10px; font-size: 14px;" onclick="openBoldnessModal()">
+          + Log Bold Action
+        </button>
+        <div id="boldnessTimeline" style="margin-top:20px; text-align:left;"></div>
       </div>
 
-      <!-- Go Attempt Review Modal -->
-      <div class="modal-overlay" id="goReviewModal">
-        <div class="person-modal">
-          <h3>Approach Review</h3>
-          <div class="modal-sub" id="goReviewSubtitle" style="margin-bottom:12px;"></div>
-          
-          <div class="review-fields" style="display:flex; flex-direction:column; gap:8px; font-size:12px;">
-            <label style="color:var(--dim);">Full Story / Overview</label>
-            <textarea id="goReviewDesc" class="modal-note" style="min-height:60px; resize:vertical; background:var(--bg); border:1px solid var(--border); color:var(--text); border-radius:8px; padding:8px 10px; font-family:inherit; font-size:13px;" placeholder="Full description of what happened..."></textarea>
-            
-            <label style="color:var(--dim);margin-top:4px;">Weakpoints</label>
-            <input type="text" id="goReviewWeak" class="modal-note" style="height:36px" placeholder="Talked too fast, fidgeted...">
-            
-            <label style="color:var(--dim);margin-top:4px;">Goodpoints</label>
-            <input type="text" id="goReviewGood" class="modal-note" style="height:36px" placeholder="Eye contact, smiled, clear voice...">
-            
-            <label style="color:var(--dim);margin-top:4px;">Could have done more</label>
-            <input type="text" id="goReviewMore" class="modal-note" style="height:36px" placeholder="Escalated, held silence longer...">
-            
-            <label style="color:var(--dim);margin-top:4px;">Could have done less</label>
-            <input type="text" id="goReviewLess" class="modal-note" style="height:36px" placeholder="Less apologizing, less interview questions...">
-            
-            <label style="color:var(--dim);margin-top:4px;">Better than expected</label>
-            <input type="text" id="goReviewBetter" class="modal-note" style="height:36px" placeholder="She was actually friendly, didn't stutter...">
-          </div>
-          
-          <div class="modal-actions" style="margin-top:16px;">
-            <button class="modal-cancel" onclick="closeGoReviewModal()">Cancel</button>
-            <button class="modal-confirm" onclick="confirmGoReview()">Save Review</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Power Level (stays on home as quick glance) -->
+      <!-- Power Level -->
       <div class="power-section">
         <h3>Power Level</h3>
         <div class="power-number" id="powerNumber">0</div>
@@ -3612,6 +3612,12 @@
         </div>
         <div class="power-factors" id="powerFactors"></div>
         <div class="power-base" id="powerBase"></div>
+      </div>
+
+      <!-- History -->
+      <div class="history-section" style="margin-top:20px;">
+        <h3>Last 28 Days</h3>
+        <div class="history-grid" id="historyGrid"></div>
       </div>
 
       <div class="settings-toggle">
@@ -3644,98 +3650,119 @@
           Data</button>
       </div>
     </div>
-  </div> <!-- /view-home -->
+  </div> <!-- /view-internal -->
 
-  <!-- ===== GO VIEW ===== -->
-  <div class="view-go" id="viewGo">
-    <div class="go-page" style="max-width:430px; margin:0 auto; padding:16px; padding-bottom:80px;">
+  <!-- Modals (shared across views) -->
 
-      <!-- Status Bar -->
-      <div class="go-status-bar">
-        <div class="go-status-item">
-          <span class="go-status-num" id="goTabTodayCount">0</span>
-          <span class="go-status-lbl">today</span>
+  <!-- Person Add/Interaction Modal -->
+  <div class="modal-overlay" id="personModal">
+    <div class="person-modal">
+      <h3 id="personModalTitle">Log a Person</h3>
+      <input type="text" id="personNickname" placeholder="Quick ID: Red jacket, Starbucks" maxlength="60">
+      <div class="status-toggle" id="personStatusToggle">
+        <button onclick="setPersonStatus('seen')" id="pStatusSeen" class="active-seen">Just Seen</button>
+        <button onclick="setPersonStatus('talked')" id="pStatusTalked">Talked To</button>
+      </div>
+      <div class="modal-datetime-row">
+        <div class="datetime-field">
+          <label>Date</label>
+          <input type="date" id="personDate">
         </div>
-        <div class="go-status-divider"></div>
-        <div class="go-status-item">
-          <span class="go-status-num" id="goTabDaysLeft">—</span>
-          <span class="go-status-lbl">days left</span>
-        </div>
-        <div class="go-status-divider"></div>
-        <div class="go-status-item">
-          <span class="go-status-num" id="goTabPower">0</span>
-          <span class="go-status-lbl">power</span>
+        <div class="datetime-field">
+          <label>Time</label>
+          <input type="time" id="personTime">
         </div>
       </div>
-
-      <!-- Scared Stat -->
-      <div class="scared-widget">
-        <div class="scared-label-col">
-          <div class="scared-title">😰 Scared Level</div>
-          <div class="scared-desc" id="scaredDesc">Honest self-assessment.<br>Drops when you actually GO.</div>
-        </div>
-        <div class="scared-controls">
-          <button class="scared-btn" onclick="adjustScaredLevel(-1)">−</button>
-          <div class="scared-num-wrap">
-            <div class="scared-num" id="scaredNum">5</div>
-            <div class="scared-out-of">out of 10</div>
-          </div>
-          <button class="scared-btn" onclick="adjustScaredLevel(1)">+</button>
-        </div>
+      <input type="text" id="personLocation" placeholder="Location: Starbucks, library, bus stop..." maxlength="80">
+      <textarea id="personNote" placeholder="Optional note..."></textarea>
+      <div class="modal-actions">
+        <button class="modal-cancel" onclick="closePersonModal()">Cancel</button>
+        <button class="modal-confirm" id="personModalConfirm" onclick="confirmPerson()">Log It</button>
       </div>
-
-      <!-- Primary CTA -->
-      <button class="go-trigger go-trigger-tab" onclick="openGoMode()">🔥 I SEE HER — GO MODE</button>
-
-      <!-- Fear Kit -->
-      <div class="go-toolkit-section">
-        <div class="go-toolkit-header">
-          <div class="go-toolkit-title">Fear Kit</div>
-          <div class="go-toolkit-sub">Tap a fear. Read the reframe. Go anyway.</div>
-        </div>
-        <div class="go-fear-cards" id="goFearCards"></div>
-      </div>
-
-      <!-- My Plans -->
-      <div class="go-toolkit-section">
-        <div class="go-toolkit-header">
-          <div class="go-toolkit-title">My Plans</div>
-          <div class="go-toolkit-sub">What you'll invite her to.</div>
-        </div>
-        <div class="go-plans-chips" id="goPlansChips">
-          <div class="go-plans-empty">No plans yet.</div>
-        </div>
-        <button class="go-plans-edit-btn" onclick="switchView('excuses')">+ Add plans</button>
-      </div>
-
-      <!-- Opening Lines -->
-      <div class="go-toolkit-section">
-        <div class="go-toolkit-header">
-          <div class="go-toolkit-title">Opening Lines</div>
-          <div class="go-toolkit-sub">Steal one. Say it. Works every time.</div>
-        </div>
-        <div class="go-openers-list">
-          <div class="go-opener-card">
-            <div class="go-opener-text">"Hey — I saw you and had to say something. You look really [specific thing]."</div>
-            <div class="go-opener-note">Direct. Honest. The specific thing makes it real.</div>
-          </div>
-          <div class="go-opener-card">
-            <div class="go-opener-text">"Excuse me — sorry to interrupt. I just noticed you and thought you seemed really interesting."</div>
-            <div class="go-opener-note">Works anywhere. The apology disarms her.</div>
-          </div>
-          <div class="go-opener-card">
-            <div class="go-opener-text">"Hey, random question — do you know anywhere good around here for [coffee/food/etc]?"</div>
-            <div class="go-opener-note">Low pressure opener. Easy to transition into conversation.</div>
-          </div>
-          <div class="go-opener-card">
-            <div class="go-opener-text">"Hey — this is a bit forward but you caught my eye. I'm [name]."</div>
-            <div class="go-opener-note">Owning it shows confidence. Short and to the point.</div>
-          </div>
-        </div>
-      </div>
-
     </div>
-  </div> <!-- /view-go -->
+  </div>
+
+  <!-- Interaction Note Modal -->
+  <div class="modal-overlay" id="interactionModal">
+    <div class="person-modal">
+      <h3>What happened?</h3>
+      <div class="modal-datetime-row">
+        <div class="datetime-field">
+          <label>Date</label>
+          <input type="date" id="interactionDate">
+        </div>
+        <div class="datetime-field">
+          <label>Time</label>
+          <input type="time" id="interactionTime">
+        </div>
+      </div>
+      <input type="text" id="interactionLocation" placeholder="Location: Starbucks, library, bus stop..."
+        maxlength="80">
+      <textarea id="interactionNote"
+        placeholder="She lent me her phone, got her number, quick chat about..."></textarea>
+
+      <div class="modal-actions" style="margin-top:12px;">
+        <button class="modal-cancel" onclick="closeInteractionModal()">Cancel</button>
+        <button class="modal-confirm" onclick="confirmInteraction()">Log It</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sighting Modal -->
+  <div class="modal-overlay" id="sightingModal">
+    <div class="person-modal">
+      <h3>Saw her again</h3>
+      <div class="modal-datetime-row">
+        <div class="datetime-field">
+          <label>Date</label>
+          <input type="date" id="sightingDate">
+        </div>
+        <div class="datetime-field">
+          <label>Time</label>
+          <input type="time" id="sightingTime">
+        </div>
+      </div>
+      <input type="text" id="sightingLocation" placeholder="Location (optional)" maxlength="80">
+      <textarea id="sightingNote" placeholder="Optional note..."></textarea>
+      <div class="modal-actions">
+        <button class="modal-cancel" onclick="closeSightingModal()">Cancel</button>
+        <button class="modal-confirm" onclick="confirmSighting()">Log It</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Go Attempt Review Modal -->
+  <div class="modal-overlay" id="goReviewModal">
+    <div class="person-modal">
+      <h3>Approach Review</h3>
+      <div class="modal-sub" id="goReviewSubtitle" style="margin-bottom:12px;"></div>
+
+      <div class="review-fields" style="display:flex; flex-direction:column; gap:8px; font-size:12px;">
+        <label style="color:var(--dim);">Full Story / Overview</label>
+        <textarea id="goReviewDesc" class="modal-note" style="min-height:60px; resize:vertical; background:var(--bg); border:1px solid var(--border); color:var(--text); border-radius:8px; padding:8px 10px; font-family:inherit; font-size:13px;" placeholder="Full description of what happened..."></textarea>
+
+        <label style="color:var(--dim);margin-top:4px;">Weakpoints</label>
+        <input type="text" id="goReviewWeak" class="modal-note" style="height:36px" placeholder="Talked too fast, fidgeted...">
+
+        <label style="color:var(--dim);margin-top:4px;">Goodpoints</label>
+        <input type="text" id="goReviewGood" class="modal-note" style="height:36px" placeholder="Eye contact, smiled, clear voice...">
+
+        <label style="color:var(--dim);margin-top:4px;">Could have done more</label>
+        <input type="text" id="goReviewMore" class="modal-note" style="height:36px" placeholder="Escalated, held silence longer...">
+
+        <label style="color:var(--dim);margin-top:4px;">Could have done less</label>
+        <input type="text" id="goReviewLess" class="modal-note" style="height:36px" placeholder="Less apologizing, less interview questions...">
+
+        <label style="color:var(--dim);margin-top:4px;">Better than expected</label>
+        <input type="text" id="goReviewBetter" class="modal-note" style="height:36px" placeholder="She was actually friendly, didn't stutter...">
+      </div>
+
+      <div class="modal-actions" style="margin-top:16px;">
+        <button class="modal-cancel" onclick="closeGoReviewModal()">Cancel</button>
+        <button class="modal-confirm" onclick="confirmGoReview()">Save Review</button>
+      </div>
+    </div>
+  </div>
 
   <!-- ===== STATS VIEW ===== -->
   <div class="view-stats" id="viewStats">
@@ -3743,6 +3770,19 @@
       <div class="stats-page-header">
         <h1>📊 STATS</h1>
         <div class="stats-sub">Your numbers, month by month</div>
+      </div>
+
+      <!-- Quick Nav Buttons -->
+      <div style="display:flex; gap:10px; margin-bottom:20px;">
+        <button onclick="switchView('looks')" style="flex:1; padding:14px 12px; border-radius:14px; border:1px solid rgba(255,255,255,0.12); background:rgba(255,255,255,0.06); color:var(--text); font-size:14px; font-weight:600; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px;">
+          👀 Looks
+        </button>
+        <button onclick="switchView('reviews')" style="flex:1; padding:14px 12px; border-radius:14px; border:1px solid rgba(255,255,255,0.12); background:rgba(255,255,255,0.06); color:var(--text); font-size:14px; font-weight:600; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px;">
+          📝 Reviews
+        </button>
+        <button onclick="switchView('encounters')" style="flex:1; padding:14px 12px; border-radius:14px; border:1px solid rgba(255,255,255,0.12); background:rgba(255,255,255,0.06); color:var(--text); font-size:14px; font-weight:600; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px;">
+          👩 Girls
+        </button>
       </div>
 
       <!-- Overview Cards -->
@@ -3887,18 +3927,13 @@
         <div class="decay-explain" id="decayExplain"></div>
       </div>
 
-      <!-- History -->
-      <div class="history-section">
-        <h3>Last 28 Days</h3>
-        <div class="history-grid" id="historyGrid"></div>
-      </div>
-
     </div>
   </div> <!-- /view-stats -->
 
   <!-- ===== ENCOUNTERS VIEW ===== -->
   <div class="view-encounters" id="viewEncounters">
     <div class="encounters-page">
+      <button onclick="switchView('stats')" style="background:none; border:none; color:var(--accent); font-size:14px; font-weight:600; cursor:pointer; padding:8px 0; margin-bottom:8px;">← Back to Stats</button>
       <div class="encounters-header">
         <h1>Encounters</h1>
         <p>Every girl you approached, her age, and why time matters.</p>
@@ -3936,8 +3971,9 @@
   <!-- ===== EXCUSES VIEW ===== -->
   <div class="view-excuses" id="viewExcuses">
     <div class="excuses-page">
+      <button onclick="switchView('approach')" style="background:none; border:none; color:var(--accent); font-size:14px; font-weight:600; cursor:pointer; padding:8px 0; margin-bottom:8px;">← Back to Approach</button>
       <div class="excuses-page-header">
-        <h1>☕ YOUR EXCUSES</h1>
+        <h1>☕ YOUR PLANS</h1>
         <div class="excuses-page-sub">What are you gonna do with her? Have the answer ready.</div>
       </div>
 
@@ -3972,6 +4008,9 @@
 
   <!-- ===== VIEW: LOOKS ===== -->
   <div class="view-looks" id="viewLooks">
+    <div style="padding: 16px 16px 0;">
+      <button onclick="switchView('stats')" style="background:none; border:none; color:var(--accent); font-size:14px; font-weight:600; cursor:pointer; padding:8px 0;">← Back to Stats</button>
+    </div>
     <div class="header" style="padding-top: 10px;">
       <h1>Who Looked At You</h1>
       <div class="subtitle">Log the girls that stared</div>
@@ -4011,6 +4050,9 @@
 
   <!-- ===== VIEW: REVIEWS ===== -->
   <div class="view-reviews" id="viewReviews">
+    <div style="padding: 16px 16px 0;">
+      <button onclick="switchView('stats')" style="background:none; border:none; color:var(--accent); font-size:14px; font-weight:600; cursor:pointer; padding:8px 0;">← Back to Stats</button>
+    </div>
     <div class="header" style="padding-top: 10px;">
       <h1>Interaction Reviews</h1>
       <div class="subtitle">Reflect and improve</div>
@@ -4093,33 +4135,21 @@
 
   <!-- ===== BOTTOM NAV ===== -->
   <div class="bottom-nav">
-    <button class="active" id="navHome" onclick="switchView('home')">
-      <span class="nav-icon">🏠</span>
-      Home
-    </button>
-    <button id="navGo" onclick="switchView('go')">
-      <span class="nav-icon">🔥</span>
-      Go
-    </button>
-    <button id="navEncounters" onclick="switchView('encounters')">
-      <span class="nav-icon">👩</span>
-      Girls
-    </button>
-    <button id="navLooks" onclick="switchView('looks')">
-      <span class="nav-icon">👀</span>
-      Looks
-    </button>
-    <button id="navExcuses" onclick="switchView('excuses')">
-      <span class="nav-icon">☕</span>
-      Excuses
-    </button>
-    <button id="navReviews" onclick="switchView('reviews')">
-      <span class="nav-icon">📝</span>
-      Reviews
-    </button>
     <button id="navStats" onclick="switchView('stats')">
       <span class="nav-icon">📊</span>
       Stats
+    </button>
+    <button class="active" id="navApproach" onclick="switchView('approach')">
+      <span class="nav-icon">🔥</span>
+      Approach
+    </button>
+    <button id="navReport" onclick="switchView('report')">
+      <span class="nav-icon">📋</span>
+      Report
+    </button>
+    <button id="navInternal" onclick="switchView('internal')">
+      <span class="nav-icon">💪</span>
+      Internal
     </button>
   </div>
 
@@ -6199,16 +6229,27 @@
     }
 
     // --- NAVIGATION ---
+    const mainViews = ['Approach','Stats','Report','Internal'];
+    const subViews = ['Excuses','Encounters','Looks','Reviews'];
+    const allViews = mainViews.concat(subViews);
+
     function switchView(view) {
-      ['Home','Stats','Excuses','Go','Encounters','Looks','Reviews'].forEach(v => {
+      allViews.forEach(v => {
         const k = v.toLowerCase();
-        document.getElementById('view' + v).classList.toggle('active', view === k);
-        document.getElementById('nav' + v).classList.toggle('active', view === k);
+        const el = document.getElementById('view' + v);
+        if (el) el.classList.toggle('active', view === k);
+      });
+      // Nav buttons only exist for main views
+      mainViews.forEach(v => {
+        const navEl = document.getElementById('nav' + v);
+        if (navEl) navEl.classList.toggle('active', view === v.toLowerCase());
       });
       window.scrollTo(0, 0);
+      if (view === 'approach') renderGoTab(getData());
+      if (view === 'report') render();
+      if (view === 'internal') render();
       if (view === 'stats') renderStats();
       if (view === 'excuses') renderExcuses(getData());
-      if (view === 'go') renderGoTab(getData());
       if (view === 'encounters') renderEncounters(getData());
       if (view === 'looks') renderLooks();
       if (view === 'reviews') renderReviews();
