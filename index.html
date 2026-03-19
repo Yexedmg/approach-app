@@ -2018,6 +2018,12 @@
       display: block;
     }
 
+    #engagementBody.open,
+    #lifeHardBody.open,
+    #featureRequestsBody.open {
+      display: block !important;
+    }
+
     .setting-row {
       display: flex;
       justify-content: space-between;
@@ -2595,7 +2601,8 @@
     .view-excuses,
     .view-encounters,
     .view-looks,
-    .view-reviews {
+    .view-reviews,
+    .view-openers {
       display: none;
     }
 
@@ -2606,7 +2613,8 @@
     .view-excuses.active,
     .view-encounters.active,
     .view-looks.active,
-    .view-reviews.active {
+    .view-reviews.active,
+    .view-openers.active {
       display: block;
     }
 
@@ -3424,30 +3432,14 @@
         Your Reasons Not to Approach →
       </button>
 
-      <!-- Opening Lines -->
+      <!-- Opening Lines (2 random) -->
       <div class="go-toolkit-section">
         <div class="go-toolkit-header">
           <div class="go-toolkit-title">Opening Lines</div>
           <div class="go-toolkit-sub">Steal one. Say it. Works every time.</div>
         </div>
-        <div class="go-openers-list">
-          <div class="go-opener-card">
-            <div class="go-opener-text">"Hey — I saw you and had to say something. You look really [specific thing]."</div>
-            <div class="go-opener-note">Direct. Honest. The specific thing makes it real.</div>
-          </div>
-          <div class="go-opener-card">
-            <div class="go-opener-text">"Excuse me — sorry to interrupt. I just noticed you and thought you seemed really interesting."</div>
-            <div class="go-opener-note">Works anywhere. The apology disarms her.</div>
-          </div>
-          <div class="go-opener-card">
-            <div class="go-opener-text">"Hey, random question — do you know anywhere good around here for [coffee/food/etc]?"</div>
-            <div class="go-opener-note">Low pressure opener. Easy to transition into conversation.</div>
-          </div>
-          <div class="go-opener-card">
-            <div class="go-opener-text">"Hey — this is a bit forward but you caught my eye. I'm [name]."</div>
-            <div class="go-opener-note">Owning it shows confidence. Short and to the point.</div>
-          </div>
-        </div>
+        <div class="go-openers-list" id="goRandomOpeners"></div>
+        <button class="go-plans-edit-btn" style="width:100%; margin-top:8px;" onclick="switchView('openers')">See all opening lines →</button>
       </div>
 
       <!-- GO MODE History -->
@@ -3560,6 +3552,17 @@
         <div class="people-summary" id="peopleSummary"></div>
         <button class="people-add-btn" onclick="openPersonModal()">+ New person</button>
         <div class="people-list" id="peopleList"></div>
+      </div>
+
+      <!-- Prospects (seen, interested, not pursuing) -->
+      <div class="people-section" id="prospectsSection">
+        <div class="people-header">
+          <h3>Prospects</h3>
+          <span class="badge" id="prospectsCount">0</span>
+        </div>
+        <div style="font-size:12px; color:var(--dim); margin-bottom:10px;">Girls you've seen and are curious about — not necessarily pursuing, but don't want to forget.</div>
+        <button class="people-add-btn" onclick="openProspectModal()">+ Add Prospect</button>
+        <div class="people-list" id="prospectsList"></div>
       </div>
 
       <!-- Age Distribution & Ratings -->
@@ -3679,6 +3682,80 @@
             onchange="saveBirthday(this.value)"></div>
       </div>
 
+      <!-- Engagement Stat -->
+      <div class="people-section" style="margin-top:16px;" id="engagementSection">
+        <div class="people-header" onclick="document.getElementById('engagementBody').classList.toggle('open')" style="cursor:pointer;">
+          <h3>Engagement Stat</h3>
+          <span style="font-size:12px; color:var(--dim);">▼</span>
+        </div>
+        <div id="engagementBody" style="display:none;" class="">
+          <div style="font-size:12px; color:var(--dim); margin-bottom:12px;">When not engaged with life, approaching is harder. Build your world — it feeds your drive.</div>
+          <div id="engagementBarWrap" style="margin-bottom:14px;">
+            <div style="display:flex; justify-content:space-between; font-size:11px; color:var(--dim); margin-bottom:4px;">
+              <span>Disengaged</span><span id="engagementScore" style="color:var(--text); font-weight:700;">0%</span><span>In The Flow</span>
+            </div>
+            <div style="height:10px; border-radius:5px; background:rgba(255,255,255,0.1); overflow:hidden;">
+              <div id="engagementBar" style="height:100%; width:0%; border-radius:5px; background:var(--success); transition:width 0.3s;"></div>
+            </div>
+            <div id="engagementLabel" style="font-size:12px; color:var(--dim); text-align:center; margin-top:6px;">—</div>
+          </div>
+          <div style="display:flex; flex-direction:column; gap:10px;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <label style="font-size:13px;">Environments I'm in</label>
+              <input type="number" min="0" max="20" id="engEnvs" style="width:70px; text-align:center; background:var(--card); border:1px solid var(--border); border-radius:8px; color:var(--text); padding:6px; font-size:14px;" oninput="saveEngagement('environments', this.value)" placeholder="0">
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <label style="font-size:13px;">Friends I have</label>
+              <input type="number" min="0" max="200" id="engFriends" style="width:70px; text-align:center; background:var(--card); border:1px solid var(--border); border-radius:8px; color:var(--text); padding:6px; font-size:14px;" oninput="saveEngagement('friends', this.value)" placeholder="0">
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <label style="font-size:13px;">Daily social talks (0–5+)</label>
+              <input type="number" min="0" max="10" id="engTalks" style="width:70px; text-align:center; background:var(--card); border:1px solid var(--border); border-radius:8px; color:var(--text); padding:6px; font-size:14px;" oninput="saveEngagement('talksDaily', this.value)" placeholder="0">
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <label style="font-size:13px;">Last time socializing</label>
+              <input type="date" id="engLastSocial" style="background:var(--card); border:1px solid var(--border); border-radius:8px; color:var(--text); padding:6px; font-size:12px;" onchange="saveEngagement('lastSocialDate', this.value)">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Life's Hard Stat -->
+      <div class="people-section" style="margin-top:16px;" id="lifeHardSection">
+        <div class="people-header" onclick="document.getElementById('lifeHardBody').classList.toggle('open')" style="cursor:pointer;">
+          <h3>Life's Hard Stat</h3>
+          <span style="font-size:12px; color:var(--dim);">▼</span>
+        </div>
+        <div id="lifeHardBody" style="display:none;">
+          <div style="font-size:12px; color:var(--dim); margin-bottom:12px;">Everything around you becomes easier when you do hard things. Log them. Watch the world soften.</div>
+          <div style="margin-bottom:14px;">
+            <div style="display:flex; justify-content:space-between; font-size:11px; color:var(--dim); margin-bottom:4px;">
+              <span style="color:var(--danger);">🔴 Easy life</span>
+              <span id="lifeHardScore" style="color:var(--text); font-weight:700;">0</span>
+              <span style="color:var(--success);">🟢 Hard things done</span>
+            </div>
+            <div style="height:12px; border-radius:6px; background:rgba(255,255,255,0.1); overflow:hidden; position:relative;">
+              <div id="lifeHardBar" style="height:100%; width:0%; border-radius:6px; background:linear-gradient(90deg, var(--danger), var(--yellow), var(--success)); transition:width 0.3s;"></div>
+            </div>
+          </div>
+          <button class="people-add-btn" onclick="openLifeHardModal()">+ Log Hard Thing</button>
+          <div id="lifeHardList" style="margin-top:10px;"></div>
+        </div>
+      </div>
+
+      <!-- Feature Requests -->
+      <div class="people-section" style="margin-top:16px;" id="featureRequestsSection">
+        <div class="people-header" onclick="document.getElementById('featureRequestsBody').classList.toggle('open')" style="cursor:pointer;">
+          <h3>Feature Ideas</h3>
+          <span class="badge" id="featureRequestsCount">0</span>
+        </div>
+        <div id="featureRequestsBody" style="display:none;">
+          <div style="font-size:12px; color:var(--dim); margin-bottom:10px;">Log features you want in the app. Review and delete when done.</div>
+          <button class="people-add-btn" onclick="openFeatureRequestModal()">+ Add Feature Idea</button>
+          <div id="featureRequestsList" style="margin-top:10px;"></div>
+        </div>
+      </div>
+
       <div class="reset-section">
         <button class="reset-btn" onclick="exportData()">Export Backup</button>
         <button class="reset-btn" onclick="importData()" style="margin-left:8px">Import Backup</button>
@@ -3763,6 +3840,32 @@
       <div class="modal-actions">
         <button class="modal-cancel" onclick="closeSightingModal()">Cancel</button>
         <button class="modal-confirm" onclick="confirmSighting()">Log It</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Prospect Modal -->
+  <div class="modal-overlay" id="prospectModal">
+    <div class="person-modal">
+      <h3 id="prospectModalTitle">Add Prospect</h3>
+      <input type="text" id="prospectNickname" placeholder="Quick ID: Red jacket at Starbucks" maxlength="60">
+      <div class="modal-datetime-row">
+        <div class="datetime-field">
+          <label>Date</label>
+          <input type="date" id="prospectDate">
+        </div>
+        <div class="datetime-field">
+          <label>Time</label>
+          <input type="time" id="prospectTime">
+        </div>
+      </div>
+      <input type="number" id="prospectRating" placeholder="Rating (1-10)" min="1" max="10">
+      <input type="number" id="prospectAge" placeholder="Estimated age" min="16" max="99">
+      <input type="text" id="prospectLocation" placeholder="Location" maxlength="80">
+      <textarea id="prospectNote" placeholder="Appearance, situation, what caught your eye..."></textarea>
+      <div class="modal-actions">
+        <button class="modal-cancel" onclick="closeProspectModal()">Cancel</button>
+        <button class="modal-confirm" onclick="confirmProspect()">Save</button>
       </div>
     </div>
   </div>
@@ -3873,6 +3976,9 @@
         <h3>📅 Average by Day of Week</h3>
         <div class="stats-week-grid" id="statsDow"></div>
       </div>
+
+      <!-- Weekly Summary Banner -->
+      <div id="statsWeeklySummary" style="background:rgba(255,107,53,0.08); border:1px solid rgba(255,107,53,0.25); border-radius:16px; padding:18px 16px; margin-bottom:16px; text-align:center;"></div>
 
       <!-- Weekly Breakdown Table -->
       <div class="stats-section">
@@ -4098,6 +4204,34 @@
     </div>
   </div>
 
+  <!-- ===== VIEW: OPENERS ===== -->
+  <div class="view-openers" id="viewOpeners">
+    <div style="padding: 16px 16px 0;">
+      <button onclick="switchView('approach')" style="background:none; border:none; color:var(--accent); font-size:14px; font-weight:600; cursor:pointer; padding:8px 0;">← Back to Approach</button>
+    </div>
+    <div class="header" style="padding-top: 10px;">
+      <h1>Opening Lines</h1>
+      <div class="subtitle">Steal one. Say it. Go.</div>
+    </div>
+    <div style="padding: 16px;">
+      <button class="btn-add" style="width:100%; height:46px; border-radius:12px; margin-bottom:20px; font-size:14px;" onclick="openOpenerModal()">+ Add Custom Opener</button>
+      <div id="openersList"></div>
+    </div>
+  </div>
+
+  <!-- Opener Add Modal -->
+  <div class="modal-overlay" id="openerModal">
+    <div class="person-modal">
+      <h3 id="openerModalTitle">Add Opening Line</h3>
+      <textarea id="openerText" class="modal-note" placeholder="What you'd say..." style="min-height:60px;"></textarea>
+      <input type="text" id="openerNote" placeholder="Why it works (optional)" maxlength="100" style="margin-top:8px;">
+      <div class="modal-actions" style="margin-top:12px;">
+        <button class="modal-cancel" onclick="closeOpenerModal()">Cancel</button>
+        <button class="modal-confirm" onclick="confirmOpener()">Save</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Look Modal -->
   <div class="modal-overlay" id="lookModal">
     <div class="modal" style="text-align: left;">
@@ -4165,6 +4299,32 @@
       <div class="modal-actions" style="margin-top: 20px;">
         <button class="modal-cancel" onclick="document.getElementById('boldnessModal').classList.remove('open')">Cancel</button>
         <button class="modal-confirm" onclick="confirmBoldAction()">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Feature Request Modal -->
+  <div class="modal-overlay" id="featureRequestModal">
+    <div class="person-modal">
+      <h3 id="featureRequestModalTitle">Add Feature Idea</h3>
+      <input type="text" id="featureRequestTitle" placeholder="Feature title..." maxlength="80">
+      <textarea id="featureRequestDesc" class="modal-note" placeholder="What should it do? Why is it useful?"></textarea>
+      <div class="modal-actions" style="margin-top:12px;">
+        <button class="modal-cancel" onclick="closeFeatureRequestModal()">Cancel</button>
+        <button class="modal-confirm" onclick="confirmFeatureRequest()">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Life's Hard Modal -->
+  <div class="modal-overlay" id="lifeHardModal">
+    <div class="modal" style="text-align:left;">
+      <h3 style="text-align:center;">Log Hard Thing</h3>
+      <div style="font-size:12px; color:var(--dim); text-align:center; margin-bottom:10px;">What hard thing did you do?</div>
+      <textarea id="lifeHardText" class="modal-note" placeholder="Cold shower, had a difficult conversation, worked out when tired..."></textarea>
+      <div class="modal-actions" style="margin-top:16px;">
+        <button class="modal-cancel" onclick="document.getElementById('lifeHardModal').classList.remove('open')">Cancel</button>
+        <button class="modal-confirm" onclick="confirmLifeHard()">Log It</button>
       </div>
     </div>
   </div>
@@ -4308,12 +4468,19 @@
       if (!data.boldnessLogs) data.boldnessLogs = [];
       if (!data.prettyGirls) data.prettyGirls = [];
       if (!data.quickLooks) data.quickLooks = {};
+      // New fields migration
+      if (!data.prospects) data.prospects = [];
+      if (!data.openers) data.openers = [];
+      if (!data.featureRequests) data.featureRequests = [];
+      if (data.totalLostOpportunityPct == null) data.totalLostOpportunityPct = 0;
+      if (!data.engagementFactors) data.engagementFactors = { environments: 1, friends: 0, talksDaily: 0, lastSocialDate: '' };
+      if (!data.lifeHard) data.lifeHard = { logs: [] };
       delete data.settings.girlsPerDay;
       return data;
     }
 
     function createFreshData() {
-      const data = { startDate: todayStr(), settings: { ...DEFAULTS }, days: {}, seen: {}, missed: [], people: [], goAttempts: [], excuses: [], scaredLevel: 5, looks: [], boldnessLogs: [], prettyGirls: [], quickLooks: {} };
+      const data = { startDate: todayStr(), settings: { ...DEFAULTS }, days: {}, seen: {}, missed: [], people: [], goAttempts: [], excuses: [], scaredLevel: 5, looks: [], boldnessLogs: [], prettyGirls: [], quickLooks: {}, prospects: [], openers: [], featureRequests: [], totalLostOpportunityPct: 0, engagementFactors: { environments: 1, friends: 0, talksDaily: 0, lastSocialDate: '' }, lifeHard: { logs: [] } };
       localStorage.setItem('approachData', JSON.stringify(data));
       return data;
     }
@@ -4424,6 +4591,7 @@
       closeMissedModal();
       render();
       if (navigator.vibrate) navigator.vibrate([30, 50, 30]);
+      showEncStatsModal('miss', entry);
       showRealityCheck(data, entry);
     }
 
@@ -4986,6 +5154,110 @@
             </div>
           </div>`;
       });
+    }
+
+    // --- PROSPECTS ---
+    let editingProspectId = null;
+
+    function openProspectModal(id = null) {
+      editingProspectId = id;
+      if (id) {
+        const data = getData();
+        const p = (data.prospects || []).find(x => x.id === id);
+        if (p) {
+          document.getElementById('prospectNickname').value = p.nickname || '';
+          document.getElementById('prospectDate').value = p.date || todayStr();
+          document.getElementById('prospectTime').value = p.time || toHHMM();
+          document.getElementById('prospectRating').value = p.rating || '';
+          document.getElementById('prospectAge').value = p.age || '';
+          document.getElementById('prospectLocation').value = p.location || '';
+          document.getElementById('prospectNote').value = p.note || '';
+        }
+        document.getElementById('prospectModalTitle').textContent = 'Edit Prospect';
+      } else {
+        document.getElementById('prospectNickname').value = '';
+        document.getElementById('prospectDate').value = todayStr();
+        document.getElementById('prospectTime').value = toHHMM();
+        document.getElementById('prospectRating').value = '';
+        document.getElementById('prospectAge').value = '';
+        document.getElementById('prospectLocation').value = '';
+        document.getElementById('prospectNote').value = '';
+        document.getElementById('prospectModalTitle').textContent = 'Add Prospect';
+      }
+      document.getElementById('prospectModal').classList.add('open');
+      setTimeout(() => document.getElementById('prospectNickname').focus(), 100);
+    }
+
+    function closeProspectModal() {
+      document.getElementById('prospectModal').classList.remove('open');
+      editingProspectId = null;
+    }
+
+    function confirmProspect() {
+      const nick = document.getElementById('prospectNickname').value.trim();
+      if (!nick) { alert('Give her a quick ID'); return; }
+      const data = getData();
+      if (!data.prospects) data.prospects = [];
+      const entry = {
+        id: editingProspectId || Date.now(),
+        nickname: nick,
+        date: document.getElementById('prospectDate').value || todayStr(),
+        time: document.getElementById('prospectTime').value || toHHMM(),
+        rating: document.getElementById('prospectRating').value,
+        age: document.getElementById('prospectAge').value,
+        location: document.getElementById('prospectLocation').value.trim(),
+        note: document.getElementById('prospectNote').value.trim(),
+      };
+      if (editingProspectId) {
+        const idx = data.prospects.findIndex(x => x.id === editingProspectId);
+        if (idx > -1) data.prospects[idx] = entry;
+      } else {
+        data.prospects.push(entry);
+      }
+      saveData(data);
+      closeProspectModal();
+      renderProspects(data);
+    }
+
+    function deleteProspect(id) {
+      if (!confirm('Delete this prospect?')) return;
+      const data = getData();
+      data.prospects = (data.prospects || []).filter(x => x.id !== id);
+      saveData(data);
+      renderProspects(data);
+    }
+
+    function renderProspects(data) {
+      const list = document.getElementById('prospectsList');
+      const countEl = document.getElementById('prospectsCount');
+      if (!list) return;
+      const prospects = data.prospects || [];
+      if (countEl) countEl.textContent = prospects.length;
+      if (prospects.length === 0) {
+        list.innerHTML = '<div style="font-size:12px; color:var(--dim); text-align:center; padding:12px 0;">No prospects logged yet.</div>';
+        return;
+      }
+      const sorted = [...prospects].sort((a, b) => b.id - a.id);
+      list.innerHTML = sorted.map(p => `
+        <div class="person-card seen-only" style="margin-bottom:10px;">
+          <div class="person-top">
+            <span class="person-nick">${escHtml(p.nickname)}</span>
+            <div class="person-meta">
+              ${p.rating ? `<span class="person-status seen">${p.rating}/10</span>` : ''}
+            </div>
+          </div>
+          <div class="person-stats-row">
+            ${p.age ? `<span>Age ~${p.age}</span>` : ''}
+            ${p.location ? `<span>📍 ${escHtml(p.location)}</span>` : ''}
+            <span>${p.date}</span>
+          </div>
+          ${p.note ? `<div style="font-size:12px; color:var(--dim); margin-top:6px; font-style:italic;">"${escHtml(p.note)}"</div>` : ''}
+          <div class="person-actions" style="margin-top:8px;">
+            <button class="person-action-btn" onclick="openProspectModal(${p.id})">Edit</button>
+            <button class="person-action-btn danger" onclick="deleteProspect(${p.id})">Delete</button>
+          </div>
+        </div>
+      `).join('');
     }
 
     // --- Power Level Calculation ---
@@ -5830,6 +6102,26 @@
     };
 
     let selectedGoFear = null;
+    let goIntention = null; // 'yes' | 'no' | null
+
+    function setGoIntention(val) {
+      goIntention = val;
+      document.getElementById('goIntentionYes').style.background = val === 'yes' ? 'rgba(48,209,88,0.25)' : 'rgba(48,209,88,0.08)';
+      document.getElementById('goIntentionNo').style.background = val === 'no' ? 'rgba(255,69,58,0.25)' : 'rgba(255,69,58,0.08)';
+      if (val === 'yes') {
+        document.getElementById('goAgreementSection').style.display = 'block';
+      } else {
+        document.getElementById('goAgreementSection').style.display = 'none';
+        // No intention → just close and show stats
+        closeGoMode();
+        showEncStatsModal('miss', null);
+      }
+    }
+
+    function goAgreementExit() {
+      closeGoMode();
+      showEncStatsModal('miss', null);
+    }
 
     function openGoMode() {
       document.getElementById('goReason').value = '';
@@ -5848,6 +6140,11 @@
       document.getElementById('goUrgencyHint').style.display = 'none';
       selectedSeeAgain = null;
       document.querySelectorAll('.go-see-btn').forEach(b => b.classList.remove('selected'));
+      // Reset intention state
+      goIntention = null;
+      document.getElementById('goAgreementSection').style.display = 'none';
+      document.getElementById('goIntentionYes').style.background = 'rgba(48,209,88,0.08)';
+      document.getElementById('goIntentionNo').style.background = 'rgba(255,69,58,0.08)';
 
       // Render fear buttons
       const grid = document.getElementById('goFearGrid');
@@ -5957,7 +6254,10 @@
       // Show success flash
       const flash = document.getElementById('goSuccessFlash');
       flash.classList.add('show');
-      setTimeout(() => flash.classList.remove('show'), 900);
+      setTimeout(() => {
+        flash.classList.remove('show');
+        showEncStatsModal('approach', attempt);
+      }, 900);
 
       if (navigator.vibrate) navigator.vibrate([50, 100, 50, 100, 50]);
       render();
@@ -6212,6 +6512,11 @@
       // Boldness
       calculateBoldness();
 
+      // Engagement + Life's Hard + Feature Requests
+      renderEngagement(data);
+      renderLifeHard(data);
+      renderFeatureRequests(data);
+
       // Re-encounter Reality Check
       if (missed.length > 0) {
         document.getElementById('reencounterSection').style.display = '';
@@ -6325,6 +6630,7 @@
 
       // People Log
       renderPeople(data);
+      renderProspects(data);
       renderExcuses(data);
       renderPrettyGirls(data);
       renderReportExtras(data);
@@ -6455,9 +6761,400 @@
       navigator.serviceWorker.register('/sw.js');
     }
 
+    // --- ENCOUNTER STATS MODAL (Win/Loss) ---
+    let encStatsPendingMiss = false; // track if we should open miss modal on log
+
+    function showEncStatsModal(type, context) {
+      const data = getData();
+      const s = data.settings;
+      const seeAgainPct = s.secondChance || 10;
+
+      const lostEl = document.getElementById('encStatsLostList');
+      const wonEl = document.getElementById('encStatsWonList');
+      const zeroEl = document.getElementById('encStatsZero');
+      const cumulEl = document.getElementById('encStatsCumulative');
+      const logBtn = document.getElementById('encStatsLogBtn');
+      const titleEl = document.getElementById('encStatsTitle');
+      const subEl = document.getElementById('encStatsSub');
+      const iconEl = document.getElementById('encStatsIcon');
+
+      const makeLost = (text) => `<div style="background:rgba(255,69,58,0.08); border:1px solid rgba(255,69,58,0.2); border-radius:8px; padding:8px 12px; font-size:13px; color:var(--danger);">${text}</div>`;
+      const makeWon = (text) => `<div style="background:rgba(48,209,88,0.08); border:1px solid rgba(48,209,88,0.2); border-radius:8px; padding:8px 12px; font-size:13px; color:var(--success);">${text}</div>`;
+
+      if (type === 'miss') {
+        iconEl.textContent = '📉';
+        titleEl.textContent = 'Here\'s what just happened.';
+        subEl.textContent = 'Every number is real.';
+
+        // Calculate funnel projections
+        const convoChance = Math.round(s.convoRate || 40);
+        const dateChance = Math.round((s.convoRate / 100) * (s.numberRate / 100) * (s.dateRate / 100) * 100);
+
+        lostEl.innerHTML = [
+          makeLost(`Potential new connection — gone`),
+          makeLost(`~${convoChance}% chance of a real conversation — gone`),
+          makeLost(`~${dateChance}% chance of a date — gone`),
+          makeLost(`${100 - seeAgainPct}% chance she's gone forever`),
+        ].join('');
+
+        wonEl.innerHTML = [
+          makeWon('Some personal time preserved'),
+          makeWon('Comfort zone intact — for now'),
+        ].join('');
+
+        zeroEl.style.display = 'block';
+
+        // Accumulate lost opportunity %
+        const lossPoints = (100 - seeAgainPct) + convoChance + dateChance;
+        data.totalLostOpportunityPct = (data.totalLostOpportunityPct || 0) + lossPoints;
+        saveData(data);
+
+        const totalMisses = (data.missed || []).length;
+        if (totalMisses > 0) {
+          cumulEl.style.display = 'block';
+          cumulEl.innerHTML = `Total opportunity cost: <strong style="color:var(--danger)">${Math.round(data.totalLostOpportunityPct)}%</strong> across ${totalMisses} miss${totalMisses !== 1 ? 'es' : ''}`;
+        } else {
+          cumulEl.style.display = 'none';
+        }
+
+        logBtn.style.display = 'block';
+        encStatsPendingMiss = true;
+
+      } else if (type === 'approach') {
+        iconEl.textContent = '🔥';
+        titleEl.textContent = 'You did it.';
+        subEl.textContent = 'This is what taking action looks like.';
+
+        wonEl.innerHTML = [
+          makeWon('New connection attempt — logged'),
+          makeWon('+Boldness — confidence increases by doing'),
+          makeWon('You gave yourself a chance'),
+          makeWon('The scared version of you lost today'),
+        ].join('');
+
+        lostEl.innerHTML = [
+          makeLost('Comfort zone spent'),
+          makeLost('A few seconds of uncertainty'),
+        ].join('');
+
+        zeroEl.style.display = 'none';
+        cumulEl.style.display = 'none';
+        logBtn.style.display = 'none';
+        encStatsPendingMiss = false;
+      }
+
+      document.getElementById('encStatsModal').classList.add('open');
+    }
+
+    function closeEncStatsModal() {
+      document.getElementById('encStatsModal').classList.remove('open');
+      encStatsPendingMiss = false;
+    }
+
+    function encStatsLogMiss() {
+      closeEncStatsModal();
+      openMissedModal();
+    }
+
+    // --- FEATURE REQUESTS ---
+    let editingFeatureRequestId = null;
+
+    function openFeatureRequestModal(id = null) {
+      editingFeatureRequestId = id;
+      if (id) {
+        const data = getData();
+        const fr = (data.featureRequests || []).find(f => f.id === id);
+        if (fr) {
+          document.getElementById('featureRequestTitle').value = fr.title || '';
+          document.getElementById('featureRequestDesc').value = fr.description || '';
+        }
+        document.getElementById('featureRequestModalTitle').textContent = 'Edit Feature Idea';
+      } else {
+        document.getElementById('featureRequestTitle').value = '';
+        document.getElementById('featureRequestDesc').value = '';
+        document.getElementById('featureRequestModalTitle').textContent = 'Add Feature Idea';
+      }
+      document.getElementById('featureRequestModal').classList.add('open');
+      setTimeout(() => document.getElementById('featureRequestTitle').focus(), 100);
+    }
+
+    function closeFeatureRequestModal() {
+      document.getElementById('featureRequestModal').classList.remove('open');
+      editingFeatureRequestId = null;
+    }
+
+    function confirmFeatureRequest() {
+      const title = document.getElementById('featureRequestTitle').value.trim();
+      if (!title) return;
+      const desc = document.getElementById('featureRequestDesc').value.trim();
+      const data = getData();
+      if (!data.featureRequests) data.featureRequests = [];
+      if (editingFeatureRequestId) {
+        const fr = data.featureRequests.find(f => f.id === editingFeatureRequestId);
+        if (fr) { fr.title = title; fr.description = desc; }
+      } else {
+        data.featureRequests.push({ id: Date.now(), date: todayStr(), title, description: desc });
+      }
+      saveData(data);
+      closeFeatureRequestModal();
+      renderFeatureRequests(data);
+    }
+
+    function deleteFeatureRequest(id) {
+      if (!confirm('Delete this feature idea?')) return;
+      const data = getData();
+      data.featureRequests = (data.featureRequests || []).filter(f => f.id !== id);
+      saveData(data);
+      renderFeatureRequests(data);
+    }
+
+    function renderFeatureRequests(data) {
+      const list = document.getElementById('featureRequestsList');
+      const countEl = document.getElementById('featureRequestsCount');
+      if (!list) return;
+      const frs = data.featureRequests || [];
+      if (countEl) countEl.textContent = frs.length;
+      if (frs.length === 0) {
+        list.innerHTML = '<div style="font-size:12px; color:var(--dim); text-align:center; padding:10px 0;">No feature ideas yet.</div>';
+        return;
+      }
+      list.innerHTML = [...frs].reverse().map(fr => `
+        <div style="background:var(--card); border:1px solid var(--border); border-radius:10px; padding:12px; margin-bottom:8px;">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:4px;">
+            <div style="font-size:14px; font-weight:600;">${escHtml(fr.title)}</div>
+            <div style="display:flex; gap:8px; flex-shrink:0; margin-left:8px;">
+              <button onclick="openFeatureRequestModal(${fr.id})" style="background:none;border:none;color:var(--blue);font-size:12px;cursor:pointer;">Edit</button>
+              <button onclick="deleteFeatureRequest(${fr.id})" style="background:none;border:none;color:var(--danger);font-size:12px;cursor:pointer;">Delete</button>
+            </div>
+          </div>
+          ${fr.description ? `<div style="font-size:12px; color:var(--dim); line-height:1.4;">${escHtml(fr.description)}</div>` : ''}
+          <div style="font-size:10px; color:var(--dim); margin-top:6px;">${fr.date}</div>
+        </div>
+      `).join('');
+    }
+
+    // --- ENGAGEMENT STAT ---
+    function saveEngagement(key, value) {
+      const data = getData();
+      if (!data.engagementFactors) data.engagementFactors = { environments: 1, friends: 0, talksDaily: 0, lastSocialDate: '' };
+      data.engagementFactors[key] = key === 'lastSocialDate' ? value : (parseFloat(value) || 0);
+      saveData(data);
+      renderEngagement(data);
+    }
+
+    function calcEngagementScore(ef) {
+      // environments: 0-10 → 0-30 pts
+      // friends: 0-50+ → 0-30 pts (cap at 50 for 100%)
+      // talksDaily: 0-5+ → 0-20 pts
+      // lastSocialDate: recent → 0-20 pts
+      const envScore = Math.min(30, (ef.environments || 0) * 3);
+      const friendScore = Math.min(30, ((ef.friends || 0) / 50) * 30);
+      const talkScore = Math.min(20, (ef.talksDaily || 0) * 4);
+      let socialScore = 0;
+      if (ef.lastSocialDate) {
+        const daysAgo = daysBetween(ef.lastSocialDate, todayStr());
+        socialScore = daysAgo <= 1 ? 20 : daysAgo <= 3 ? 15 : daysAgo <= 7 ? 10 : daysAgo <= 14 ? 5 : 0;
+      }
+      return Math.min(100, Math.round(envScore + friendScore + talkScore + socialScore));
+    }
+
+    function renderEngagement(data) {
+      const ef = data.engagementFactors || {};
+      const score = calcEngagementScore(ef);
+      const scoreEl = document.getElementById('engagementScore');
+      const barEl = document.getElementById('engagementBar');
+      const labelEl = document.getElementById('engagementLabel');
+      if (scoreEl) scoreEl.textContent = score + '%';
+      if (barEl) {
+        barEl.style.width = score + '%';
+        barEl.style.background = score >= 70 ? 'var(--success)' : score >= 40 ? 'var(--yellow)' : 'var(--danger)';
+      }
+      const labels = [[0,'Disengaged — approach feels impossible'],[30,'Building — getting out there'],[60,'Engaged — you\'re in the flow'],[80,'Highly Engaged — world is your playground']];
+      const lbl = [...labels].reverse().find(([min]) => score >= min);
+      if (labelEl) labelEl.textContent = lbl ? lbl[1] : '—';
+      // Populate inputs
+      const envIn = document.getElementById('engEnvs');
+      const friendIn = document.getElementById('engFriends');
+      const talkIn = document.getElementById('engTalks');
+      const socialIn = document.getElementById('engLastSocial');
+      if (envIn && !envIn.matches(':focus')) envIn.value = ef.environments || '';
+      if (friendIn && !friendIn.matches(':focus')) friendIn.value = ef.friends || '';
+      if (talkIn && !talkIn.matches(':focus')) talkIn.value = ef.talksDaily || '';
+      if (socialIn && !socialIn.matches(':focus')) socialIn.value = ef.lastSocialDate || '';
+    }
+
+    // --- LIFE'S HARD STAT ---
+    function openLifeHardModal() {
+      document.getElementById('lifeHardText').value = '';
+      document.getElementById('lifeHardModal').classList.add('open');
+      setTimeout(() => document.getElementById('lifeHardText').focus(), 100);
+    }
+
+    function confirmLifeHard() {
+      const text = document.getElementById('lifeHardText').value.trim();
+      if (!text) return;
+      const data = getData();
+      if (!data.lifeHard) data.lifeHard = { logs: [] };
+      data.lifeHard.logs.unshift({ id: Date.now(), date: todayStr(), text, points: 10 });
+      saveData(data);
+      document.getElementById('lifeHardModal').classList.remove('open');
+      renderLifeHard(data);
+    }
+
+    function deleteLifeHardEntry(id) {
+      const data = getData();
+      data.lifeHard.logs = (data.lifeHard.logs || []).filter(l => l.id !== id);
+      saveData(data);
+      renderLifeHard(data);
+    }
+
+    function calcLifeHardScore(lifeHard) {
+      const today = new Date(todayStr());
+      let score = 0;
+      (lifeHard.logs || []).forEach(log => {
+        const logDate = new Date(log.date);
+        const daysAgo = Math.round((today - logDate) / 86400000);
+        const pts = Math.max(0, (log.points || 10) - daysAgo);
+        score += pts;
+      });
+      return Math.min(100, score);
+    }
+
+    function renderLifeHard(data) {
+      const lh = data.lifeHard || { logs: [] };
+      const score = calcLifeHardScore(lh);
+      const scoreEl = document.getElementById('lifeHardScore');
+      const barEl = document.getElementById('lifeHardBar');
+      const listEl = document.getElementById('lifeHardList');
+      if (scoreEl) scoreEl.textContent = score;
+      if (barEl) barEl.style.width = Math.max(2, score) + '%';
+      if (!listEl) return;
+      if (lh.logs.length === 0) {
+        listEl.innerHTML = '<div style="font-size:12px; color:var(--dim); text-align:center; padding:10px 0;">No hard things logged yet. Go do something hard.</div>';
+        return;
+      }
+      const today = new Date(todayStr());
+      listEl.innerHTML = lh.logs.slice(0, 15).map(log => {
+        const daysAgo = Math.round((today - new Date(log.date)) / 86400000);
+        const pts = Math.max(0, (log.points || 10) - daysAgo);
+        return `<div style="padding:10px; border-left:2px solid var(--success); margin-bottom:8px; background:rgba(48,209,88,0.05); border-radius:0 8px 8px 0;">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+            <div style="font-size:13px; font-weight:600; flex:1;">${escHtml(log.text)}</div>
+            <button onclick="deleteLifeHardEntry(${log.id})" style="background:none;border:none;color:var(--danger);font-size:11px;cursor:pointer;margin-left:8px;">✕</button>
+          </div>
+          <div style="font-size:11px; color:var(--dim); margin-top:4px;">${log.date} · +${pts} pts remaining</div>
+        </div>`;
+      }).join('');
+    }
+
+    // --- OPENING LINES ---
+    const DEFAULT_OPENERS = [
+      { text: '"Hey — I saw you and had to say something. You look really [specific thing]."', note: 'Direct. Honest. The specific thing makes it real.' },
+      { text: '"Excuse me — sorry to interrupt. I just noticed you and thought you seemed really interesting."', note: 'Works anywhere. The apology disarms her.' },
+      { text: '"Hey, random question — do you know anywhere good around here for [coffee/food/etc]?"', note: 'Low pressure. Easy to transition into conversation.' },
+      { text: '"Hey — this is a bit forward but you caught my eye. I\'m [name]."', note: 'Owning it shows confidence. Short and to the point.' },
+      { text: '"You look like someone I need to meet. I\'m [name]."', note: 'Bold. Confident. She knows exactly what\'s happening.' },
+      { text: '"I just had to say something — you have a really interesting [style/vibe/energy]."', note: 'Observation-based. Personal without being creepy.' },
+    ];
+
+    function renderRandomOpeners() {
+      const el = document.getElementById('goRandomOpeners');
+      if (!el) return;
+      const data = getData();
+      const all = [...DEFAULT_OPENERS, ...(data.openers || []).map(o => ({ text: o.text, note: o.note || '' }))];
+      // Pick 2 random, different ones
+      const shuffled = all.sort(() => Math.random() - 0.5).slice(0, 2);
+      el.innerHTML = shuffled.map(o => `
+        <div class="go-opener-card">
+          <div class="go-opener-text">${escHtml(o.text)}</div>
+          ${o.note ? `<div class="go-opener-note">${escHtml(o.note)}</div>` : ''}
+        </div>
+      `).join('');
+    }
+
+    let editingOpenerId = null;
+
+    function openOpenerModal(id = null) {
+      editingOpenerId = id;
+      if (id) {
+        const data = getData();
+        const op = (data.openers || []).find(o => o.id === id);
+        if (op) {
+          document.getElementById('openerText').value = op.text || '';
+          document.getElementById('openerNote').value = op.note || '';
+        }
+        document.getElementById('openerModalTitle').textContent = 'Edit Opening Line';
+      } else {
+        document.getElementById('openerText').value = '';
+        document.getElementById('openerNote').value = '';
+        document.getElementById('openerModalTitle').textContent = 'Add Opening Line';
+      }
+      document.getElementById('openerModal').classList.add('open');
+      setTimeout(() => document.getElementById('openerText').focus(), 100);
+    }
+
+    function closeOpenerModal() {
+      document.getElementById('openerModal').classList.remove('open');
+      editingOpenerId = null;
+    }
+
+    function confirmOpener() {
+      const text = document.getElementById('openerText').value.trim();
+      if (!text) return;
+      const note = document.getElementById('openerNote').value.trim();
+      const data = getData();
+      if (!data.openers) data.openers = [];
+      if (editingOpenerId) {
+        const op = data.openers.find(o => o.id === editingOpenerId);
+        if (op) { op.text = text; op.note = note; }
+      } else {
+        data.openers.push({ id: Date.now(), text, note });
+      }
+      saveData(data);
+      closeOpenerModal();
+      renderOpeners();
+    }
+
+    function deleteOpener(id) {
+      if (!confirm('Delete this opener?')) return;
+      const data = getData();
+      data.openers = (data.openers || []).filter(o => o.id !== id);
+      saveData(data);
+      renderOpeners();
+    }
+
+    function renderOpeners() {
+      const el = document.getElementById('openersList');
+      if (!el) return;
+      const data = getData();
+      let html = '';
+      html += `<h3 style="font-size:13px; color:var(--dim); text-transform:uppercase; letter-spacing:1px; margin-bottom:12px;">Default</h3>`;
+      DEFAULT_OPENERS.forEach(o => {
+        html += `<div class="go-opener-card" style="margin-bottom:10px;">
+          <div class="go-opener-text">${escHtml(o.text)}</div>
+          ${o.note ? `<div class="go-opener-note">${escHtml(o.note)}</div>` : ''}
+        </div>`;
+      });
+      const custom = data.openers || [];
+      if (custom.length > 0) {
+        html += `<h3 style="font-size:13px; color:var(--dim); text-transform:uppercase; letter-spacing:1px; margin:16px 0 12px;">Your Custom Lines</h3>`;
+        custom.forEach(o => {
+          html += `<div class="go-opener-card" style="margin-bottom:10px;">
+            <div class="go-opener-text">${escHtml(o.text)}</div>
+            ${o.note ? `<div class="go-opener-note">${escHtml(o.note)}</div>` : ''}
+            <div style="display:flex; gap:10px; margin-top:8px;">
+              <button onclick="openOpenerModal(${o.id})" style="background:none;border:none;color:var(--blue);font-size:12px;cursor:pointer;">Edit</button>
+              <button onclick="deleteOpener(${o.id})" style="background:none;border:none;color:var(--danger);font-size:12px;cursor:pointer;">Delete</button>
+            </div>
+          </div>`;
+        });
+      }
+      el.innerHTML = html;
+    }
+
     // --- NAVIGATION ---
     const mainViews = ['Approach','Stats','Report','Internal'];
-    const subViews = ['Excuses','Encounters','Looks','Reviews'];
+    const subViews = ['Excuses','Encounters','Looks','Reviews','Openers'];
     const allViews = mainViews.concat(subViews);
 
     function switchView(view) {
@@ -6472,7 +7169,7 @@
         if (navEl) navEl.classList.toggle('active', view === v.toLowerCase());
       });
       window.scrollTo(0, 0);
-      if (view === 'approach') renderGoTab(getData());
+      if (view === 'approach') { renderGoTab(getData()); renderRandomOpeners(); }
       if (view === 'report') render();
       if (view === 'internal') render();
       if (view === 'stats') renderStats();
@@ -6480,6 +7177,7 @@
       if (view === 'encounters') renderEncounters(getData());
       if (view === 'looks') renderLooks();
       if (view === 'reviews') renderReviews();
+      if (view === 'openers') renderOpeners();
     }
 
     // --- STATS RENDERING ---
@@ -6736,6 +7434,23 @@
         weekStartDate.setDate(weekStartDate.getDate() + 7);
       }
 
+      // Weekly Summary Banner (current week = last entry)
+      const summaryEl = document.getElementById('statsWeeklySummary');
+      if (summaryEl && weeks.length > 0) {
+        const cw = weeks[weeks.length - 1];
+        const cwBoldColor = cw.boldness >= 50 ? 'var(--success)' : cw.boldness >= 20 ? 'var(--yellow)' : 'var(--danger)';
+        summaryEl.innerHTML = `
+          <div style="font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--dim); margin-bottom:6px;">${cw.label} · This Week</div>
+          <div style="font-size:54px; font-weight:900; color:var(--accent); line-height:1;">${cw.seen}</div>
+          <div style="font-size:16px; font-weight:700; color:var(--dim); margin-bottom:12px;">approachable girls seen</div>
+          <div style="display:flex; justify-content:center; gap:20px; font-size:13px;">
+            <div><span style="color:var(--text); font-weight:700;">${cw.talked}</span> <span style="color:var(--dim);">talked</span></div>
+            <div><span style="color:${cwBoldColor}; font-weight:700;">${cw.boldness}%</span> <span style="color:var(--dim);">boldness</span></div>
+            <div><span style="color:var(--danger); font-weight:700;">${cw.missed}</span> <span style="color:var(--dim);">missed</span></div>
+          </div>
+        `;
+      }
+
       // Weekly Breakdown Table
       const wTbody = document.getElementById('statsWeeklyBody');
       wTbody.innerHTML = '';
@@ -6813,6 +7528,7 @@
     }
 
     render();
+    renderRandomOpeners();
 
     // --- BOLDNESS ---
     function openBoldnessModal() {
@@ -6989,9 +7705,8 @@
         const reviews = [];
         (data.goAttempts || []).forEach(a => {
             if (!a.bailed && a.review) {
-                // Use firstLine as the identifier, or 'Approach' if empty
                 const identifier = a.firstLine ? a.firstLine : 'Approach';
-                reviews.push({ ...a.review, personName: `"${identifier}"`, date: a.date });
+                reviews.push({ ...a.review, personName: `"${identifier}"`, date: a.date, attemptId: a.id });
             }
         });
         
@@ -7004,19 +7719,19 @@
              <h3 style="font-size:16px; color:var(--text); margin-bottom:12px; border-bottom:1px solid var(--border); padding-bottom:6px;">Full Reviews</h3>`;
            
            reviews.forEach(r => {
-             // Only show the Full Review box if there is a description OR if they want it anyway. 
-             // We'll show all reviews as a full box.
              html += `<div style="background:var(--card); border:1px solid var(--border); border-radius:12px; padding:14px; margin-bottom:12px;">
-               <div style="font-weight:700; font-size:14px; margin-bottom:4px; color:var(--accent);">${r.personName}</div>
+               <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:4px;">
+                 <div style="font-weight:700; font-size:14px; color:var(--accent);">${r.personName}</div>
+                 <button onclick="openGoReviewModal(${r.attemptId})" style="background:none;border:none;color:var(--blue);font-size:12px;font-weight:600;cursor:pointer;padding:0;">Edit</button>
+               </div>
                <div style="font-size:11px; color:var(--dim); margin-bottom:10px;">${r.date}</div>
-               ${r.desc ? `<div style="font-size:13px; margin-bottom:12px; line-height:1.5;">${r.desc.replace(/\\n/g, '<br>')}</div>` : ''}
-               
+               ${r.desc ? `<div style="font-size:13px; margin-bottom:12px; line-height:1.5;">${escHtml(r.desc).replace(/\n/g, '<br>')}</div>` : ''}
                <div style="font-size:12px; display:flex; flex-direction:column; gap:4px; padding-top:10px; border-top:1px solid var(--border);">
-                 ${r.weakpoints ? `<div><span style="color:var(--dim);">Weakpoints:</span> ${r.weakpoints}</div>` : ''}
-                 ${r.goodpoints ? `<div><span style="color:var(--dim);">Goodpoints:</span> ${r.goodpoints}</div>` : ''}
-                 ${r.more ? `<div><span style="color:var(--dim);">More:</span> ${r.more}</div>` : ''}
-                 ${r.less ? `<div><span style="color:var(--dim);">Less:</span> ${r.less}</div>` : ''}
-                 ${r.better ? `<div><span style="color:var(--dim);">Better:</span> ${r.better}</div>` : ''}
+                 ${r.weakpoints ? `<div><span style="color:var(--dim);">Weakpoints:</span> ${escHtml(r.weakpoints)}</div>` : ''}
+                 ${r.goodpoints ? `<div><span style="color:var(--dim);">Goodpoints:</span> ${escHtml(r.goodpoints)}</div>` : ''}
+                 ${r.more ? `<div><span style="color:var(--dim);">More:</span> ${escHtml(r.more)}</div>` : ''}
+                 ${r.less ? `<div><span style="color:var(--dim);">Less:</span> ${escHtml(r.less)}</div>` : ''}
+                 ${r.better ? `<div><span style="color:var(--dim);">Better:</span> ${escHtml(r.better)}</div>` : ''}
                </div>
              </div>`;
            });
@@ -7113,6 +7828,40 @@
       renderLooks();
     }
   </script>
+  <!-- ===== ENCOUNTER STATS MODAL (Win/Loss) ===== -->
+  <div class="modal-overlay" id="encStatsModal" style="z-index:1200; align-items:flex-start; padding-top:20px;">
+    <div class="person-modal" style="max-height:85vh; overflow-y:auto; width:100%;">
+      <div id="encStatsHeader" style="text-align:center; margin-bottom:16px;">
+        <div id="encStatsIcon" style="font-size:36px; margin-bottom:6px;"></div>
+        <div id="encStatsTitle" style="font-size:20px; font-weight:800;"></div>
+        <div id="encStatsSub" style="font-size:12px; color:var(--dim); margin-top:4px;"></div>
+      </div>
+
+      <div id="encStatsLost" style="margin-bottom:14px;">
+        <div style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:var(--danger); margin-bottom:8px;">🔴 Lost</div>
+        <div id="encStatsLostList" style="display:flex; flex-direction:column; gap:6px;"></div>
+      </div>
+
+      <div id="encStatsWon" style="margin-bottom:16px;">
+        <div style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:var(--success); margin-bottom:8px;">🟢 Won</div>
+        <div id="encStatsWonList" style="display:flex; flex-direction:column; gap:6px;"></div>
+      </div>
+
+      <div id="encStatsZero" style="background:rgba(255,69,58,0.1); border:1px solid rgba(255,69,58,0.3); border-radius:10px; padding:12px; text-align:center; margin-bottom:16px; display:none;">
+        <div style="font-size:13px; font-weight:700; color:var(--danger);">You made the % of something happening:</div>
+        <div style="font-size:36px; font-weight:900; color:var(--danger); margin:4px 0;">0%</div>
+        <div style="font-size:11px; color:var(--dim);">By not approaching, every outcome became impossible.</div>
+      </div>
+
+      <div id="encStatsCumulative" style="background:rgba(255,255,255,0.05); border:1px solid var(--border); border-radius:10px; padding:10px; text-align:center; margin-bottom:16px; font-size:12px; color:var(--dim); display:none;"></div>
+
+      <div id="encStatsActions" style="display:flex; flex-direction:column; gap:8px;">
+        <button id="encStatsLogBtn" onclick="encStatsLogMiss()" style="display:none; padding:12px; border-radius:12px; border:1px solid rgba(255,107,53,0.3); background:rgba(255,107,53,0.08); color:var(--accent); font-size:14px; font-weight:600; cursor:pointer;">Log this miss in detail →</button>
+        <button onclick="closeEncStatsModal()" style="padding:14px; border-radius:12px; border:none; background:rgba(255,255,255,0.1); color:var(--text); font-size:15px; font-weight:700; cursor:pointer;">Continue</button>
+      </div>
+    </div>
+  </div>
+
   <!-- GO MODE Overlay — outside all views so display:none on tabs doesn't block it -->
   <div class="go-overlay" id="goOverlay">
     <div class="go-panel">
@@ -7187,7 +7936,26 @@
         </div>
       </div>
 
-      <button class="go-execute" id="goExecute" onclick="executeGo()" disabled>GO</button>
+      <!-- Intention to Approach -->
+      <div id="goIntentionSection" style="margin-top:16px; background:rgba(255,255,255,0.05); border:1px solid var(--border); border-radius:14px; padding:14px;">
+        <div style="font-size:14px; font-weight:700; text-align:center; margin-bottom:12px;">Is your intention to approach?</div>
+        <div style="display:flex; gap:10px;">
+          <button onclick="setGoIntention('yes')" id="goIntentionYes" style="flex:1; padding:12px; border-radius:12px; border:1px solid rgba(48,209,88,0.3); background:rgba(48,209,88,0.08); color:var(--success); font-size:15px; font-weight:700; cursor:pointer;">YES</button>
+          <button onclick="setGoIntention('no')" id="goIntentionNo" style="flex:1; padding:12px; border-radius:12px; border:1px solid rgba(255,69,58,0.3); background:rgba(255,69,58,0.08); color:var(--danger); font-size:15px; font-weight:700; cursor:pointer;">NO</button>
+        </div>
+      </div>
+
+      <!-- Agreement (shown after YES) -->
+      <div id="goAgreementSection" style="display:none; margin-top:12px; background:rgba(48,209,88,0.06); border:1px solid rgba(48,209,88,0.25); border-radius:14px; padding:16px; text-align:center;">
+        <div style="font-size:15px; font-weight:700; color:var(--success); margin-bottom:8px;">Forget about wanting her.</div>
+        <div style="font-size:13px; color:var(--dim); line-height:1.5; margin-bottom:14px;">Do it without a goal — no outcome needed. Just approach. The rest is not your job right now.</div>
+        <div style="display:flex; gap:10px;">
+          <button onclick="goAgreementExit()" style="flex:1; padding:12px; border-radius:12px; border:1px solid var(--border); background:rgba(255,255,255,0.06); color:var(--dim); font-size:14px; font-weight:600; cursor:pointer;">Exit</button>
+          <button onclick="executeGo()" style="flex:1; padding:12px; border-radius:12px; border:none; background:var(--success); color:#000; font-size:15px; font-weight:800; cursor:pointer;">I AGREE — GO 🔥</button>
+        </div>
+      </div>
+
+      <button class="go-execute" id="goExecute" onclick="executeGo()" disabled style="display:none;">GO</button>
       <button class="go-bail" onclick="executeBail()">I didn't do it — log the miss</button>
     </div>
   </div>
