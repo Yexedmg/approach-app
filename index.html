@@ -3378,6 +3378,7 @@
 
       <!-- Primary CTA -->
       <button class="go-trigger go-trigger-tab" onclick="openGoMode()">🔥 I SEE HER — GO MODE</button>
+      <button onclick="openPrettyModal()" style="width:100%; margin-top:8px; padding:12px; border-radius:12px; border:1px solid rgba(255,255,255,0.12); background:rgba(255,255,255,0.05); color:var(--dim); font-size:13px; font-weight:600; cursor:pointer;">✨ Log a Pretty Girl (didn't approach)</button>
 
       <!-- Status Bar -->
       <div class="go-status-bar">
@@ -4279,6 +4280,7 @@
       'Felt not good enough',
       'Too fast / walked past',
       'To do what exactly',
+      'Dysregulated',
       'Other'
     ];
 
@@ -4546,7 +4548,11 @@
       if (!entry) return;
       entry.sightings.push(todayStr());
       saveData(data);
+      // Preserve open state of report collapsibles before re-render
+      const openSections = ['reportAgeRatingsList','reportPrettyList','reportSeenAgainList','missedLogList']
+        .filter(sid => document.getElementById(sid)?.classList.contains('open'));
       render();
+      openSections.forEach(sid => document.getElementById(sid)?.classList.add('open'));
     }
 
     function deleteMissed(id) {
@@ -5771,6 +5777,27 @@
         chartHtml += `<div style="margin-top:12px; font-size:12px; color:var(--dim);">
           ${dist[0]} never seen again (${missed.length > 0 ? Math.round(dist[0]/missed.length*100) : 0}% gone forever)
         </div>`;
+
+        // Per-entry list sorted by most recent
+        chartHtml += `<div style="margin-top:16px; border-top:1px solid var(--border); padding-top:12px;">`;
+        [...missed].reverse().forEach(m => {
+          const n = m.sightings.length;
+          const lastSeen = n > 0 ? m.sightings[n - 1] : null;
+          const sawClass = n > 0 ? 'active' : '';
+          chartHtml += `
+            <div style="background:var(--card); border:1px solid var(--border); border-radius:10px; padding:10px; margin-bottom:8px; font-size:12px;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+                <span style="color:var(--dim); font-size:11px;">${m.date} — ${escHtml(m.reason)}</span>
+                <span style="font-size:11px; color:${n > 0 ? 'var(--success)' : 'var(--danger)'};">${n}x seen again</span>
+              </div>
+              ${m.note ? `<div style="color:var(--dim); font-style:italic; font-size:11px; margin-bottom:6px;">"${escHtml(m.note)}"</div>` : ''}
+              ${lastSeen ? `<div style="font-size:11px; color:var(--dim); margin-bottom:6px;">Last: ${lastSeen}</div>` : ''}
+              <button class="missed-entry-btn saw-again${sawClass}" onclick="markSawAgain(${m.id})" style="font-size:11px;">Saw her again</button>
+            </div>
+          `;
+        });
+        chartHtml += `</div>`;
+
         document.getElementById('reportSeenAgainChart').innerHTML = chartHtml;
       } else {
         seenAgainEl.style.display = 'none';
