@@ -2461,8 +2461,8 @@
     }
 
     .go-entry {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.1);
+      background: var(--card);
+      border: 1px solid var(--border);
       border-radius: var(--radius-sm);
       padding: 12px;
       margin-bottom: 8px;
@@ -2714,8 +2714,8 @@
       align-items: center;
       justify-content: center;
       gap: 0;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.08);
+      background: var(--card);
+      border: 1px solid var(--border);
       border-radius: 14px;
       padding: 14px 0;
       margin-bottom: 16px;
@@ -2730,27 +2730,27 @@
     .go-status-num {
       font-size: 22px;
       font-weight: 700;
-      color: #fff;
+      color: var(--text);
       line-height: 1;
     }
     .go-status-lbl {
       font-size: 11px;
-      color: rgba(255,255,255,0.4);
+      color: var(--dim);
       text-transform: uppercase;
       letter-spacing: 0.05em;
     }
     .go-status-divider {
       width: 1px;
       height: 32px;
-      background: rgba(255,255,255,0.1);
+      background: var(--border);
     }
     .go-trigger-tab {
       width: 100%;
       margin-bottom: 20px;
     }
     .go-toolkit-section {
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.07);
+      background: var(--card);
+      border: 1px solid var(--border);
       border-radius: 16px;
       padding: 16px;
       margin-bottom: 14px;
@@ -2761,13 +2761,13 @@
     .go-toolkit-title {
       font-size: 15px;
       font-weight: 700;
-      color: #fff;
+      color: var(--text);
       letter-spacing: 0.02em;
       margin-bottom: 2px;
     }
     .go-toolkit-sub {
       font-size: 12px;
-      color: rgba(255,255,255,0.4);
+      color: var(--dim);
     }
     /* Fear cards */
     .go-fear-cards {
@@ -2776,8 +2776,8 @@
       gap: 8px;
     }
     .go-fear-card {
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.08);
+      background: var(--card);
+      border: 1px solid var(--border);
       border-radius: 10px;
       overflow: hidden;
       cursor: pointer;
@@ -2793,12 +2793,12 @@
       padding: 11px 14px;
       font-size: 14px;
       font-weight: 500;
-      color: rgba(255,255,255,0.85);
+      color: var(--text);
       user-select: none;
     }
     .go-fear-card-arrow {
       font-size: 11px;
-      color: rgba(255,255,255,0.3);
+      color: var(--dim);
       transition: transform 0.2s;
     }
     .go-fear-card.open .go-fear-card-arrow {
@@ -2810,8 +2810,8 @@
       padding: 0 14px 12px;
       font-size: 13px;
       line-height: 1.55;
-      color: rgba(255,255,255,0.7);
-      border-top: 1px solid rgba(255,255,255,0.06);
+      color: var(--dim);
+      border-top: 1px solid var(--border);
       padding-top: 10px;
     }
     .go-fear-card.open .go-fear-card-reframe {
@@ -2835,14 +2835,14 @@
     }
     .go-plans-empty {
       font-size: 13px;
-      color: rgba(255,255,255,0.3);
+      color: var(--dim);
       padding: 4px 0;
     }
     .go-plans-edit-btn {
       background: none;
-      border: 1px solid rgba(255,255,255,0.12);
+      border: 1px solid var(--border);
       border-radius: 8px;
-      color: rgba(255,255,255,0.5);
+      color: var(--dim);
       font-size: 13px;
       padding: 7px 14px;
       cursor: pointer;
@@ -2851,8 +2851,8 @@
       transition: border-color 0.15s, color 0.15s;
     }
     .go-plans-edit-btn:active {
-      border-color: rgba(255,255,255,0.3);
-      color: rgba(255,255,255,0.8);
+      border-color: var(--text);
+      color: var(--text);
     }
     /* Opening lines */
     .go-openers-list {
@@ -2861,21 +2861,21 @@
       gap: 8px;
     }
     .go-opener-card {
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.07);
+      background: var(--card);
+      border: 1px solid var(--border);
       border-radius: 10px;
       padding: 12px 14px;
     }
     .go-opener-text {
       font-size: 13px;
-      color: rgba(255,255,255,0.85);
+      color: var(--text);
       line-height: 1.5;
       margin-bottom: 5px;
       font-style: italic;
     }
     .go-opener-note {
       font-size: 11px;
-      color: rgba(255,255,255,0.35);
+      color: var(--dim);
     }
 
     /* ===== STATS PAGE ===== */
@@ -3476,7 +3476,7 @@
 
       <!-- Primary CTA -->
       <button class="go-trigger go-trigger-tab" onclick="openGoMode()">🔥 I SEE HER — GO MODE</button>
-      <button onclick="openPrettyModal()" style="width:100%; margin-top:8px; padding:12px; border-radius:12px; border:1px solid rgba(255,255,255,0.12); background:rgba(255,255,255,0.05); color:var(--dim); font-size:13px; font-weight:600; cursor:pointer;">✨ Log a Pretty Girl (didn't approach)</button>
+      <button onclick="openPrettyModal()" style="width:100%; margin-top:8px; padding:12px; border-radius:12px; border:1px solid var(--border); background:var(--card); color:var(--dim); font-size:13px; font-weight:600; cursor:pointer;">✨ Log a Pretty Girl (didn't approach)</button>
 
       <!-- Status Bar -->
       <div class="go-status-bar">
