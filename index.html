@@ -2602,7 +2602,11 @@
     .view-encounters,
     .view-looks,
     .view-reviews,
-    .view-openers {
+    .view-openers,
+    .view-pretty-girls,
+    .view-age-ratings,
+    .view-seen-again,
+    .view-prospects {
       display: none;
     }
 
@@ -2614,8 +2618,48 @@
     .view-encounters.active,
     .view-looks.active,
     .view-reviews.active,
-    .view-openers.active {
+    .view-openers.active,
+    .view-pretty-girls.active,
+    .view-age-ratings.active,
+    .view-seen-again.active,
+    .view-prospects.active {
       display: block;
+    }
+
+    /* Hamburger menu drawer */
+    .report-hamburger-btn {
+      position: absolute; right: 16px; top: 16px;
+      background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 10px; color: var(--text); font-size: 20px;
+      width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;
+      cursor: pointer; -webkit-tap-highlight-color: transparent;
+    }
+    .report-drawer-overlay {
+      display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 200;
+    }
+    .report-drawer-overlay.open { display: block; }
+    .report-drawer-panel {
+      position: fixed; top: 0; right: -280px; width: 260px; height: 100vh;
+      background: rgba(16,16,36,0.98); border-left: 1px solid rgba(255,255,255,0.1);
+      padding: 60px 20px 30px; z-index: 201; transition: right 0.25s ease;
+      display: flex; flex-direction: column; gap: 10px;
+    }
+    .report-drawer-panel.open { right: 0; }
+    .report-drawer-title {
+      font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px;
+      color: var(--dim); margin-bottom: 8px;
+    }
+    .report-drawer-link {
+      display: block; width: 100%; text-align: left;
+      padding: 14px 16px; border-radius: 12px;
+      background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+      color: var(--text); font-size: 15px; font-weight: 600; cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .report-drawer-link:active { background: rgba(255,107,53,0.15); border-color: var(--accent); }
+    .sub-page-back {
+      background: none; border: none; color: var(--accent); font-size: 14px;
+      font-weight: 600; cursor: pointer; padding: 8px 0; margin-bottom: 8px;
     }
 
     /* ===== GO TAB ACTION HUB ===== */
@@ -3456,10 +3500,21 @@
 
   <!-- ===== REPORT VIEW ===== -->
   <div class="view-report" id="viewReport">
+    <!-- Hamburger drawer overlay -->
+    <div class="report-drawer-overlay" id="reportDrawerOverlay" onclick="closeReportDrawer()"></div>
+    <div class="report-drawer-panel" id="reportDrawerPanel">
+      <div class="report-drawer-title">Report Sections</div>
+      <button class="report-drawer-link" onclick="switchView('prettygirls'); closeReportDrawer()">Pretty Girls Seen</button>
+      <button class="report-drawer-link" onclick="switchView('ageratings'); closeReportDrawer()">Age Distribution & Ratings</button>
+      <button class="report-drawer-link" onclick="switchView('seenagain'); closeReportDrawer()">Seen Again Tracker</button>
+      <button class="report-drawer-link" onclick="switchView('prospects'); closeReportDrawer()">Prospects</button>
+    </div>
+
     <div class="app">
-      <div class="header">
+      <div class="header" style="position:relative;">
         <h1>REPORT</h1>
         <div class="subtitle">Track your numbers</div>
+        <button class="report-hamburger-btn" onclick="openReportDrawer()">☰</button>
       </div>
 
       <!-- Today: Dual Counter -->
@@ -3554,54 +3609,64 @@
         <div class="people-list" id="peopleList"></div>
       </div>
 
-      <!-- Prospects (seen, interested, not pursuing) -->
-      <div class="people-section" id="prospectsSection">
-        <div class="people-header">
-          <h3>Prospects</h3>
-          <span class="badge" id="prospectsCount">0</span>
-        </div>
-        <div style="font-size:12px; color:var(--dim); margin-bottom:10px;">Girls you've seen and are curious about — not necessarily pursuing, but don't want to forget.</div>
-        <button class="people-add-btn" onclick="openProspectModal()">+ Add Prospect</button>
-        <div class="people-list" id="prospectsList"></div>
-      </div>
-
-      <!-- Age Distribution & Ratings -->
-      <div class="missed-log" id="reportAgeRatingsSection" style="display:none">
-        <div class="missed-log-toggle" onclick="toggleReportSection('reportAgeRatingsList')">
-          <h3>Age Distribution & Ratings</h3>
-          <span class="count-badge" id="reportAgeRatingsCount">0 logs</span>
-        </div>
-        <div class="missed-log-list" id="reportAgeRatingsList">
-          <div id="reportAgeRatingsChart" style="padding:12px 0;"></div>
-          <div id="reportAgeRatingsList2" style="margin-top:10px;"></div>
-        </div>
-      </div>
-
-      <!-- Pretty Girls Seen -->
-      <div class="missed-log" id="reportPrettySection" style="display:none">
-        <div class="missed-log-toggle" onclick="toggleReportSection('reportPrettyList')">
-          <h3>Pretty Girls Seen</h3>
-          <span class="count-badge" id="reportPrettyCount">0 logged</span>
-        </div>
-        <div class="missed-log-list" id="reportPrettyList">
-          <div id="reportPrettyAgeStats" style="margin-bottom:12px;"></div>
-          <div id="reportPrettyItems"></div>
-        </div>
-      </div>
-
-      <!-- Seen Again Tracker -->
-      <div class="missed-log" id="reportSeenAgainSection" style="display:none">
-        <div class="missed-log-toggle" onclick="toggleReportSection('reportSeenAgainList')">
-          <h3>Seen Again Tracker</h3>
-          <span class="count-badge" id="reportSeenAgainCount">0 missed</span>
-        </div>
-        <div class="missed-log-list" id="reportSeenAgainList">
-          <div id="reportSeenAgainChart" style="padding:12px 0;"></div>
-        </div>
-      </div>
+      <!-- Prospects, Age Distribution, Pretty Girls, Seen Again moved to hamburger menu sub-pages -->
 
     </div>
   </div> <!-- /view-report -->
+
+  <!-- ===== PRETTY GIRLS SEEN SUB-PAGE ===== -->
+  <div class="view-pretty-girls" id="viewPrettygirls">
+    <div class="app">
+      <button class="sub-page-back" onclick="switchView('report')">← Back to Report</button>
+      <div class="header">
+        <h1>Pretty Girls Seen</h1>
+        <div class="subtitle">Beautiful girls you noticed</div>
+      </div>
+      <button class="people-add-btn" onclick="openPrettyModal()" style="margin-bottom:16px;">+ Log a Pretty Girl</button>
+      <div id="pgAgeStats" style="margin-bottom:16px;"></div>
+      <div id="pgList"></div>
+    </div>
+  </div>
+
+  <!-- ===== AGE DISTRIBUTION & RATINGS SUB-PAGE ===== -->
+  <div class="view-age-ratings" id="viewAgeratings">
+    <div class="app">
+      <button class="sub-page-back" onclick="switchView('report')">← Back to Report</button>
+      <div class="header">
+        <h1>Age Distribution & Ratings</h1>
+        <div class="subtitle">Analytics on all logged looks</div>
+      </div>
+      <div id="arChart" style="margin-bottom:16px;"></div>
+      <div id="arList"></div>
+    </div>
+  </div>
+
+  <!-- ===== SEEN AGAIN TRACKER SUB-PAGE ===== -->
+  <div class="view-seen-again" id="viewSeenagain">
+    <div class="app">
+      <button class="sub-page-back" onclick="switchView('report')">← Back to Report</button>
+      <div class="header">
+        <h1>Seen Again Tracker</h1>
+        <div class="subtitle">How many times did they reappear?</div>
+      </div>
+      <div id="saStats" style="margin-bottom:12px; font-size:13px; color:var(--dim);"></div>
+      <div id="saChart"></div>
+    </div>
+  </div>
+
+  <!-- ===== PROSPECTS SUB-PAGE ===== -->
+  <div class="view-prospects" id="viewProspects">
+    <div class="app">
+      <button class="sub-page-back" onclick="switchView('report')">← Back to Report</button>
+      <div class="header">
+        <h1>Prospects</h1>
+        <div class="subtitle">Girls you've seen and are curious about</div>
+      </div>
+      <div style="font-size:12px; color:var(--dim); margin-bottom:12px;">Not necessarily pursuing — just don't want to forget them.</div>
+      <button class="people-add-btn" onclick="openProspectModal()" style="margin-bottom:16px;">+ Add Prospect</button>
+      <div class="people-list" id="prospectsList"></div>
+    </div>
+  </div>
 
   <!-- ===== INTERNAL VIEW ===== -->
   <div class="view-internal" id="viewInternal">
@@ -4094,19 +4159,6 @@
       <div class="enc-list-title" style="margin-top:20px;">All Encounters</div>
       <div id="encList"></div>
 
-      <!-- PRETTY GIRLS INJECTED HERE -->
-      <div style="margin-top:40px; border-top:1px solid var(--border); padding-top:20px;">
-        <div class="encounters-header" style="margin-bottom:16px;">
-          <h1>Pretty Girls Seen</h1>
-          <p>Log beautiful girls you noticed but didn't approach</p>
-        </div>
-        <button class="btn-add" style="width: 100%; height: 46px; border-radius: 12px; margin-bottom: 20px; font-size: 15px;" onclick="openPrettyModal()">
-          + Log a Pretty Girl
-        </button>
-        <div id="prettyAgeStats" style="margin-bottom:20px;"></div>
-        <div id="prettyList" style="margin-top:10px;"></div>
-      </div>
-      
     </div>
   </div> <!-- /view-encounters -->
 
@@ -4395,30 +4447,35 @@
           <button class="rc-btn rc-go-back" onclick="closeRealityCheck(); goBackForHer()">She's still there?</button>
         </div>
       </div>
-      <!-- Screen 2: Will you see her again? -->
+      <!-- Screen 2: Where did you see her? (determines chance of seeing again) -->
       <div class="rc-odds-screen" id="rcOddsScreen">
-        <div class="rc-odds-title">Will you ever see her again?</div>
-        <div class="rc-odds-sub">Be honest with yourself.</div>
+        <div class="rc-odds-title">Where did you see her?</div>
+        <div class="rc-odds-sub">Location determines your chance of seeing her again.</div>
         <div class="rc-odds-grid">
-          <button class="rc-odds-btn" onclick="logReencounterOdds('daily', 80)">
-            <div><span class="odds-label">Same place daily</span><br><span class="odds-desc">Gym, class, commute, coffee shop</span></div>
-            <span class="odds-pct">~80%</span>
-            <div class="odds-xp-preview"><span class="missed-xp-lost">-20 XP</span> · <span class="missed-xp-avoided">+24 saved</span></div>
+          <button class="rc-odds-btn" onclick="logReencounterOdds('school', 85)">
+            <div><span class="odds-label">School / Class</span><br><span class="odds-desc">You'll almost definitely see her again</span></div>
+            <span class="odds-pct">~85%</span>
+            <div class="odds-xp-preview"><span class="missed-xp-lost">-15 XP</span> · <span class="missed-xp-avoided">+25 saved</span></div>
           </button>
-          <button class="rc-odds-btn" onclick="logReencounterOdds('weekly', 40)">
-            <div><span class="odds-label">Same area sometimes</span><br><span class="odds-desc">Campus, neighborhood, regular spot</span></div>
+          <button class="rc-odds-btn" onclick="logReencounterOdds('hometown', 70)">
+            <div><span class="odds-label">My Hometown</span><br><span class="odds-desc">Small town, familiar faces</span></div>
+            <span class="odds-pct">~70%</span>
+            <div class="odds-xp-preview"><span class="missed-xp-lost">-30 XP</span> · <span class="missed-xp-avoided">+21 saved</span></div>
+          </button>
+          <button class="rc-odds-btn" onclick="logReencounterOdds('city', 40)">
+            <div><span class="odds-label">City</span><br><span class="odds-desc">Urban area, same neighborhood maybe</span></div>
             <span class="odds-pct">~40%</span>
             <div class="odds-xp-preview"><span class="missed-xp-lost">-60 XP</span> · <span class="missed-xp-avoided">+12 saved</span></div>
           </button>
-          <button class="rc-odds-btn" onclick="logReencounterOdds('random', 10)">
-            <div><span class="odds-label">Random encounter</span><br><span class="odds-desc">Street, mall, one-time event</span></div>
-            <span class="odds-pct">~10%</span>
-            <div class="odds-xp-preview"><span class="missed-xp-lost">-90 XP</span> · <span class="missed-xp-avoided">+3 saved</span></div>
+          <button class="rc-odds-btn" onclick="logReencounterOdds('restaurant', 30)">
+            <div><span class="odds-label">Restaurant</span><br><span class="odds-desc">Might be local, might be a one-time visit</span></div>
+            <span class="odds-pct">~30%</span>
+            <div class="odds-xp-preview"><span class="missed-xp-lost">-70 XP</span> · <span class="missed-xp-avoided">+9 saved</span></div>
           </button>
-          <button class="rc-odds-btn" onclick="logReencounterOdds('never', 2)">
-            <div><span class="odds-label">Probably never</span><br><span class="odds-desc">Tourist, traveler, passing through</span></div>
-            <span class="odds-pct">~2%</span>
-            <div class="odds-xp-preview"><span class="missed-xp-lost">-98 XP</span> · <span class="missed-xp-avoided">+1 saved</span></div>
+          <button class="rc-odds-btn" onclick="logReencounterOdds('train', 15)">
+            <div><span class="odds-label">Train</span><br><span class="odds-desc">Transit — probably not coming back</span></div>
+            <span class="odds-pct">~15%</span>
+            <div class="odds-xp-preview"><span class="missed-xp-lost">-85 XP</span> · <span class="missed-xp-avoided">+4 saved</span></div>
           </button>
         </div>
       </div>
@@ -4716,11 +4773,7 @@
       if (!entry) return;
       entry.sightings.push(todayStr());
       saveData(data);
-      // Preserve open state of report collapsibles before re-render
-      const openSections = ['reportAgeRatingsList','reportPrettyList','reportSeenAgainList','missedLogList']
-        .filter(sid => document.getElementById(sid)?.classList.contains('open'));
       render();
-      openSections.forEach(sid => document.getElementById(sid)?.classList.add('open'));
     }
 
     function deleteMissed(id) {
@@ -5258,6 +5311,199 @@
           </div>
         </div>
       `).join('');
+    }
+
+    // --- Sub-page render functions (from hamburger menu) ---
+
+    function renderPrettyGirlsPage() {
+      const data = getData();
+      const prettyGirls = data.prettyGirls || [];
+      const ageStatsEl = document.getElementById('pgAgeStats');
+      const listEl = document.getElementById('pgList');
+      if (!listEl) return;
+
+      if (prettyGirls.length === 0) {
+        ageStatsEl.innerHTML = '';
+        listEl.innerHTML = '<div style="font-size:13px; color:var(--dim); text-align:center; padding:20px 0;">No pretty girls logged yet. Tap the button above to log one.</div>';
+        return;
+      }
+
+      // Age stats chart
+      const pgAges = {};
+      prettyGirls.forEach(pg => {
+        if (!pg.age) return;
+        if (!pgAges[pg.age]) pgAges[pg.age] = { count: 0, totalRating: 0 };
+        pgAges[pg.age].count++;
+        pgAges[pg.age].totalRating += parseFloat(pg.rating) || 0;
+      });
+      let maxPgCount = 1;
+      Object.values(pgAges).forEach(a => { if (a.count > maxPgCount) maxPgCount = a.count; });
+      let pgAgeHtml = '';
+      Object.keys(pgAges).sort((a,b)=>Number(a)-Number(b)).forEach(ag => {
+        const avg = (pgAges[ag].totalRating / pgAges[ag].count).toFixed(1);
+        const pct = (pgAges[ag].count / maxPgCount) * 100;
+        pgAgeHtml += `<div class="funnel-step" style="align-items:center;">
+          <span class="funnel-label" style="width:60px;">${ag}</span>
+          <div class="funnel-bar-bg" style="flex:1;">
+            <div class="funnel-bar-fill" style="width:${Math.max(2,pct)}%;background:var(--accent)"></div>
+            <span class="funnel-bar-text" style="color:#fff; padding-left:6px; font-size:11px;">${pgAges[ag].count}x</span>
+          </div>
+          <div style="width:70px; text-align:right;">
+            <div style="font-size:18px; font-weight:800; color:var(--text); line-height:1;">${avg}</div>
+            <div style="font-size:9px; color:var(--dim); text-transform:uppercase; letter-spacing:0.5px; margin-top:4px;">Avg Rating</div>
+          </div>
+        </div>`;
+      });
+      ageStatsEl.innerHTML = Object.keys(pgAges).length > 0
+        ? `<h4 style="font-size:13px; margin-bottom:10px; color:var(--text);">Age Stats & Ratings</h4><div style="display:flex; flex-direction:column; gap:8px; margin-bottom:16px;">${pgAgeHtml}</div>`
+        : '';
+
+      listEl.innerHTML = [...prettyGirls].sort((a,b)=>b.id-a.id).map(pg => `
+        <div style="background:var(--card); border:1px solid var(--border); border-radius:10px; padding:10px; margin-bottom:8px; font-size:12px;">
+          <div style="display:flex; justify-content:space-between; color:var(--dim); font-size:11px; margin-bottom:6px;">
+            <span>${pg.date} ${pg.time||''}</span>
+            <div>
+              <button onclick="openPrettyModal(${pg.id})" style="background:none;border:none;color:var(--accent);font-size:11px;cursor:pointer;margin-right:8px;">Edit</button>
+              <button onclick="deletePrettyGirlPage(${pg.id})" style="background:none;border:none;color:var(--danger);font-size:11px;cursor:pointer;">Delete</button>
+            </div>
+          </div>
+          <div>Rating <strong>${pg.rating}/10</strong>${pg.age ? ` — Age ${pg.age}` : ''}${pg.location ? ` — ${escHtml(pg.location)}` : ''}</div>
+          ${pg.appearance ? `<div style="margin-top:4px; color:var(--dim);">Looks: ${escHtml(pg.appearance)}</div>` : ''}
+          ${pg.situation ? `<div style="margin-top:4px; font-style:italic;">"${escHtml(pg.situation)}"</div>` : ''}
+        </div>
+      `).join('');
+    }
+
+    function deletePrettyGirlPage(id) {
+      if (!confirm('Delete?')) return;
+      const data = getData();
+      data.prettyGirls = (data.prettyGirls || []).filter(x => x.id !== id);
+      saveData(data);
+      renderPrettyGirlsPage();
+    }
+
+    function renderAgeRatingsPage() {
+      const data = getData();
+      const looks = data.looks || [];
+      const chartEl = document.getElementById('arChart');
+      const listEl = document.getElementById('arList');
+      if (!chartEl || !listEl) return;
+
+      if (looks.length === 0) {
+        chartEl.innerHTML = '<div style="font-size:13px; color:var(--dim); text-align:center; padding:20px 0;">No looks logged yet. Log a look from the Looks page.</div>';
+        listEl.innerHTML = '';
+        return;
+      }
+
+      const ages = {};
+      looks.forEach(l => {
+        const ag = l.age || 'Unknown';
+        if (!ages[ag]) ages[ag] = { count: 0, totalRating: 0 };
+        ages[ag].count++;
+        ages[ag].totalRating += parseFloat(l.her) || 0;
+      });
+      let maxCount = 1;
+      Object.values(ages).forEach(a => { if (a.count > maxCount) maxCount = a.count; });
+      let htmlAges = '';
+      Object.keys(ages).sort().forEach(ag => {
+        const avgRating = (ages[ag].totalRating / ages[ag].count).toFixed(1);
+        const pct = (ages[ag].count / maxCount) * 100;
+        htmlAges += `<div class="funnel-step" style="align-items:center;">
+          <span class="funnel-label" style="width:60px;">${ag}</span>
+          <div class="funnel-bar-bg" style="flex:1;">
+            <div class="funnel-bar-fill" style="width:${Math.max(2, pct)}%;background:var(--blue)"></div>
+            <span class="funnel-bar-text" style="color:#fff; padding-left:6px; font-size:11px;">${ages[ag].count}x</span>
+          </div>
+          <div style="width:70px; text-align:right;">
+            <div style="font-size:18px; font-weight:800; color:var(--text); line-height:1;">${avgRating}</div>
+            <div style="font-size:9px; color:var(--dim); text-transform:uppercase; letter-spacing:0.5px; margin-top:4px;">Avg Rating</div>
+          </div>
+        </div>`;
+      });
+      chartEl.innerHTML = `<h4 style="font-size:13px; margin-bottom:10px;">By Age</h4><div style="display:flex; flex-direction:column; gap:8px;">${htmlAges}</div>`;
+
+      const recentLooks = [...looks].sort((a,b)=>b.id-a.id).slice(0, 20);
+      listEl.innerHTML = `<h4 style="font-size:13px; margin:16px 0 10px;">Recent Entries</h4>` + recentLooks.map(l => `
+        <div style="background:var(--card); border:1px solid var(--border); border-radius:10px; padding:10px; margin-bottom:8px; font-size:12px;">
+          <div style="display:flex; justify-content:space-between; color:var(--dim); font-size:11px; margin-bottom:6px;">
+            <span>${l.date} ${l.time || ''}</span>
+          </div>
+          <div><span style="color:var(--dim)">Me:</span> ${l.self}/10 — ${escHtml(l.outfit||'')}</div>
+          <div style="margin-top:4px; border-top:1px solid var(--border); padding-top:4px;">
+            <span style="color:var(--dim)">Her:</span> Age ${l.age}, Rating <strong>${l.her}/10</strong>${l.app ? ` — ${escHtml(l.app)}` : ''}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderSeenAgainPage() {
+      const data = getData();
+      const missed = data.missed || [];
+      const statsEl = document.getElementById('saStats');
+      const chartEl = document.getElementById('saChart');
+      if (!chartEl) return;
+
+      if (missed.length === 0) {
+        statsEl.innerHTML = '';
+        chartEl.innerHTML = '<div style="font-size:13px; color:var(--dim); text-align:center; padding:20px 0;">No missed girls logged yet.</div>';
+        return;
+      }
+
+      const dist = { 0: 0, 1: 0, 2: 0, 3: 0, 4: 0, '5+': 0 };
+      missed.forEach(m => {
+        const n = (m.sightings || []).length;
+        if (n >= 5) dist['5+']++;
+        else dist[n]++;
+      });
+      const maxDist = Math.max(1, ...Object.values(dist));
+      const labels = ['0', '1', '2', '3', '4', '5+'];
+      const colors = ['var(--danger)', 'var(--yellow)', 'var(--yellow)', 'var(--success)', 'var(--success)', 'var(--success)'];
+      let html = '<div style="display:flex; flex-direction:column; gap:8px; margin-bottom:20px;">';
+      labels.forEach((lbl, i) => {
+        const count = dist[lbl === '5+' ? '5+' : Number(lbl)];
+        const pct = (count / maxDist) * 100;
+        html += `<div class="funnel-step" style="align-items:center;">
+          <span class="funnel-label" style="width:36px; font-size:13px;">${lbl}x</span>
+          <div class="funnel-bar-bg" style="flex:1;">
+            <div class="funnel-bar-fill" style="width:${count > 0 ? Math.max(2, pct) : 0}%;background:${colors[i]}"></div>
+            ${count > 0 ? `<span class="funnel-bar-text" style="color:#fff; padding-left:6px; font-size:11px;">${count}</span>` : ''}
+          </div>
+          <span style="width:50px; text-align:right; font-size:12px; color:var(--dim);">${count} girl${count !== 1 ? 's' : ''}</span>
+        </div>`;
+      });
+      html += '</div>';
+      statsEl.textContent = `${dist[0]} never seen again (${Math.round(dist[0]/missed.length*100)}% gone forever)`;
+
+      html += `<div style="border-top:1px solid var(--border); padding-top:16px;">`;
+      [...missed].reverse().forEach(m => {
+        const n = (m.sightings || []).length;
+        const lastSeen = n > 0 ? m.sightings[n - 1] : null;
+        html += `<div style="background:var(--card); border:1px solid var(--border); border-radius:10px; padding:10px; margin-bottom:8px; font-size:12px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+            <span style="color:var(--dim); font-size:11px;">${m.date} — ${escHtml(m.reason)}</span>
+            <span style="font-size:11px; color:${n > 0 ? 'var(--success)' : 'var(--danger)'};">${n}x seen again</span>
+          </div>
+          ${m.note ? `<div style="color:var(--dim); font-style:italic; font-size:11px; margin-bottom:6px;">"${escHtml(m.note)}"</div>` : ''}
+          ${lastSeen ? `<div style="font-size:11px; color:var(--dim); margin-bottom:6px;">Last: ${lastSeen}</div>` : ''}
+          <button class="missed-entry-btn saw-again${n > 0 ? ' active' : ''}" onclick="markSawAgainPage(${m.id})" style="font-size:11px;">Saw her again</button>
+        </div>`;
+      });
+      html += '</div>';
+      chartEl.innerHTML = html;
+    }
+
+    function markSawAgainPage(id) {
+      const data = getData();
+      const entry = (data.missed || []).find(m => m.id === id);
+      if (!entry) return;
+      if (!entry.sightings) entry.sightings = [];
+      entry.sightings.push(todayStr());
+      saveData(data);
+      renderSeenAgainPage();
+    }
+
+    function renderProspectsPage() {
+      renderProspects(getData());
     }
 
     // --- Power Level Calculation ---
@@ -5810,7 +6056,7 @@
       }
       saveData(data);
       closePrettyModal();
-      render();
+      renderPrettyGirlsPage();
     }
 
     function deletePrettyGirl(id) {
@@ -5818,7 +6064,7 @@
       const data = getData();
       data.prettyGirls = (data.prettyGirls || []).filter(p => p.id !== id);
       saveData(data);
-      render();
+      renderPrettyGirlsPage();
     }
 
     function renderPrettyGirls(data) {
@@ -5896,184 +6142,9 @@
     }
 
     function renderReportExtras(data) {
-      const looks = data.looks || [];
-      const prettyGirls = data.prettyGirls || [];
-      const missed = data.missed || [];
-
-      // --- Age Distribution & Ratings (from looks logs) ---
-      const ageRatingsEl = document.getElementById('reportAgeRatingsSection');
-      if (looks.length > 0) {
-        ageRatingsEl.style.display = '';
-        document.getElementById('reportAgeRatingsCount').textContent = `${looks.length} logs`;
-
-        const ages = {};
-        looks.forEach(l => {
-          const ag = l.age || 'Unknown';
-          if (!ages[ag]) ages[ag] = { count: 0, totalRating: 0 };
-          ages[ag].count++;
-          ages[ag].totalRating += parseFloat(l.her) || 0;
-        });
-
-        let maxCount = 1;
-        Object.values(ages).forEach(a => { if (a.count > maxCount) maxCount = a.count; });
-
-        let htmlAges = '';
-        Object.keys(ages).sort().forEach(ag => {
-          const avgRating = (ages[ag].totalRating / ages[ag].count).toFixed(1);
-          const pct = (ages[ag].count / maxCount) * 100;
-          htmlAges += `
-            <div class="funnel-step" style="align-items:center;">
-              <span class="funnel-label" style="width:60px;">${ag}</span>
-              <div class="funnel-bar-bg" style="flex:1;">
-                <div class="funnel-bar-fill" style="width:${Math.max(2, pct)}%;background:var(--blue)"></div>
-                <span class="funnel-bar-text" style="color:#fff; padding-left:6px; font-size:11px;">${ages[ag].count}x</span>
-              </div>
-              <div style="width:70px; text-align:right;">
-                <div style="font-size:18px; font-weight:800; color:var(--text); line-height:1;">${avgRating}</div>
-                <div style="font-size:9px; color:var(--dim); text-transform:uppercase; letter-spacing:0.5px; margin-top:4px;">Avg Rating</div>
-              </div>
-            </div>
-          `;
-        });
-        document.getElementById('reportAgeRatingsChart').innerHTML = `<div style="display:flex; flex-direction:column; gap:8px;">${htmlAges}</div>`;
-
-        // Recent look entries
-        const recentLooks = [...looks].sort((a,b)=>b.id-a.id).slice(0, 10);
-        document.getElementById('reportAgeRatingsList2').innerHTML = recentLooks.map(l => `
-          <div style="background:var(--card); border:1px solid var(--border); border-radius:10px; padding:10px; margin-bottom:8px; font-size:12px;">
-            <div style="display:flex; justify-content:space-between; color:var(--dim); font-size:11px; margin-bottom:6px;">
-              <span>${l.date} ${l.time || ''}</span>
-              <button onclick="deleteLook(${l.id})" style="background:none;border:none;color:var(--danger);font-size:11px;cursor:pointer;">Delete</button>
-            </div>
-            <div><span style="color:var(--dim)">Me:</span> ${l.self}/10 — ${escHtml(l.outfit||'')}</div>
-            <div style="margin-top:4px; border-top:1px solid var(--border); padding-top:4px;">
-              <span style="color:var(--dim)">Her:</span> Age ${l.age}, Rating <strong>${l.her}/10</strong>
-              ${l.app ? ` — ${escHtml(l.app)}` : ''}
-            </div>
-          </div>
-        `).join('');
-      } else {
-        ageRatingsEl.style.display = 'none';
-      }
-
-      // --- Pretty Girls Seen ---
-      const prettyEl = document.getElementById('reportPrettySection');
-      if (prettyGirls.length > 0) {
-        prettyEl.style.display = '';
-        document.getElementById('reportPrettyCount').textContent = `${prettyGirls.length} logged`;
-
-        // Age stats
-        const pgAges = {};
-        prettyGirls.forEach(pg => {
-          if (!pg.age) return;
-          if (!pgAges[pg.age]) pgAges[pg.age] = { count: 0, totalRating: 0 };
-          pgAges[pg.age].count++;
-          pgAges[pg.age].totalRating += parseFloat(pg.rating) || 0;
-        });
-        let maxPgCount = 1;
-        Object.values(pgAges).forEach(a => { if (a.count > maxPgCount) maxPgCount = a.count; });
-
-        let pgAgeHtml = '';
-        Object.keys(pgAges).sort((a,b)=>Number(a)-Number(b)).forEach(ag => {
-          const avg = (pgAges[ag].totalRating / pgAges[ag].count).toFixed(1);
-          const pct = (pgAges[ag].count / maxPgCount) * 100;
-          pgAgeHtml += `
-            <div class="funnel-step" style="align-items:center;">
-              <span class="funnel-label" style="width:60px;">${ag}</span>
-              <div class="funnel-bar-bg" style="flex:1;">
-                <div class="funnel-bar-fill" style="width:${Math.max(2,pct)}%;background:var(--accent)"></div>
-                <span class="funnel-bar-text" style="color:#fff; padding-left:6px; font-size:11px;">${pgAges[ag].count}x</span>
-              </div>
-              <div style="width:70px; text-align:right;">
-                <div style="font-size:18px; font-weight:800; color:var(--text); line-height:1;">${avg}</div>
-                <div style="font-size:9px; color:var(--dim); text-transform:uppercase; letter-spacing:0.5px; margin-top:4px;">Avg Rating</div>
-              </div>
-            </div>
-          `;
-        });
-        document.getElementById('reportPrettyAgeStats').innerHTML = Object.keys(pgAges).length > 0
-          ? `<h4 style="font-size:13px; margin-bottom:10px; color:var(--text);">Age Stats & Ratings</h4><div style="display:flex; flex-direction:column; gap:8px;">${pgAgeHtml}</div>`
-          : '';
-
-        document.getElementById('reportPrettyItems').innerHTML = [...prettyGirls].sort((a,b)=>b.id-a.id).map(pg => `
-          <div style="background:var(--card); border:1px solid var(--border); border-radius:10px; padding:10px; margin-bottom:8px; font-size:12px;">
-            <div style="display:flex; justify-content:space-between; color:var(--dim); font-size:11px; margin-bottom:6px;">
-              <span>${pg.date} ${pg.time||''}</span>
-              <div>
-                <button onclick="openPrettyModal(${pg.id})" style="background:none;border:none;color:var(--accent);font-size:11px;cursor:pointer;margin-right:8px;">Edit</button>
-                <button onclick="deletePrettyGirl(${pg.id})" style="background:none;border:none;color:var(--danger);font-size:11px;cursor:pointer;">Delete</button>
-              </div>
-            </div>
-            <div>Rating <strong>${pg.rating}/10</strong>${pg.age ? ` — Age ${pg.age}` : ''}</div>
-            ${pg.appearance ? `<div style="margin-top:4px; color:var(--dim);">Looks: ${escHtml(pg.appearance)}</div>` : ''}
-            ${pg.situation ? `<div style="margin-top:4px; font-style:italic;">"${escHtml(pg.situation)}"</div>` : ''}
-          </div>
-        `).join('');
-      } else {
-        prettyEl.style.display = 'none';
-      }
-
-      // --- Seen Again Tracker ---
-      const seenAgainEl = document.getElementById('reportSeenAgainSection');
-      if (missed.length > 0) {
-        seenAgainEl.style.display = '';
-        document.getElementById('reportSeenAgainCount').textContent = `${missed.length} missed`;
-
-        // Build distribution: 0, 1, 2, 3, 4, 5+
-        const dist = { 0: 0, 1: 0, 2: 0, 3: 0, 4: 0, '5+': 0 };
-        missed.forEach(m => {
-          const n = m.sightings.length;
-          if (n >= 5) dist['5+']++;
-          else dist[n]++;
-        });
-
-        const maxDist = Math.max(1, ...Object.values(dist));
-        const labels = ['0', '1', '2', '3', '4', '5+'];
-        const colors = ['var(--danger)', 'var(--yellow)', 'var(--yellow)', 'var(--success)', 'var(--success)', 'var(--success)'];
-        let chartHtml = '<div style="display:flex; flex-direction:column; gap:8px;">';
-        labels.forEach((lbl, i) => {
-          const count = dist[lbl === '5+' ? '5+' : Number(lbl)];
-          const pct = (count / maxDist) * 100;
-          chartHtml += `
-            <div class="funnel-step" style="align-items:center;">
-              <span class="funnel-label" style="width:36px; font-size:13px;">${lbl}x</span>
-              <div class="funnel-bar-bg" style="flex:1;">
-                <div class="funnel-bar-fill" style="width:${count > 0 ? Math.max(2, pct) : 0}%;background:${colors[i]}"></div>
-                ${count > 0 ? `<span class="funnel-bar-text" style="color:#fff; padding-left:6px; font-size:11px;">${count}</span>` : ''}
-              </div>
-              <span style="width:50px; text-align:right; font-size:12px; color:var(--dim);">${count} girl${count !== 1 ? 's' : ''}</span>
-            </div>
-          `;
-        });
-        chartHtml += '</div>';
-        chartHtml += `<div style="margin-top:12px; font-size:12px; color:var(--dim);">
-          ${dist[0]} never seen again (${missed.length > 0 ? Math.round(dist[0]/missed.length*100) : 0}% gone forever)
-        </div>`;
-
-        // Per-entry list sorted by most recent
-        chartHtml += `<div style="margin-top:16px; border-top:1px solid var(--border); padding-top:12px;">`;
-        [...missed].reverse().forEach(m => {
-          const n = m.sightings.length;
-          const lastSeen = n > 0 ? m.sightings[n - 1] : null;
-          const sawClass = n > 0 ? 'active' : '';
-          chartHtml += `
-            <div style="background:var(--card); border:1px solid var(--border); border-radius:10px; padding:10px; margin-bottom:8px; font-size:12px;">
-              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
-                <span style="color:var(--dim); font-size:11px;">${m.date} — ${escHtml(m.reason)}</span>
-                <span style="font-size:11px; color:${n > 0 ? 'var(--success)' : 'var(--danger)'};">${n}x seen again</span>
-              </div>
-              ${m.note ? `<div style="color:var(--dim); font-style:italic; font-size:11px; margin-bottom:6px;">"${escHtml(m.note)}"</div>` : ''}
-              ${lastSeen ? `<div style="font-size:11px; color:var(--dim); margin-bottom:6px;">Last: ${lastSeen}</div>` : ''}
-              <button class="missed-entry-btn saw-again${sawClass}" onclick="markSawAgain(${m.id})" style="font-size:11px;">Saw her again</button>
-            </div>
-          `;
-        });
-        chartHtml += `</div>`;
-
-        document.getElementById('reportSeenAgainChart').innerHTML = chartHtml;
-      } else {
-        seenAgainEl.style.display = 'none';
-      }
+      // These sections have been moved to their own sub-pages via the hamburger menu.
+      // Render is now handled by renderPrettyGirlsPage(), renderAgeRatingsPage(),
+      // renderSeenAgainPage(), and renderProspectsPage() when those views are opened.
     }
 
     // --- GO MODE ---
@@ -6630,10 +6701,8 @@
 
       // People Log
       renderPeople(data);
-      renderProspects(data);
       renderExcuses(data);
-      renderPrettyGirls(data);
-      renderReportExtras(data);
+      // Prospects, PrettyGirls, AgeRatings, SeenAgain are rendered in their sub-pages via hamburger menu
 
       // Funnel
       const funnelData = [
@@ -6783,7 +6852,7 @@
 
       if (type === 'miss') {
         iconEl.textContent = '📉';
-        titleEl.textContent = 'Here\'s what just happened.';
+        titleEl.textContent = 'Results.';
         subEl.textContent = 'Every number is real.';
 
         // Calculate funnel projections
@@ -7154,8 +7223,17 @@
 
     // --- NAVIGATION ---
     const mainViews = ['Approach','Stats','Report','Internal'];
-    const subViews = ['Excuses','Encounters','Looks','Reviews','Openers'];
+    const subViews = ['Excuses','Encounters','Looks','Reviews','Openers','Prettygirls','Ageratings','Seenagain','Prospects'];
     const allViews = mainViews.concat(subViews);
+
+    function openReportDrawer() {
+      document.getElementById('reportDrawerOverlay').classList.add('open');
+      document.getElementById('reportDrawerPanel').classList.add('open');
+    }
+    function closeReportDrawer() {
+      document.getElementById('reportDrawerOverlay').classList.remove('open');
+      document.getElementById('reportDrawerPanel').classList.remove('open');
+    }
 
     function switchView(view) {
       allViews.forEach(v => {
@@ -7178,6 +7256,10 @@
       if (view === 'looks') renderLooks();
       if (view === 'reviews') renderReviews();
       if (view === 'openers') renderOpeners();
+      if (view === 'prettygirls') renderPrettyGirlsPage();
+      if (view === 'ageratings') renderAgeRatingsPage();
+      if (view === 'seenagain') renderSeenAgainPage();
+      if (view === 'prospects') renderProspectsPage();
     }
 
     // --- STATS RENDERING ---
