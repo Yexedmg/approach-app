@@ -4248,11 +4248,12 @@
       <button onclick="switchView('stats')" style="background:none; border:none; color:var(--accent); font-size:14px; font-weight:600; cursor:pointer; padding:8px 0;">← Back to Stats</button>
     </div>
     <div class="header" style="padding-top: 10px;">
-      <h1>Interaction Reviews</h1>
-      <div class="subtitle">Reflect and improve</div>
+      <h1>Reviews</h1>
+      <div class="subtitle">Reflect on every approach</div>
     </div>
-    <div style="padding: 16px;" id="reviewsInventoryContainer">
-      <!-- Inventory goes here -->
+    <div style="padding: 16px;">
+      <div id="reviewsApproachList"></div>
+      <div id="reviewsInventoryContainer"></div>
     </div>
   </div>
 
@@ -7784,17 +7785,41 @@
     // --- REVIEWS ---
     function renderReviews() {
         const data = getData();
+        const approaches = (data.goAttempts || []).filter(a => !a.bailed);
         const reviews = [];
-        (data.goAttempts || []).forEach(a => {
-            if (!a.bailed && a.review) {
+        approaches.forEach(a => {
+            if (a.review) {
                 const identifier = a.firstLine ? a.firstLine : 'Approach';
                 reviews.push({ ...a.review, personName: `"${identifier}"`, date: a.date, attemptId: a.id });
             }
         });
-        
+
+        // Top section: all approaches with write/edit review buttons
+        const approachListEl = document.getElementById('reviewsApproachList');
+        if (approaches.length === 0) {
+            approachListEl.innerHTML = '<div style="color:var(--dim);font-size:13px;text-align:center;padding:20px 0;">No approaches logged yet. Use GO Mode on the Approach tab to log one.</div>';
+        } else {
+            const sorted = [...approaches].reverse();
+            approachListEl.innerHTML = `
+              <h3 style="font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:var(--dim); margin-bottom:12px;">Your Approaches</h3>
+              ${sorted.map(a => `
+                <div style="background:var(--card); border:1px solid var(--border); border-radius:12px; padding:12px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center;">
+                  <div>
+                    <div style="font-size:13px; font-weight:600;">${a.firstLine ? escHtml(a.firstLine) : 'Approach'}</div>
+                    <div style="font-size:11px; color:var(--dim); margin-top:2px;">${a.date}${a.time ? ' · ' + a.time : ''}${a.review ? ' · <span style="color:var(--success);">reviewed</span>' : ''}</div>
+                  </div>
+                  <button onclick="openGoReviewModal(${a.id})" style="background:${a.review ? 'rgba(48,209,88,0.1)' : 'rgba(255,107,53,0.15)'}; border:1px solid ${a.review ? 'rgba(48,209,88,0.3)' : 'rgba(255,107,53,0.4)'}; border-radius:8px; color:${a.review ? 'var(--success)' : 'var(--accent)'}; font-size:12px; font-weight:700; padding:6px 12px; cursor:pointer; white-space:nowrap;">
+                    ${a.review ? 'Edit Review' : '+ Write Review'}
+                  </button>
+                </div>
+              `).join('')}
+              <div style="border-top:1px solid var(--border); margin:20px 0;"></div>
+            `;
+        }
+
         let html = '';
         if (reviews.length === 0) {
-           html = '<div style="color:var(--dim);font-size:13px;text-align:center;margin-top:20px;">No approach reviews logged yet.<br>Add them from the Go Mode history in Encounters.</div>';
+           html = '';
         } else {
            // Full Reviews Section
            html += `<div style="margin-bottom:30px;">
