@@ -3558,9 +3558,9 @@
 
       <!-- Today: Missed -->
       <div class="missed-section">
-        <h2>Log a Miss</h2>
-        <button class="missed-btn" onclick="openMissedModal()">+ I let one go</button>
-        <div class="missed-today-count">Today: <span id="missedTodayCount">0</span> missed</div>
+        <h2>Saw, Didn't Act</h2>
+        <button class="missed-btn" onclick="openMissedModal()">+ Log one</button>
+        <div class="missed-today-count">Today: <span id="missedTodayCount">0</span> saw, didn't act</div>
       </div>
 
       <!-- Reasons Breakdown (renamed from Excuses) -->
@@ -3575,7 +3575,7 @@
         <div class="reencounter-stats">
           <div class="reencounter-stat">
             <div class="rs-value" id="reTotalMissed" style="color:var(--danger)">0</div>
-            <div class="rs-label">Total Missed</div>
+            <div class="rs-label">Saw, Didn't Act</div>
           </div>
           <div class="reencounter-stat">
             <div class="rs-value" id="reSawAgain" style="color:var(--yellow)">0</div>
@@ -3592,7 +3592,7 @@
       <!-- Missed Log -->
       <div class="missed-log" id="missedLogSection" style="display:none">
         <div class="missed-log-toggle" onclick="toggleMissedLog()">
-          <h3>Missed Log</h3>
+          <h3>Saw, Didn't Act — Log</h3>
           <span class="count-badge" id="missedLogCount">0 entries</span>
         </div>
         <div class="missed-log-list" id="missedLogList"></div>
@@ -4003,7 +4003,7 @@
                 <th style="text-align:right">Talked</th>
                 <th style="text-align:right">Seen</th>
                 <th style="text-align:right">Boldness</th>
-                <th style="text-align:right">Missed</th>
+                <th style="text-align:right">Didn't Act</th>
                 <th style="text-align:right">GO</th>
               </tr>
             </thead>
@@ -4056,7 +4056,7 @@
                 <th style="text-align:right">Talked</th>
                 <th style="text-align:right">Seen</th>
                 <th style="text-align:right">Boldness</th>
-                <th style="text-align:right">Missed</th>
+                <th style="text-align:right">Didn't Act</th>
                 <th style="text-align:right">GO</th>
               </tr>
             </thead>
@@ -5884,7 +5884,7 @@
         </div>
         <div class="enc-summary-card">
           <div class="enc-summary-num">${bailedEnc.length}</div>
-          <div class="enc-summary-lbl">Missed</div>
+          <div class="enc-summary-lbl">Didn't Act</div>
         </div>
         <div class="enc-summary-card">
           <div class="enc-summary-num">${avgAge || '—'}</div>
@@ -5910,7 +5910,7 @@
         <h3>All Girls Inventory</h3>
         <div class="enc-kv"><span class="k">Total encounters with age logged</span><span class="v">${totalEnc}</span></div>
         <div class="enc-kv"><span class="k">Talked</span><span class="v">${approached.length}</span></div>
-        <div class="enc-kv"><span class="k">Missed</span><span class="v">${bailedEnc.length}</span></div>
+        <div class="enc-kv"><span class="k">Didn't Act</span><span class="v">${bailedEnc.length}</span></div>
         ${ageInventory || '<div class="enc-kv"><span class="k">Ages</span><span class="v">No age data yet</span></div>'}
       `;
 
@@ -7528,7 +7528,7 @@
           <div style="display:flex; justify-content:center; gap:20px; font-size:13px;">
             <div><span style="color:var(--text); font-weight:700;">${cw.talked}</span> <span style="color:var(--dim);">talked</span></div>
             <div><span style="color:${cwBoldColor}; font-weight:700;">${cw.boldness}%</span> <span style="color:var(--dim);">boldness</span></div>
-            <div><span style="color:var(--danger); font-weight:700;">${cw.missed}</span> <span style="color:var(--dim);">missed</span></div>
+            <div><span style="color:var(--danger); font-weight:700;">${cw.missed}</span> <span style="color:var(--dim);">didn't act</span></div>
           </div>
         `;
       }
