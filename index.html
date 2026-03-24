@@ -3669,6 +3669,7 @@
         <div class="subtitle">Beautiful girls you noticed</div>
       </div>
       <button class="people-add-btn" onclick="openPrettyModal()" style="margin-bottom:16px;">+ Log a Pretty Girl</button>
+      <div id="pgSeenAgainChart" style="margin-bottom:16px;"></div>
       <div id="pgAgeStats" style="margin-bottom:16px;"></div>
       <div id="pgList"></div>
     </div>
@@ -5443,6 +5444,31 @@
       ageStatsEl.innerHTML = Object.keys(pgAges).length > 0
         ? `<h4 style="font-size:13px; margin-bottom:10px; color:var(--text);">Age Stats & Ratings</h4><div style="display:flex; flex-direction:column; gap:8px; margin-bottom:16px;">${pgAgeHtml}</div>`
         : '';
+
+      // Seen Again chart — only girls who have at least 1 sighting
+      const seenAgainChartEl = document.getElementById('pgSeenAgainChart');
+      const girlsWithSightings = prettyGirls.filter(pg => pg.sightings && pg.sightings.length > 0);
+      if (girlsWithSightings.length === 0) {
+        seenAgainChartEl.innerHTML = '';
+      } else {
+        const maxSightings = Math.max(...girlsWithSightings.map(pg => pg.sightings.length));
+        const rows = [...girlsWithSightings]
+          .sort((a, b) => b.sightings.length - a.sightings.length)
+          .map(pg => {
+            const pct = (pg.sightings.length / maxSightings) * 100;
+            const lastSeen = [...pg.sightings].sort((a,b) => b.date.localeCompare(a.date))[0].date;
+            const label = pg.appearance ? escHtml(pg.appearance.split(',')[0].trim()) : `${pg.date}`;
+            return `<div class="funnel-step" style="align-items:center;">
+              <span class="funnel-label" style="width:90px; font-size:11px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${label}</span>
+              <div class="funnel-bar-bg" style="flex:1;">
+                <div class="funnel-bar-fill" style="width:${Math.max(4,pct)}%;background:var(--accent)"></div>
+                <span class="funnel-bar-text" style="color:#fff; padding-left:6px; font-size:11px;">${pg.sightings.length}x</span>
+              </div>
+              <div style="width:60px; text-align:right; font-size:10px; color:var(--dim);">${lastSeen.slice(5)}</div>
+            </div>`;
+          }).join('');
+        seenAgainChartEl.innerHTML = `<h4 style="font-size:13px; margin-bottom:10px; color:var(--text);">Seen Again</h4><div style="display:flex; flex-direction:column; gap:8px;">${rows}</div>`;
+      }
 
       listEl.innerHTML = [...prettyGirls].sort((a,b)=>b.id-a.id).map(pg => {
         const sightings = pg.sightings || [];
