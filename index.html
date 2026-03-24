@@ -4393,6 +4393,26 @@
     </div>
   </div>
 
+  <!-- Pretty Girl Sighting Modal -->
+  <div class="modal-overlay" id="sightingModal">
+    <div class="modal" style="text-align: left;">
+      <h3 style="text-align: center;">Saw Her Again</h3>
+      <input type="hidden" id="sightingPgId">
+      <div style="margin: 10px 0;">
+        <label style="font-size: 12px; color: var(--dim);">Date</label>
+        <input type="date" id="sightingDate" class="modal-note" style="height:40px;">
+      </div>
+      <div style="margin: 10px 0;">
+        <label style="font-size: 12px; color: var(--dim);">Situation (optional)</label>
+        <textarea id="sightingNote" class="modal-note" placeholder="Where you saw her..."></textarea>
+      </div>
+      <div class="modal-actions" style="margin-top: 20px;">
+        <button class="modal-cancel" onclick="document.getElementById('sightingModal').classList.remove('open')">Cancel</button>
+        <button class="modal-confirm" onclick="confirmSighting()">Log It</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Boldness Modal -->
   <div class="modal-overlay" id="boldnessModal">
     <div class="modal" style="text-align: left;">
@@ -5424,10 +5444,24 @@
         ? `<h4 style="font-size:13px; margin-bottom:10px; color:var(--text);">Age Stats & Ratings</h4><div style="display:flex; flex-direction:column; gap:8px; margin-bottom:16px;">${pgAgeHtml}</div>`
         : '';
 
-      listEl.innerHTML = [...prettyGirls].sort((a,b)=>b.id-a.id).map(pg => `
+      listEl.innerHTML = [...prettyGirls].sort((a,b)=>b.id-a.id).map(pg => {
+        const sightings = pg.sightings || [];
+        const lastSeen = sightings.length > 0 ? [...sightings].sort((a,b)=>b.date.localeCompare(a.date))[0] : null;
+        const sightingsHtml = sightings.length > 0 ? `
+          <div style="margin-top:8px; padding-top:8px; border-top:1px solid var(--border);">
+            <div style="font-size:11px; font-weight:600; color:var(--dim); margin-bottom:4px;">Sightings (${sightings.length})</div>
+            ${sightings.map((s, idx) => `
+              <div style="display:flex; justify-content:space-between; align-items:center; font-size:11px; padding:3px 0;">
+                <span style="color:var(--text);">${s.date}${s.note ? ` — <em>${escHtml(s.note)}</em>` : ''}</span>
+                <button onclick="deleteSighting(${pg.id}, ${idx})" style="background:none;border:none;color:var(--danger);font-size:10px;cursor:pointer;">✕</button>
+              </div>
+            `).join('')}
+          </div>
+        ` : '';
+        return `
         <div style="background:var(--card); border:1px solid var(--border); border-radius:10px; padding:10px; margin-bottom:8px; font-size:12px;">
           <div style="display:flex; justify-content:space-between; color:var(--dim); font-size:11px; margin-bottom:6px;">
-            <span>${pg.date} ${pg.time||''}</span>
+            <span>First seen: ${pg.date} ${pg.time||''}</span>
             <div>
               <button onclick="openPrettyModal(${pg.id})" style="background:none;border:none;color:var(--accent);font-size:11px;cursor:pointer;margin-right:8px;">Edit</button>
               <button onclick="deletePrettyGirlPage(${pg.id})" style="background:none;border:none;color:var(--danger);font-size:11px;cursor:pointer;">Delete</button>
@@ -5436,8 +5470,11 @@
           <div>Rating <strong>${pg.rating}/10</strong>${pg.age ? ` — Age ${pg.age}` : ''}${pg.location ? ` — ${escHtml(pg.location)}` : ''}</div>
           ${pg.appearance ? `<div style="margin-top:4px; color:var(--dim);">Looks: ${escHtml(pg.appearance)}</div>` : ''}
           ${pg.situation ? `<div style="margin-top:4px; font-style:italic;">"${escHtml(pg.situation)}"</div>` : ''}
-        </div>
-      `).join('');
+          ${lastSeen ? `<div style="margin-top:4px; font-size:11px; color:var(--dim);">Last seen: ${lastSeen.date}</div>` : ''}
+          ${sightingsHtml}
+          <button onclick="openSightingModal(${pg.id})" style="margin-top:8px; width:100%; background:none; border:1px solid var(--border); border-radius:8px; color:var(--dim); font-size:12px; padding:6px; cursor:pointer;">👀 Saw Her Again</button>
+        </div>`;
+      }).join('');
     }
 
     function deletePrettyGirlPage(id) {
@@ -5446,6 +5483,38 @@
       data.prettyGirls = (data.prettyGirls || []).filter(x => x.id !== id);
       saveData(data);
       renderPrettyGirlsPage();
+    }
+
+    function openSightingModal(pgId) {
+      document.getElementById('sightingPgId').value = pgId;
+      document.getElementById('sightingDate').value = todayStr();
+      document.getElementById('sightingNote').value = '';
+      document.getElementById('sightingModal').classList.add('open');
+    }
+
+    function confirmSighting() {
+      const pgId = parseInt(document.getElementById('sightingPgId').value);
+      const date = document.getElementById('sightingDate').value || todayStr();
+      const note = document.getElementById('sightingNote').value.trim();
+      const data = getData();
+      const pg = (data.prettyGirls || []).find(p => p.id === pgId);
+      if (pg) {
+        if (!pg.sightings) pg.sightings = [];
+        pg.sightings.push({ date, time: toHHMM(), note });
+        saveData(data);
+      }
+      document.getElementById('sightingModal').classList.remove('open');
+      renderPrettyGirlsPage();
+    }
+
+    function deleteSighting(pgId, idx) {
+      const data = getData();
+      const pg = (data.prettyGirls || []).find(p => p.id === pgId);
+      if (pg && pg.sightings) {
+        pg.sightings.splice(idx, 1);
+        saveData(data);
+        renderPrettyGirlsPage();
+      }
     }
 
     function renderAgeRatingsPage() {
