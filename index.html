@@ -5307,8 +5307,8 @@
       tip.style.display = mans.length > 2 ? 'none' : '';
 
       let html = '';
-      // Show pending first, then manifested
-      [...pending, ...done].reverse().forEach(m => {
+      // Show pending first (newest on top), then manifested (newest on top)
+      [...pending.slice().reverse(), ...done.slice().reverse()].forEach(m => {
         const fields = [];
         if (m.situation) fields.push({ label: 'The Exact Situation', text: m.situation });
         if (m.why) fields.push({ label: 'Why I Want This', text: m.why });
