@@ -2462,8 +2462,7 @@
     .view-excuses,
     .view-go,
     .view-looks,
-    .view-reviews,
-    .view-world {
+    .view-reviews {
       display: none;
     }
 
@@ -2472,46 +2471,9 @@
     .view-excuses.active,
     .view-go.active,
     .view-looks.active,
-    .view-reviews.active,
-    .view-world.active {
+    .view-reviews.active {
       display: block;
     }
-
-    /* ===== SITUATIONS VIEW ===== */
-    .situations-page { max-width: 430px; margin: 0 auto; padding: 16px; padding-bottom: 80px; }
-    .situations-page-header { text-align: center; margin-bottom: 16px; }
-    .situations-page-header h1 { font-size: 22px; font-weight: 800; letter-spacing: 1px; }
-    .situations-page-sub { font-size: 13px; color: var(--dim); margin-top: 4px; }
-    .situations-count-bar { text-align: center; font-size: 13px; color: var(--dim); padding: 8px 0; }
-    .situations-count-bar span { color: var(--purple); font-weight: 700; }
-    .situation-add-btn { width: 100%; padding: 14px; border: 2px dashed var(--purple); background: rgba(167, 139, 250, 0.05); border-radius: 12px; color: var(--purple); font-size: 15px; font-weight: 700; cursor: pointer; -webkit-tap-highlight-color: transparent; transition: transform 0.1s; }
-    .situation-add-btn:active { transform: scale(0.97); }
-    .situation-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 10px; overflow: hidden; transition: border-color 0.2s; }
-    .situation-card:hover { border-color: rgba(167, 139, 250, 0.3); }
-    .situation-card-header { padding: 14px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
-    .situation-card-title { font-size: 15px; font-weight: 700; color: var(--text); display: flex; justify-content: space-between; align-items: center; }
-    .situation-card-title .expand-icon { font-size: 12px; color: var(--dim); transition: transform 0.2s; }
-    .situation-card.expanded .expand-icon { transform: rotate(180deg); }
-    .situation-card-setting { font-size: 12px; color: var(--purple); margin-top: 3px; }
-    .situation-card-body { display: none; padding: 0 14px 14px; border-top: 1px solid var(--border); }
-    .situation-card.expanded .situation-card-body { display: block; }
-    .situation-field { margin-top: 10px; }
-    .situation-field-label { font-size: 11px; font-weight: 700; color: var(--dim); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 3px; }
-    .situation-field-text { font-size: 13px; color: var(--text); line-height: 1.5; white-space: pre-wrap; }
-    .situation-card-actions { display: flex; gap: 8px; margin-top: 12px; }
-    .situation-card-actions button { padding: 6px 14px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; border: 1px solid var(--border); background: var(--bg); -webkit-tap-highlight-color: transparent; }
-    .situation-card-actions .sit-edit { color: var(--purple); border-color: rgba(167, 139, 250, 0.3); }
-    .situation-card-actions .sit-delete { color: var(--danger); border-color: rgba(255, 59, 59, 0.2); }
-    .situations-tip { background: linear-gradient(135deg, rgba(167, 139, 250, 0.06), rgba(167, 139, 250, 0.12)); border: 1px solid rgba(167, 139, 250, 0.15); border-radius: 12px; padding: 14px; margin-top: 20px; }
-    .situations-tip-title { font-size: 13px; font-weight: 700; color: var(--purple); margin-bottom: 4px; }
-    .situations-tip-text { font-size: 12px; color: var(--dim); line-height: 1.5; }
-    .situation-modal-field { margin: 10px 0; }
-    .situation-modal-field label { font-size: 12px; color: var(--dim); display: block; margin-bottom: 4px; }
-    .situation-modal-field input, .situation-modal-field textarea { width: 100%; background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 10px; color: var(--text); font-size: 13px; font-family: inherit; }
-    .situation-modal-field textarea { resize: vertical; min-height: 70px; }
-    .situation-modal-field input::placeholder, .situation-modal-field textarea::placeholder { color: var(--dim); }
-    .situations-empty { text-align: center; padding: 40px 20px; color: var(--dim); font-size: 13px; line-height: 1.6; }
-    .situations-empty .empty-icon { font-size: 40px; margin-bottom: 10px; }
 
     /* ===== GO TAB ACTION HUB ===== */
     .go-status-bar {
@@ -3877,70 +3839,6 @@
     </div>
   </div>
 
-  <!-- ===== WORLD VIEW ===== -->
-  <div class="view-world" id="viewWorld">
-    <div class="situations-page">
-      <div class="situations-page-header">
-        <h1>🌍 WORLD</h1>
-        <div class="situations-page-sub">Your environment. Your scenarios.</div>
-      </div>
-
-      <!-- Situations Section -->
-      <div style="margin-top:16px;">
-        <div style="font-size:15px; font-weight:700; color:var(--purple); margin-bottom:4px;">🎭 Situations</div>
-        <div style="font-size:12px; color:var(--dim); margin-bottom:12px;">Describe it. Visualize it. Be ready.</div>
-
-        <div class="situations-count-bar">
-          <span id="situationCountPage">0</span> situations created
-        </div>
-
-        <button class="situation-add-btn" onclick="openSituationModal()" style="margin-top:12px">+ Create Situation</button>
-
-        <div id="situationList" style="margin-top:12px"></div>
-
-        <div class="situations-tip" id="situationsTip">
-          <div class="situations-tip-title">Why this works</div>
-          <div class="situations-tip-text">When you mentally rehearse a situation in detail — the setting, the words, the body language — you're training your brain to recognize and act when the moment arrives. No freezing. No blank mind. You've been here before.</div>
-        </div>
-      </div>
-    </div>
-  </div> <!-- /view-world -->
-
-  <!-- Situation Add/Edit Modal -->
-  <div class="modal-overlay" id="situationModal">
-    <div class="modal" style="text-align: left;">
-      <h3 style="text-align:center;" id="situationModalTitle">Create Situation</h3>
-      <div class="situation-modal-field">
-        <label>Title</label>
-        <input type="text" id="sitTitle" placeholder="Coffee shop encounter, bus stop approach..." maxlength="80">
-      </div>
-      <div class="situation-modal-field">
-        <label>Setting / Location</label>
-        <input type="text" id="sitSetting" placeholder="Busy Starbucks, quiet library, park bench..." maxlength="100">
-      </div>
-      <div class="situation-modal-field">
-        <label>Full Description</label>
-        <textarea id="sitDescription" placeholder="Paint the whole picture. Where are you, where is she, what's happening around you..."></textarea>
-      </div>
-      <div class="situation-modal-field">
-        <label>What I'll Say</label>
-        <textarea id="sitWhatSay" placeholder="Opening line, follow-up, transition to asking for number..." style="min-height:50px"></textarea>
-      </div>
-      <div class="situation-modal-field">
-        <label>What I'll Do</label>
-        <textarea id="sitWhatDo" placeholder="Walk up calmly, eye contact, smile, open posture..." style="min-height:50px"></textarea>
-      </div>
-      <div class="situation-modal-field">
-        <label>Possible Outcomes</label>
-        <textarea id="sitOutcomes" placeholder="Best case: she's engaged, laughs, gives number. Worst case: polite rejection, I walk away proud I tried." style="min-height:50px"></textarea>
-      </div>
-      <div class="modal-actions" style="margin-top:16px">
-        <button class="modal-cancel" onclick="closeSituationModal()">Cancel</button>
-        <button class="modal-confirm" onclick="confirmSituation()">Save</button>
-      </div>
-    </div>
-  </div>
-
   <!-- ===== VIEW: LOOKS ===== -->
   <div class="view-looks" id="viewLooks">
     <div class="header" style="padding-top: 10px;">
@@ -4084,10 +3982,6 @@
       <span class="nav-icon">☕</span>
       Excuses
     </button>
-    <button id="navWorld" onclick="switchView('world')">
-      <span class="nav-icon">🌍</span>
-      World
-    </button>
     <button id="navReviews" onclick="switchView('reviews')">
       <span class="nav-icon">📝</span>
       Reviews
@@ -4216,13 +4110,12 @@
       if (!data.boldnessLogs) data.boldnessLogs = [];
       if (!data.prettyGirls) data.prettyGirls = [];
       if (!data.quickLooks) data.quickLooks = {};
-      if (!data.situations) data.situations = [];
       delete data.settings.girlsPerDay;
       return data;
     }
 
     function createFreshData() {
-      const data = { startDate: todayStr(), settings: { ...DEFAULTS }, days: {}, seen: {}, missed: [], people: [], goAttempts: [], excuses: [], scaredLevel: 5, looks: [], boldnessLogs: [], prettyGirls: [], quickLooks: {}, situations: [] };
+      const data = { startDate: todayStr(), settings: { ...DEFAULTS }, days: {}, seen: {}, missed: [], people: [], goAttempts: [], excuses: [], scaredLevel: 5, looks: [], boldnessLogs: [], prettyGirls: [], quickLooks: {} };
       localStorage.setItem('approachData', JSON.stringify(data));
       return data;
     }
@@ -4982,131 +4875,6 @@
     }
 
     function getUrgencyMultiplier(left, total) { return left <= 0 ? 999 : total / left; }
-
-    // --- SITUATIONS ---
-    let situationModalMode = 'add';
-    let situationEditId = null;
-
-    function openSituationModal(editId) {
-      if (editId) {
-        situationModalMode = 'edit';
-        situationEditId = editId;
-        const data = getData();
-        const sit = data.situations.find(s => s.id === editId);
-        if (!sit) return;
-        document.getElementById('situationModalTitle').textContent = 'Edit Situation';
-        document.getElementById('sitTitle').value = sit.title;
-        document.getElementById('sitSetting').value = sit.setting || '';
-        document.getElementById('sitDescription').value = sit.description || '';
-        document.getElementById('sitWhatSay').value = sit.whatSay || '';
-        document.getElementById('sitWhatDo').value = sit.whatDo || '';
-        document.getElementById('sitOutcomes').value = sit.outcomes || '';
-      } else {
-        situationModalMode = 'add';
-        situationEditId = null;
-        document.getElementById('situationModalTitle').textContent = 'Create Situation';
-        document.getElementById('sitTitle').value = '';
-        document.getElementById('sitSetting').value = '';
-        document.getElementById('sitDescription').value = '';
-        document.getElementById('sitWhatSay').value = '';
-        document.getElementById('sitWhatDo').value = '';
-        document.getElementById('sitOutcomes').value = '';
-      }
-      document.getElementById('situationModal').classList.add('open');
-      setTimeout(() => document.getElementById('sitTitle').focus(), 100);
-    }
-
-    function closeSituationModal() {
-      document.getElementById('situationModal').classList.remove('open');
-    }
-
-    function confirmSituation() {
-      const title = document.getElementById('sitTitle').value.trim();
-      if (!title) { document.getElementById('sitTitle').focus(); return; }
-      const setting = document.getElementById('sitSetting').value.trim();
-      const description = document.getElementById('sitDescription').value.trim();
-      const whatSay = document.getElementById('sitWhatSay').value.trim();
-      const whatDo = document.getElementById('sitWhatDo').value.trim();
-      const outcomes = document.getElementById('sitOutcomes').value.trim();
-      const data = getData();
-
-      if (situationModalMode === 'edit' && situationEditId) {
-        const sit = data.situations.find(s => s.id === situationEditId);
-        if (sit) {
-          sit.title = title;
-          sit.setting = setting;
-          sit.description = description;
-          sit.whatSay = whatSay;
-          sit.whatDo = whatDo;
-          sit.outcomes = outcomes;
-        }
-      } else {
-        data.situations.push({ id: Date.now(), title, setting, description, whatSay, whatDo, outcomes, created: todayStr() });
-      }
-      saveData(data);
-      closeSituationModal();
-      renderSituations();
-    }
-
-    function deleteSituation(id) {
-      if (!confirm('Delete this situation?')) return;
-      const data = getData();
-      data.situations = data.situations.filter(s => s.id !== id);
-      saveData(data);
-      renderSituations();
-    }
-
-    function toggleSituationCard(id) {
-      const card = document.getElementById('sitCard' + id);
-      if (card) card.classList.toggle('expanded');
-    }
-
-    function renderSituations() {
-      const data = getData();
-      const sits = data.situations || [];
-      document.getElementById('situationCountPage').textContent = sits.length;
-
-      const container = document.getElementById('situationList');
-      const tip = document.getElementById('situationsTip');
-
-      if (sits.length === 0) {
-        container.innerHTML = '<div class="situations-empty"><div class="empty-icon">🎭</div>No situations yet.<br>Create one and mentally rehearse your approach.</div>';
-        tip.style.display = '';
-        return;
-      }
-
-      tip.style.display = sits.length > 2 ? 'none' : '';
-
-      let html = '';
-      sits.slice().reverse().forEach(sit => {
-        const fields = [];
-        if (sit.description) fields.push({ label: 'Description', text: sit.description });
-        if (sit.whatSay) fields.push({ label: "What I'll Say", text: sit.whatSay });
-        if (sit.whatDo) fields.push({ label: "What I'll Do", text: sit.whatDo });
-        if (sit.outcomes) fields.push({ label: 'Possible Outcomes', text: sit.outcomes });
-
-        html += `<div class="situation-card" id="sitCard${sit.id}">
-          <div class="situation-card-header" onclick="toggleSituationCard(${sit.id})">
-            <div class="situation-card-title">
-              <span>${escHtml(sit.title)}</span>
-              <span class="expand-icon">▼</span>
-            </div>
-            ${sit.setting ? `<div class="situation-card-setting">📍 ${escHtml(sit.setting)}</div>` : ''}
-          </div>
-          <div class="situation-card-body">
-            ${fields.map(f => `<div class="situation-field">
-              <div class="situation-field-label">${f.label}</div>
-              <div class="situation-field-text">${escHtml(f.text)}</div>
-            </div>`).join('')}
-            <div class="situation-card-actions">
-              <button class="sit-edit" onclick="openSituationModal(${sit.id})">Edit</button>
-              <button class="sit-delete" onclick="deleteSituation(${sit.id})">Delete</button>
-            </div>
-          </div>
-        </div>`;
-      });
-      container.innerHTML = html;
-    }
 
     // --- EXCUSES / PLANS ---
     let excuseModalMode = 'add';
@@ -6301,7 +6069,7 @@
 
     // --- NAVIGATION ---
     function switchView(view) {
-      ['Home','Stats','Excuses','Go','Encounters','Looks','Reviews','World'].forEach(v => {
+      ['Home','Stats','Excuses','Go','Encounters','Looks','Reviews'].forEach(v => {
         const k = v.toLowerCase();
         document.getElementById('view' + v).classList.toggle('active', view === k);
         document.getElementById('nav' + v).classList.toggle('active', view === k);
@@ -6313,7 +6081,6 @@
       if (view === 'encounters') renderEncounters(getData());
       if (view === 'looks') renderLooks();
       if (view === 'reviews') renderReviews();
-      if (view === 'world') renderSituations();
     }
 
     // --- STATS RENDERING ---
