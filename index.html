@@ -2461,7 +2461,9 @@
     .view-stats,
     .view-excuses,
     .view-go,
+    .view-encounters,
     .view-looks,
+    .view-world,
     .view-reviews {
       display: none;
     }
@@ -2470,7 +2472,9 @@
     .view-stats.active,
     .view-excuses.active,
     .view-go.active,
+    .view-encounters.active,
     .view-looks.active,
+    .view-world.active,
     .view-reviews.active {
       display: block;
     }
@@ -4174,6 +4178,10 @@
     <button id="navExcuses" onclick="switchView('excuses')">
       <span class="nav-icon">☕</span>
       Excuses
+    </button>
+    <button id="navWorld" onclick="switchView('world')">
+      <span class="nav-icon">🌍</span>
+      World
     </button>
     <button id="navReviews" onclick="switchView('reviews')">
       <span class="nav-icon">📝</span>
