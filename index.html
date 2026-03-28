@@ -2513,6 +2513,49 @@
     .situations-empty { text-align: center; padding: 40px 20px; color: var(--dim); font-size: 13px; line-height: 1.6; }
     .situations-empty .empty-icon { font-size: 40px; margin-bottom: 10px; }
 
+    /* ===== WORLD TAB SWITCHER ===== */
+    .world-tabs { display: flex; gap: 0; margin-bottom: 18px; border-radius: 12px; overflow: hidden; border: 1px solid var(--border); }
+    .world-tab { flex: 1; padding: 12px 0; text-align: center; font-size: 14px; font-weight: 700; cursor: pointer; background: var(--card); color: var(--dim); border: none; transition: all 0.2s; -webkit-tap-highlight-color: transparent; }
+    .world-tab.active { background: var(--purple); color: #fff; }
+    .world-tab:not(.active):hover { background: rgba(167, 139, 250, 0.1); }
+    .world-section { display: none; }
+    .world-section.active { display: block; }
+
+    /* ===== MANIFEST ===== */
+    .manifest-add-btn { width: 100%; padding: 14px; border: 2px dashed var(--yellow); background: rgba(251, 191, 36, 0.05); border-radius: 12px; color: var(--yellow); font-size: 15px; font-weight: 700; cursor: pointer; -webkit-tap-highlight-color: transparent; transition: transform 0.1s; }
+    .manifest-add-btn:active { transform: scale(0.97); }
+    .manifest-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 10px; overflow: hidden; transition: border-color 0.2s; }
+    .manifest-card:hover { border-color: rgba(251, 191, 36, 0.3); }
+    .manifest-card-header { padding: 14px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+    .manifest-card-title { font-size: 15px; font-weight: 700; color: var(--text); display: flex; justify-content: space-between; align-items: center; }
+    .manifest-card-title .expand-icon { font-size: 12px; color: var(--dim); transition: transform 0.2s; }
+    .manifest-card.expanded .expand-icon { transform: rotate(180deg); }
+    .manifest-card-status { font-size: 11px; margin-top: 4px; font-weight: 600; }
+    .manifest-card-status.pending { color: var(--yellow); }
+    .manifest-card-status.manifested { color: var(--success); }
+    .manifest-card-body { display: none; padding: 0 14px 14px; border-top: 1px solid var(--border); }
+    .manifest-card.expanded .manifest-card-body { display: block; }
+    .manifest-field { margin-top: 10px; }
+    .manifest-field-label { font-size: 11px; font-weight: 700; color: var(--dim); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 3px; }
+    .manifest-field-text { font-size: 13px; color: var(--text); line-height: 1.5; white-space: pre-wrap; }
+    .manifest-card-actions { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+    .manifest-card-actions button { padding: 6px 14px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; border: 1px solid var(--border); background: var(--bg); -webkit-tap-highlight-color: transparent; }
+    .manifest-card-actions .man-edit { color: var(--yellow); border-color: rgba(251, 191, 36, 0.3); }
+    .manifest-card-actions .man-toggle { color: var(--success); border-color: rgba(52, 211, 153, 0.3); }
+    .manifest-card-actions .man-delete { color: var(--danger); border-color: rgba(255, 59, 59, 0.2); }
+    .manifest-count-bar { text-align: center; font-size: 13px; color: var(--dim); padding: 8px 0; }
+    .manifest-count-bar span { color: var(--yellow); font-weight: 700; }
+    .manifest-empty { text-align: center; padding: 40px 20px; color: var(--dim); font-size: 13px; line-height: 1.6; }
+    .manifest-empty .empty-icon { font-size: 40px; margin-bottom: 10px; }
+    .manifest-tip { background: linear-gradient(135deg, rgba(251, 191, 36, 0.06), rgba(251, 191, 36, 0.12)); border: 1px solid rgba(251, 191, 36, 0.15); border-radius: 12px; padding: 14px; margin-top: 20px; }
+    .manifest-tip-title { font-size: 13px; font-weight: 700; color: var(--yellow); margin-bottom: 4px; }
+    .manifest-tip-text { font-size: 12px; color: var(--dim); line-height: 1.5; }
+    .manifest-modal-field { margin: 10px 0; }
+    .manifest-modal-field label { font-size: 12px; color: var(--dim); display: block; margin-bottom: 4px; }
+    .manifest-modal-field input, .manifest-modal-field textarea { width: 100%; background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 10px; color: var(--text); font-size: 13px; font-family: inherit; }
+    .manifest-modal-field textarea { resize: vertical; min-height: 70px; }
+    .manifest-modal-field input::placeholder, .manifest-modal-field textarea::placeholder { color: var(--dim); }
+
     /* ===== GO TAB ACTION HUB ===== */
     .go-status-bar {
       display: flex;
@@ -3885,9 +3928,14 @@
         <div class="situations-page-sub">Your environment. Your scenarios.</div>
       </div>
 
+      <!-- World Sub-tabs -->
+      <div class="world-tabs">
+        <button class="world-tab active" id="worldTabSituations" onclick="switchWorldTab('situations')">🎭 Situations</button>
+        <button class="world-tab" id="worldTabManifest" onclick="switchWorldTab('manifest')">✨ Manifest</button>
+      </div>
+
       <!-- Situations Section -->
-      <div style="margin-top:16px;">
-        <div style="font-size:15px; font-weight:700; color:var(--purple); margin-bottom:4px;">🎭 Situations</div>
+      <div class="world-section active" id="worldSectionSituations">
         <div style="font-size:12px; color:var(--dim); margin-bottom:12px;">Describe it. Visualize it. Be ready.</div>
 
         <div class="situations-count-bar">
@@ -3901,6 +3949,24 @@
         <div class="situations-tip" id="situationsTip">
           <div class="situations-tip-title">Why this works</div>
           <div class="situations-tip-text">When you mentally rehearse a situation in detail — the setting, the words, the body language — you're training your brain to recognize and act when the moment arrives. No freezing. No blank mind. You've been here before.</div>
+        </div>
+      </div>
+
+      <!-- Manifest Section -->
+      <div class="world-section" id="worldSectionManifest">
+        <div style="font-size:12px; color:var(--dim); margin-bottom:12px;">Write the exact situation you want. Claim it. Make it real.</div>
+
+        <div class="manifest-count-bar">
+          <span id="manifestCount">0</span> manifested · <span id="manifestPendingCount">0</span> pending
+        </div>
+
+        <button class="manifest-add-btn" onclick="openManifestModal()" style="margin-top:12px">+ Create Manifest</button>
+
+        <div id="manifestList" style="margin-top:12px"></div>
+
+        <div class="manifest-tip" id="manifestTip">
+          <div class="manifest-tip-title">Why this works</div>
+          <div class="manifest-tip-text">When you write down exactly what you want to happen — in vivid detail — you prime your subconscious to spot opportunities and act. You're not hoping. You're declaring. The clearer the picture, the faster it becomes real.</div>
         </div>
       </div>
     </div>
@@ -3937,6 +4003,33 @@
       <div class="modal-actions" style="margin-top:16px">
         <button class="modal-cancel" onclick="closeSituationModal()">Cancel</button>
         <button class="modal-confirm" onclick="confirmSituation()">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Manifest Add/Edit Modal -->
+  <div class="modal-overlay" id="manifestModal">
+    <div class="modal" style="text-align: left;">
+      <h3 style="text-align:center;" id="manifestModalTitle">Create Manifest</h3>
+      <div class="manifest-modal-field">
+        <label>Title</label>
+        <input type="text" id="manTitle" placeholder="Get her number at the gym, land a date this week..." maxlength="80">
+      </div>
+      <div class="manifest-modal-field">
+        <label>The Exact Situation</label>
+        <textarea id="manSituation" placeholder="Describe exactly what happens. Where you are, what she looks like, what you say, how she reacts. Write it like it already happened."></textarea>
+      </div>
+      <div class="manifest-modal-field">
+        <label>Why I Want This</label>
+        <textarea id="manWhy" placeholder="What does this mean to me? Why does this matter?" style="min-height:50px"></textarea>
+      </div>
+      <div class="manifest-modal-field">
+        <label>By When (optional)</label>
+        <input type="date" id="manDeadline">
+      </div>
+      <div class="modal-actions" style="margin-top:16px">
+        <button class="modal-cancel" onclick="closeManifestModal()">Cancel</button>
+        <button class="modal-confirm" onclick="confirmManifest()">Save</button>
       </div>
     </div>
   </div>
@@ -4217,12 +4310,13 @@
       if (!data.prettyGirls) data.prettyGirls = [];
       if (!data.quickLooks) data.quickLooks = {};
       if (!data.situations) data.situations = [];
+      if (!data.manifests) data.manifests = [];
       delete data.settings.girlsPerDay;
       return data;
     }
 
     function createFreshData() {
-      const data = { startDate: todayStr(), settings: { ...DEFAULTS }, days: {}, seen: {}, missed: [], people: [], goAttempts: [], excuses: [], scaredLevel: 5, looks: [], boldnessLogs: [], prettyGirls: [], quickLooks: {}, situations: [] };
+      const data = { startDate: todayStr(), settings: { ...DEFAULTS }, days: {}, seen: {}, missed: [], people: [], goAttempts: [], excuses: [], scaredLevel: 5, looks: [], boldnessLogs: [], prettyGirls: [], quickLooks: {}, situations: [], manifests: [] };
       localStorage.setItem('approachData', JSON.stringify(data));
       return data;
     }
@@ -5101,6 +5195,153 @@
             <div class="situation-card-actions">
               <button class="sit-edit" onclick="openSituationModal(${sit.id})">Edit</button>
               <button class="sit-delete" onclick="deleteSituation(${sit.id})">Delete</button>
+            </div>
+          </div>
+        </div>`;
+      });
+      container.innerHTML = html;
+    }
+
+    // --- WORLD TAB SWITCHER ---
+    function switchWorldTab(tab) {
+      document.getElementById('worldTabSituations').classList.toggle('active', tab === 'situations');
+      document.getElementById('worldTabManifest').classList.toggle('active', tab === 'manifest');
+      document.getElementById('worldSectionSituations').classList.toggle('active', tab === 'situations');
+      document.getElementById('worldSectionManifest').classList.toggle('active', tab === 'manifest');
+      if (tab === 'manifest') renderManifests();
+    }
+
+    // --- MANIFESTS ---
+    let manifestModalMode = 'add';
+    let manifestEditId = null;
+
+    function openManifestModal(editId) {
+      if (editId) {
+        manifestModalMode = 'edit';
+        manifestEditId = editId;
+        const data = getData();
+        const m = data.manifests.find(x => x.id === editId);
+        if (!m) return;
+        document.getElementById('manifestModalTitle').textContent = 'Edit Manifest';
+        document.getElementById('manTitle').value = m.title;
+        document.getElementById('manSituation').value = m.situation || '';
+        document.getElementById('manWhy').value = m.why || '';
+        document.getElementById('manDeadline').value = m.deadline || '';
+      } else {
+        manifestModalMode = 'add';
+        manifestEditId = null;
+        document.getElementById('manifestModalTitle').textContent = 'Create Manifest';
+        document.getElementById('manTitle').value = '';
+        document.getElementById('manSituation').value = '';
+        document.getElementById('manWhy').value = '';
+        document.getElementById('manDeadline').value = '';
+      }
+      document.getElementById('manifestModal').classList.add('open');
+      setTimeout(() => document.getElementById('manTitle').focus(), 100);
+    }
+
+    function closeManifestModal() {
+      document.getElementById('manifestModal').classList.remove('open');
+    }
+
+    function confirmManifest() {
+      const title = document.getElementById('manTitle').value.trim();
+      if (!title) { document.getElementById('manTitle').focus(); return; }
+      const situation = document.getElementById('manSituation').value.trim();
+      const why = document.getElementById('manWhy').value.trim();
+      const deadline = document.getElementById('manDeadline').value;
+      const data = getData();
+
+      if (manifestModalMode === 'edit' && manifestEditId) {
+        const m = data.manifests.find(x => x.id === manifestEditId);
+        if (m) {
+          m.title = title;
+          m.situation = situation;
+          m.why = why;
+          m.deadline = deadline;
+        }
+      } else {
+        data.manifests.push({ id: Date.now(), title, situation, why, deadline, status: 'pending', created: todayStr() });
+      }
+      saveData(data);
+      closeManifestModal();
+      renderManifests();
+    }
+
+    function deleteManifest(id) {
+      if (!confirm('Delete this manifest?')) return;
+      const data = getData();
+      data.manifests = data.manifests.filter(x => x.id !== id);
+      saveData(data);
+      renderManifests();
+    }
+
+    function toggleManifestStatus(id) {
+      const data = getData();
+      const m = data.manifests.find(x => x.id === id);
+      if (!m) return;
+      m.status = m.status === 'manifested' ? 'pending' : 'manifested';
+      if (m.status === 'manifested') m.manifestedDate = todayStr();
+      saveData(data);
+      renderManifests();
+      if (navigator.vibrate) navigator.vibrate(30);
+    }
+
+    function toggleManifestCard(id) {
+      const card = document.getElementById('manCard' + id);
+      if (card) card.classList.toggle('expanded');
+    }
+
+    function renderManifests() {
+      const data = getData();
+      const mans = data.manifests || [];
+      const pending = mans.filter(m => m.status !== 'manifested');
+      const done = mans.filter(m => m.status === 'manifested');
+
+      document.getElementById('manifestCount').textContent = done.length;
+      document.getElementById('manifestPendingCount').textContent = pending.length;
+
+      const container = document.getElementById('manifestList');
+      const tip = document.getElementById('manifestTip');
+
+      if (mans.length === 0) {
+        container.innerHTML = '<div class="manifest-empty"><div class="empty-icon">✨</div>No manifests yet.<br>Write exactly what you want to happen. Own it.</div>';
+        tip.style.display = '';
+        return;
+      }
+
+      tip.style.display = mans.length > 2 ? 'none' : '';
+
+      let html = '';
+      // Show pending first, then manifested
+      [...pending, ...done].reverse().forEach(m => {
+        const fields = [];
+        if (m.situation) fields.push({ label: 'The Exact Situation', text: m.situation });
+        if (m.why) fields.push({ label: 'Why I Want This', text: m.why });
+        if (m.deadline) fields.push({ label: 'By When', text: m.deadline });
+        if (m.manifestedDate) fields.push({ label: 'Manifested On', text: m.manifestedDate });
+
+        const statusLabel = m.status === 'manifested' ? '✅ Manifested' : '⏳ Pending';
+        const statusClass = m.status === 'manifested' ? 'manifested' : 'pending';
+        const toggleLabel = m.status === 'manifested' ? 'Undo' : '✅ Mark Manifested';
+
+        html += `<div class="manifest-card" id="manCard${m.id}">
+          <div class="manifest-card-header" onclick="toggleManifestCard(${m.id})">
+            <div class="manifest-card-title">
+              <span>${escHtml(m.title)}</span>
+              <span class="expand-icon">▼</span>
+            </div>
+            <div class="manifest-card-status ${statusClass}">${statusLabel}</div>
+          </div>
+          <div class="manifest-card-body">
+            ${fields.map(f => `<div class="manifest-field">
+              <div class="manifest-field-label">${f.label}</div>
+              <div class="manifest-field-text">${escHtml(f.text)}</div>
+            </div>`).join('')}
+            <div class="manifest-card-actions">
+              <button class="man-toggle" onclick="toggleManifestStatus(${m.id})">${toggleLabel}</button>
+              <button class="man-edit" onclick="openManifestModal(${m.id})">Edit</button>
+              <button class="man-delete" onclick="deleteManifest(${m.id})">Delete</button>
             </div>
           </div>
         </div>`;
@@ -6313,7 +6554,7 @@
       if (view === 'encounters') renderEncounters(getData());
       if (view === 'looks') renderLooks();
       if (view === 'reviews') renderReviews();
-      if (view === 'world') renderSituations();
+      if (view === 'world') { renderSituations(); renderManifests(); }
     }
 
     // --- STATS RENDERING ---
