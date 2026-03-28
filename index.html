@@ -2462,8 +2462,7 @@
     .view-excuses,
     .view-go,
     .view-looks,
-    .view-reviews,
-    .view-world {
+    .view-reviews {
       display: none;
     }
 
@@ -2472,8 +2471,7 @@
     .view-excuses.active,
     .view-go.active,
     .view-looks.active,
-    .view-reviews.active,
-    .view-world.active {
+    .view-reviews.active {
       display: block;
     }
 
@@ -4176,10 +4174,6 @@
     <button id="navExcuses" onclick="switchView('excuses')">
       <span class="nav-icon">☕</span>
       Excuses
-    </button>
-    <button id="navWorld" onclick="switchView('world')">
-      <span class="nav-icon">🌍</span>
-      World
     </button>
     <button id="navReviews" onclick="switchView('reviews')">
       <span class="nav-icon">📝</span>
@@ -6542,7 +6536,7 @@
 
     // --- NAVIGATION ---
     function switchView(view) {
-      ['Home','Stats','Excuses','Go','Encounters','Looks','Reviews','World'].forEach(v => {
+      ['Home','Stats','Excuses','Go','Encounters','Looks','Reviews'].forEach(v => {
         const k = v.toLowerCase();
         document.getElementById('view' + v).classList.toggle('active', view === k);
         document.getElementById('nav' + v).classList.toggle('active', view === k);
