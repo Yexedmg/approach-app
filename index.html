@@ -7,6 +7,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="theme-color" content="#080814">
+  <script>if(localStorage.getItem('approachTheme')==='light')document.documentElement.style.background='#eeeef6';</script>
   <link rel="manifest" href="manifest.json">
   <link rel="apple-touch-icon" href="icon-192.png">
   <title>Approach</title>
@@ -38,6 +39,51 @@
       --radius-lg: 22px;
       --radius-md: 16px;
       --radius-sm: 12px;
+    }
+
+    body.light {
+      --bg: rgba(242, 242, 250, 0.92);
+      --card: rgba(0, 0, 0, 0.045);
+      --border: rgba(0, 0, 0, 0.10);
+      --text: rgba(0, 0, 0, 0.88);
+      --dim: rgba(0, 0, 0, 0.44);
+      --accent-glow: rgba(255, 107, 53, 0.18);
+      --glass-bg: rgba(255, 255, 255, 0.65);
+      --glass-border: rgba(0, 0, 0, 0.10);
+      --glass-specular: inset 0 1px 0 rgba(255, 255, 255, 0.85);
+      background: #eeeef6;
+    }
+
+    body.light::before {
+      background:
+        radial-gradient(ellipse 65% 55% at 20% 25%, rgba(180, 140, 255, 0.18) 0%, transparent 100%),
+        radial-gradient(ellipse 55% 65% at 80% 75%, rgba(255, 120, 160, 0.12) 0%, transparent 100%),
+        radial-gradient(ellipse 75% 45% at 65% 15%, rgba(100, 160, 255, 0.12) 0%, transparent 100%),
+        radial-gradient(ellipse 45% 55% at 15% 80%, rgba(80, 210, 190, 0.10) 0%, transparent 100%),
+        radial-gradient(ellipse 50% 50% at 50% 50%, rgba(180, 150, 255, 0.08) 0%, transparent 70%);
+    }
+
+    body.light .modal-overlay {
+      background: rgba(180, 180, 200, 0.55);
+    }
+
+    body.light .modal {
+      background: rgba(245, 245, 255, 0.96);
+    }
+
+    body.light .bottom-nav {
+      background: rgba(230, 230, 245, 0.82);
+      border-color: rgba(0, 0, 0, 0.10);
+      box-shadow: 0 10px 50px rgba(0,0,0,0.12), 0 2px 12px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.9);
+    }
+
+    body.light .bottom-nav button {
+      color: rgba(0, 0, 0, 0.38);
+    }
+
+    body.light .rc-odds-btn {
+      border-color: rgba(0,0,0,0.10);
+      background: rgba(0,0,0,0.04);
     }
 
     body {
@@ -2018,6 +2064,12 @@
       display: block;
     }
 
+    #engagementBody.open,
+    #lifeHardBody.open,
+    #featureRequestsBody.open {
+      display: block !important;
+    }
+
     .setting-row {
       display: flex;
       justify-content: space-between;
@@ -2409,8 +2461,8 @@
     }
 
     .go-entry {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.1);
+      background: var(--card);
+      border: 1px solid var(--border);
       border-radius: var(--radius-sm);
       padding: 12px;
       margin-bottom: 8px;
@@ -2588,26 +2640,74 @@
       transform: scale(0.94);
     }
 
-    .view-home,
+    .view-approach,
     .view-stats,
+    .view-report,
+    .view-internal,
     .view-excuses,
-    .view-go,
     .view-encounters,
     .view-looks,
-    .view-world,
-    .view-reviews {
+    .view-reviews,
+    .view-openers,
+    .view-pretty-girls,
+    .view-age-ratings,
+    .view-seen-again,
+    .view-prospects,
+    .view-world {
       display: none;
     }
 
-    .view-home.active,
+    .view-approach.active,
     .view-stats.active,
+    .view-report.active,
+    .view-internal.active,
     .view-excuses.active,
-    .view-go.active,
     .view-encounters.active,
     .view-looks.active,
-    .view-world.active,
-    .view-reviews.active {
+    .view-reviews.active,
+    .view-openers.active,
+    .view-pretty-girls.active,
+    .view-age-ratings.active,
+    .view-seen-again.active,
+    .view-prospects.active,
+    .view-world.active {
       display: block;
+    }
+
+    /* Hamburger menu drawer */
+    .report-hamburger-btn {
+      position: absolute; right: 16px; top: 16px;
+      background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 10px; color: var(--text); font-size: 20px;
+      width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;
+      cursor: pointer; -webkit-tap-highlight-color: transparent;
+    }
+    .report-drawer-overlay {
+      display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 200;
+    }
+    .report-drawer-overlay.open { display: block; }
+    .report-drawer-panel {
+      position: fixed; top: 0; right: -280px; width: 260px; height: 100vh;
+      background: rgba(16,16,36,0.98); border-left: 1px solid rgba(255,255,255,0.1);
+      padding: 60px 20px 30px; z-index: 201; transition: right 0.25s ease;
+      display: flex; flex-direction: column; gap: 10px;
+    }
+    .report-drawer-panel.open { right: 0; }
+    .report-drawer-title {
+      font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px;
+      color: var(--dim); margin-bottom: 8px;
+    }
+    .report-drawer-link {
+      display: block; width: 100%; text-align: left;
+      padding: 14px 16px; border-radius: 12px;
+      background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+      color: var(--text); font-size: 15px; font-weight: 600; cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .report-drawer-link:active { background: rgba(255,107,53,0.15); border-color: var(--accent); }
+    .sub-page-back {
+      background: none; border: none; color: var(--accent); font-size: 14px;
+      font-weight: 600; cursor: pointer; padding: 8px 0; margin-bottom: 8px;
     }
 
     /* ===== WORLD TAB SWITCHER ===== */
@@ -2618,7 +2718,7 @@
     .world-section { display: none; }
     .world-section.active { display: block; }
 
-    /* ===== SITUATIONS VIEW ===== */
+    /* ===== SITUATIONS ===== */
     .situations-page { max-width: 430px; margin: 0 auto; padding: 16px; padding-bottom: 130px; position: relative; z-index: 1; }
     .situations-page-header { text-align: center; margin-bottom: 16px; }
     .situations-page-header h1 { font-size: 22px; font-weight: 800; letter-spacing: 1px; }
@@ -2695,8 +2795,8 @@
       align-items: center;
       justify-content: center;
       gap: 0;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.08);
+      background: var(--card);
+      border: 1px solid var(--border);
       border-radius: 14px;
       padding: 14px 0;
       margin-bottom: 16px;
@@ -2711,27 +2811,27 @@
     .go-status-num {
       font-size: 22px;
       font-weight: 700;
-      color: #fff;
+      color: var(--text);
       line-height: 1;
     }
     .go-status-lbl {
       font-size: 11px;
-      color: rgba(255,255,255,0.4);
+      color: var(--dim);
       text-transform: uppercase;
       letter-spacing: 0.05em;
     }
     .go-status-divider {
       width: 1px;
       height: 32px;
-      background: rgba(255,255,255,0.1);
+      background: var(--border);
     }
     .go-trigger-tab {
       width: 100%;
       margin-bottom: 20px;
     }
     .go-toolkit-section {
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.07);
+      background: var(--card);
+      border: 1px solid var(--border);
       border-radius: 16px;
       padding: 16px;
       margin-bottom: 14px;
@@ -2742,13 +2842,13 @@
     .go-toolkit-title {
       font-size: 15px;
       font-weight: 700;
-      color: #fff;
+      color: var(--text);
       letter-spacing: 0.02em;
       margin-bottom: 2px;
     }
     .go-toolkit-sub {
       font-size: 12px;
-      color: rgba(255,255,255,0.4);
+      color: var(--dim);
     }
     /* Fear cards */
     .go-fear-cards {
@@ -2757,8 +2857,8 @@
       gap: 8px;
     }
     .go-fear-card {
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.08);
+      background: var(--card);
+      border: 1px solid var(--border);
       border-radius: 10px;
       overflow: hidden;
       cursor: pointer;
@@ -2774,12 +2874,12 @@
       padding: 11px 14px;
       font-size: 14px;
       font-weight: 500;
-      color: rgba(255,255,255,0.85);
+      color: var(--text);
       user-select: none;
     }
     .go-fear-card-arrow {
       font-size: 11px;
-      color: rgba(255,255,255,0.3);
+      color: var(--dim);
       transition: transform 0.2s;
     }
     .go-fear-card.open .go-fear-card-arrow {
@@ -2791,8 +2891,8 @@
       padding: 0 14px 12px;
       font-size: 13px;
       line-height: 1.55;
-      color: rgba(255,255,255,0.7);
-      border-top: 1px solid rgba(255,255,255,0.06);
+      color: var(--dim);
+      border-top: 1px solid var(--border);
       padding-top: 10px;
     }
     .go-fear-card.open .go-fear-card-reframe {
@@ -2816,14 +2916,14 @@
     }
     .go-plans-empty {
       font-size: 13px;
-      color: rgba(255,255,255,0.3);
+      color: var(--dim);
       padding: 4px 0;
     }
     .go-plans-edit-btn {
       background: none;
-      border: 1px solid rgba(255,255,255,0.12);
+      border: 1px solid var(--border);
       border-radius: 8px;
-      color: rgba(255,255,255,0.5);
+      color: var(--dim);
       font-size: 13px;
       padding: 7px 14px;
       cursor: pointer;
@@ -2832,8 +2932,8 @@
       transition: border-color 0.15s, color 0.15s;
     }
     .go-plans-edit-btn:active {
-      border-color: rgba(255,255,255,0.3);
-      color: rgba(255,255,255,0.8);
+      border-color: var(--text);
+      color: var(--text);
     }
     /* Opening lines */
     .go-openers-list {
@@ -2842,21 +2942,21 @@
       gap: 8px;
     }
     .go-opener-card {
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.07);
+      background: var(--card);
+      border: 1px solid var(--border);
       border-radius: 10px;
       padding: 12px 14px;
     }
     .go-opener-text {
       font-size: 13px;
-      color: rgba(255,255,255,0.85);
+      color: var(--text);
       line-height: 1.5;
       margin-bottom: 5px;
       font-style: italic;
     }
     .go-opener-note {
       font-size: 11px;
-      color: rgba(255,255,255,0.35);
+      color: var(--dim);
     }
 
     /* ===== STATS PAGE ===== */
@@ -3431,42 +3531,117 @@
 </head>
 
 <body>
-  <!-- ===== HOME VIEW ===== -->
-  <div class="view-home active" id="viewHome">
+  <!-- ===== APPROACH VIEW (default) ===== -->
+  <div class="view-approach active" id="viewApproach">
     <div class="app">
       <div class="header">
         <h1>APPROACH</h1>
         <div class="subtitle">The window is closing</div>
       </div>
 
-      <div class="countdown-section">
-        <div class="ring-container">
-          <svg width="180" height="180" viewBox="0 0 180 180">
-            <circle class="ring-bg" cx="90" cy="90" r="78" />
-            <circle class="ring-progress" id="ringProgress" cx="90" cy="90" r="78" stroke-dasharray="490"
-              stroke-dashoffset="0" />
-          </svg>
-          <div class="ring-text">
-            <div class="days-left" id="daysLeft">--</div>
-            <div class="days-label">days left</div>
+      <!-- Scared Stat -->
+      <div class="scared-widget">
+        <div class="scared-label-col">
+          <div class="scared-title">😰 Scared Level</div>
+          <div class="scared-desc" id="scaredDesc">Honest self-assessment.<br>Drops when you actually GO.</div>
+        </div>
+        <div class="scared-controls">
+          <button class="scared-btn" onclick="adjustScaredLevel(-1)">−</button>
+          <div class="scared-num-wrap">
+            <div class="scared-num" id="scaredNum">5</div>
+            <div class="scared-out-of">out of 10</div>
           </div>
+          <button class="scared-btn" onclick="adjustScaredLevel(1)">+</button>
         </div>
       </div>
 
-      <div class="truth-banner">
-        <div class="truth-text" id="truthText"></div>
-        <div class="truth-sub" id="truthSub"></div>
+      <!-- Primary CTA -->
+      <button class="go-trigger go-trigger-tab" onclick="openGoMode()">🔥 I SEE HER — GO MODE</button>
+      <button onclick="openPrettyModal()" style="width:100%; margin-top:8px; padding:12px; border-radius:12px; border:1px solid var(--border); background:var(--card); color:var(--dim); font-size:13px; font-weight:600; cursor:pointer;">✨ Log a Pretty Girl (didn't approach)</button>
+
+      <!-- Status Bar -->
+      <div class="go-status-bar">
+        <div class="go-status-item">
+          <span class="go-status-num" id="goTabTodayCount">0</span>
+          <span class="go-status-lbl">today</span>
+        </div>
+        <div class="go-status-divider"></div>
+        <div class="go-status-item">
+          <span class="go-status-num" id="goTabDaysLeft">—</span>
+          <span class="go-status-lbl">days left</span>
+        </div>
+        <div class="go-status-divider"></div>
+        <div class="go-status-item">
+          <span class="go-status-num" id="goTabPower">0</span>
+          <span class="go-status-lbl">power</span>
+        </div>
       </div>
 
-      <!-- Boldness Section -->
-      <div class="today-section" style="margin-top: 16px; text-align: center;">
-        <h2 style="font-size:16px; color:var(--accent);">Boldness Stat</h2>
-        <div style="font-size:42px; font-weight:800; margin:10px 0; color:var(--accent);" id="boldnessScore">0</div>
-        <div style="font-size:12px; color:var(--dim); margin-bottom:16px;">This increases your boldness stat that decreases through the days if you don't keep it up.</div>
-        <button class="btn-add" style="width: 100%; height: 40px; border-radius: 10px; font-size: 14px;" onclick="openBoldnessModal()">
-          + Log Bold Action
-        </button>
-        <div id="boldnessTimeline" style="margin-top:20px; text-align:left;"></div>
+      <!-- Fear Kit -->
+      <div class="go-toolkit-section">
+        <div class="go-toolkit-header">
+          <div class="go-toolkit-title">Fear Kit</div>
+          <div class="go-toolkit-sub">Tap a fear. Read the reframe. Go anyway.</div>
+        </div>
+        <div class="go-fear-cards" id="goFearCards"></div>
+      </div>
+
+      <!-- My Plans (Excuses redirect) -->
+      <div class="go-toolkit-section">
+        <div class="go-toolkit-header">
+          <div class="go-toolkit-title">My Plans</div>
+          <div class="go-toolkit-sub">What you'll invite her to.</div>
+        </div>
+        <div class="go-plans-chips" id="goPlansChips">
+          <div class="go-plans-empty">No plans yet.</div>
+        </div>
+        <button class="go-plans-edit-btn" onclick="switchView('excuses')">+ Add plans</button>
+      </div>
+
+      <!-- Redirect to Reasons -->
+      <button class="go-plans-edit-btn" style="width:100%; margin-top:12px; background:rgba(255,107,53,0.08); border:1px solid rgba(255,107,53,0.25); color:var(--accent); padding:12px; border-radius:12px; font-size:14px; font-weight:600; cursor:pointer;" onclick="switchView('report')">
+        Your Reasons Not to Approach →
+      </button>
+
+      <!-- Opening Lines (2 random) -->
+      <div class="go-toolkit-section">
+        <div class="go-toolkit-header">
+          <div class="go-toolkit-title">Opening Lines</div>
+          <div class="go-toolkit-sub">Steal one. Say it. Works every time.</div>
+        </div>
+        <div class="go-openers-list" id="goRandomOpeners"></div>
+        <button class="go-plans-edit-btn" style="width:100%; margin-top:8px;" onclick="switchView('openers')">See all opening lines →</button>
+      </div>
+
+      <!-- GO MODE History -->
+      <div class="go-history" id="goHistorySection" style="display:none">
+        <div class="go-history-toggle" onclick="toggleGoHistory()">
+          <h3>🔥 Go Mode Log</h3>
+          <span class="count-badge" id="goHistoryCount">0</span>
+        </div>
+        <div class="go-history-list" id="goHistoryList"></div>
+      </div>
+
+    </div>
+  </div> <!-- /view-approach -->
+
+  <!-- ===== REPORT VIEW ===== -->
+  <div class="view-report" id="viewReport">
+    <!-- Hamburger drawer overlay -->
+    <div class="report-drawer-overlay" id="reportDrawerOverlay" onclick="closeReportDrawer()"></div>
+    <div class="report-drawer-panel" id="reportDrawerPanel">
+      <div class="report-drawer-title">Report Sections</div>
+      <button class="report-drawer-link" onclick="switchView('prettygirls'); closeReportDrawer()">Pretty Girls Seen</button>
+      <button class="report-drawer-link" onclick="switchView('ageratings'); closeReportDrawer()">Age Distribution & Ratings</button>
+      <button class="report-drawer-link" onclick="switchView('seenagain'); closeReportDrawer()">Seen Again Tracker</button>
+      <button class="report-drawer-link" onclick="switchView('prospects'); closeReportDrawer()">Prospects</button>
+    </div>
+
+    <div class="app">
+      <div class="header" style="position:relative;">
+        <h1>REPORT</h1>
+        <div class="subtitle">Track your numbers</div>
+        <button class="report-hamburger-btn" onclick="openReportDrawer()">☰</button>
       </div>
 
       <!-- Today: Dual Counter -->
@@ -3508,25 +3683,17 @@
         </div>
       </div>
 
-      <!-- GO MODE Trigger -->
-      <button class="go-trigger" id="goTrigger" onclick="openGoMode()">🔥 I SEE HER — GO MODE</button>
-
-
-      <!-- GO MODE History -->
-      <div class="go-history" id="goHistorySection" style="display:none">
-        <div class="go-history-toggle" onclick="toggleGoHistory()">
-          <h3>🔥 Go Mode Log</h3>
-          <span class="count-badge" id="goHistoryCount">0</span>
-        </div>
-        <div class="go-history-list" id="goHistoryList"></div>
-      </div>
-
       <!-- Today: Missed -->
       <div class="missed-section">
-        <h2>Log a Miss</h2>
-        <div class="missed-sub">Saw someone, said nothing. Log it. Own it.</div>
-        <button class="missed-btn" onclick="openMissedModal()">+ I let one go</button>
-        <div class="missed-today-count">Today: <span id="missedTodayCount">0</span> missed</div>
+        <h2>Saw, Didn't Act</h2>
+        <button class="missed-btn" onclick="openMissedModal()">+ Log one</button>
+        <div class="missed-today-count">Today: <span id="missedTodayCount">0</span> saw, didn't act</div>
+      </div>
+
+      <!-- Reasons Breakdown (renamed from Excuses) -->
+      <div class="excuse-section" id="excuseSection" style="display:none">
+        <h3>Your Reasons — Ranked</h3>
+        <div id="excuseBars"></div>
       </div>
 
       <!-- Re-encounter Reality Check -->
@@ -3535,7 +3702,7 @@
         <div class="reencounter-stats">
           <div class="reencounter-stat">
             <div class="rs-value" id="reTotalMissed" style="color:var(--danger)">0</div>
-            <div class="rs-label">Total Missed</div>
+            <div class="rs-label">Saw, Didn't Act</div>
           </div>
           <div class="reencounter-stat">
             <div class="rs-value" id="reSawAgain" style="color:var(--yellow)">0</div>
@@ -3549,16 +3716,10 @@
         <div class="reencounter-verdict" id="reVerdict"></div>
       </div>
 
-      <!-- Excuse Breakdown -->
-      <div class="excuse-section" id="excuseSection" style="display:none">
-        <h3>Your Excuses — Ranked</h3>
-        <div id="excuseBars"></div>
-      </div>
-
       <!-- Missed Log -->
       <div class="missed-log" id="missedLogSection" style="display:none">
         <div class="missed-log-toggle" onclick="toggleMissedLog()">
-          <h3>Missed Log</h3>
+          <h3>Saw, Didn't Act — Log</h3>
           <span class="count-badge" id="missedLogCount">0 entries</span>
         </div>
         <div class="missed-log-list" id="missedLogList"></div>
@@ -3575,117 +3736,104 @@
         <div class="people-list" id="peopleList"></div>
       </div>
 
-      <!-- Person Add/Interaction Modal -->
-      <div class="modal-overlay" id="personModal">
-        <div class="person-modal">
-          <h3 id="personModalTitle">Log a Person</h3>
-          <input type="text" id="personNickname" placeholder="Quick ID: Red jacket, Starbucks" maxlength="60">
-          <div class="status-toggle" id="personStatusToggle">
-            <button onclick="setPersonStatus('seen')" id="pStatusSeen" class="active-seen">Just Seen</button>
-            <button onclick="setPersonStatus('talked')" id="pStatusTalked">Talked To</button>
-          </div>
-          <div class="modal-datetime-row">
-            <div class="datetime-field">
-              <label>Date</label>
-              <input type="date" id="personDate">
-            </div>
-            <div class="datetime-field">
-              <label>Time</label>
-              <input type="time" id="personTime">
-            </div>
-          </div>
-          <input type="text" id="personLocation" placeholder="Location: Starbucks, library, bus stop..." maxlength="80">
-          <textarea id="personNote" placeholder="Optional note..."></textarea>
-          <div class="modal-actions">
-            <button class="modal-cancel" onclick="closePersonModal()">Cancel</button>
-            <button class="modal-confirm" id="personModalConfirm" onclick="confirmPerson()">Log It</button>
+      <!-- Prospects, Age Distribution, Pretty Girls, Seen Again moved to hamburger menu sub-pages -->
+
+    </div>
+  </div> <!-- /view-report -->
+
+  <!-- ===== PRETTY GIRLS SEEN SUB-PAGE ===== -->
+  <div class="view-pretty-girls" id="viewPrettygirls">
+    <div class="app">
+      <button class="sub-page-back" onclick="switchView('report')">← Back to Report</button>
+      <div class="header">
+        <h1>Pretty Girls Seen</h1>
+        <div class="subtitle">Beautiful girls you noticed</div>
+      </div>
+      <button class="people-add-btn" onclick="openPrettyModal()" style="margin-bottom:16px;">+ Log a Pretty Girl</button>
+      <div id="pgAgeStats" style="margin-bottom:16px;"></div>
+      <div id="pgList"></div>
+    </div>
+  </div>
+
+  <!-- ===== AGE DISTRIBUTION & RATINGS SUB-PAGE ===== -->
+  <div class="view-age-ratings" id="viewAgeratings">
+    <div class="app">
+      <button class="sub-page-back" onclick="switchView('report')">← Back to Report</button>
+      <div class="header">
+        <h1>Age Distribution & Ratings</h1>
+        <div class="subtitle">Analytics on all logged looks</div>
+      </div>
+      <div id="arChart" style="margin-bottom:16px;"></div>
+      <div id="arList"></div>
+    </div>
+  </div>
+
+  <!-- ===== SEEN AGAIN TRACKER SUB-PAGE ===== -->
+  <div class="view-seen-again" id="viewSeenagain">
+    <div class="app">
+      <button class="sub-page-back" onclick="switchView('report')">← Back to Report</button>
+      <div class="header">
+        <h1>Seen Again Tracker</h1>
+        <div class="subtitle">How many times did they reappear?</div>
+      </div>
+      <div id="saStats" style="margin-bottom:12px; font-size:13px; color:var(--dim);"></div>
+      <div id="saChart"></div>
+    </div>
+  </div>
+
+  <!-- ===== PROSPECTS SUB-PAGE ===== -->
+  <div class="view-prospects" id="viewProspects">
+    <div class="app">
+      <button class="sub-page-back" onclick="switchView('report')">← Back to Report</button>
+      <div class="header">
+        <h1>Prospects</h1>
+        <div class="subtitle">Girls you've seen and are curious about</div>
+      </div>
+      <div style="font-size:12px; color:var(--dim); margin-bottom:12px;">Not necessarily pursuing — just don't want to forget them.</div>
+      <button class="people-add-btn" onclick="openProspectModal()" style="margin-bottom:16px;">+ Add Prospect</button>
+      <div class="people-list" id="prospectsList"></div>
+    </div>
+  </div>
+
+  <!-- ===== INTERNAL VIEW ===== -->
+  <div class="view-internal" id="viewInternal">
+    <div class="app">
+      <div class="header">
+        <h1>INTERNAL</h1>
+        <div class="subtitle">Your inner game</div>
+      </div>
+
+      <div class="countdown-section">
+        <div class="ring-container">
+          <svg width="180" height="180" viewBox="0 0 180 180">
+            <circle class="ring-bg" cx="90" cy="90" r="78" />
+            <circle class="ring-progress" id="ringProgress" cx="90" cy="90" r="78" stroke-dasharray="490"
+              stroke-dashoffset="0" />
+          </svg>
+          <div class="ring-text">
+            <div class="days-left" id="daysLeft">--</div>
+            <div class="days-label">days left</div>
           </div>
         </div>
       </div>
 
-      <!-- Interaction Note Modal -->
-      <div class="modal-overlay" id="interactionModal">
-        <div class="person-modal">
-          <h3>What happened?</h3>
-          <div class="modal-datetime-row">
-            <div class="datetime-field">
-              <label>Date</label>
-              <input type="date" id="interactionDate">
-            </div>
-            <div class="datetime-field">
-              <label>Time</label>
-              <input type="time" id="interactionTime">
-            </div>
-          </div>
-          <input type="text" id="interactionLocation" placeholder="Location: Starbucks, library, bus stop..."
-            maxlength="80">
-          <textarea id="interactionNote"
-            placeholder="She lent me her phone, got her number, quick chat about..."></textarea>
-          
-          <div class="modal-actions" style="margin-top:12px;">
-            <button class="modal-cancel" onclick="closeInteractionModal()">Cancel</button>
-            <button class="modal-confirm" onclick="confirmInteraction()">Log It</button>
-          </div>
-        </div>
+      <div class="truth-banner">
+        <div class="truth-text" id="truthText"></div>
+        <div class="truth-sub" id="truthSub"></div>
       </div>
 
-      <!-- Sighting Modal -->
-      <div class="modal-overlay" id="sightingModal">
-        <div class="person-modal">
-          <h3>Saw her again</h3>
-          <div class="modal-datetime-row">
-            <div class="datetime-field">
-              <label>Date</label>
-              <input type="date" id="sightingDate">
-            </div>
-            <div class="datetime-field">
-              <label>Time</label>
-              <input type="time" id="sightingTime">
-            </div>
-          </div>
-          <input type="text" id="sightingLocation" placeholder="Location (optional)" maxlength="80">
-          <textarea id="sightingNote" placeholder="Optional note..."></textarea>
-          <div class="modal-actions">
-            <button class="modal-cancel" onclick="closeSightingModal()">Cancel</button>
-            <button class="modal-confirm" onclick="confirmSighting()">Log It</button>
-          </div>
-        </div>
+      <!-- Boldness Section -->
+      <div class="today-section" style="margin-top: 16px; text-align: center;">
+        <h2 style="font-size:16px; color:var(--accent);">Boldness Stat</h2>
+        <div style="font-size:42px; font-weight:800; margin:10px 0; color:var(--accent);" id="boldnessScore">0</div>
+        <div style="font-size:12px; color:var(--dim); margin-bottom:16px;">This increases your boldness stat that decreases through the days if you don't keep it up.</div>
+        <button class="btn-add" style="width: 100%; height: 40px; border-radius: 10px; font-size: 14px;" onclick="openBoldnessModal()">
+          + Log Bold Action
+        </button>
+        <div id="boldnessTimeline" style="margin-top:20px; text-align:left;"></div>
       </div>
 
-      <!-- Go Attempt Review Modal -->
-      <div class="modal-overlay" id="goReviewModal">
-        <div class="person-modal">
-          <h3>Approach Review</h3>
-          <div class="modal-sub" id="goReviewSubtitle" style="margin-bottom:12px;"></div>
-          
-          <div class="review-fields" style="display:flex; flex-direction:column; gap:8px; font-size:12px;">
-            <label style="color:var(--dim);">Full Story / Overview</label>
-            <textarea id="goReviewDesc" class="modal-note" style="min-height:60px; resize:vertical; background:var(--bg); border:1px solid var(--border); color:var(--text); border-radius:8px; padding:8px 10px; font-family:inherit; font-size:13px;" placeholder="Full description of what happened..."></textarea>
-            
-            <label style="color:var(--dim);margin-top:4px;">Weakpoints</label>
-            <input type="text" id="goReviewWeak" class="modal-note" style="height:36px" placeholder="Talked too fast, fidgeted...">
-            
-            <label style="color:var(--dim);margin-top:4px;">Goodpoints</label>
-            <input type="text" id="goReviewGood" class="modal-note" style="height:36px" placeholder="Eye contact, smiled, clear voice...">
-            
-            <label style="color:var(--dim);margin-top:4px;">Could have done more</label>
-            <input type="text" id="goReviewMore" class="modal-note" style="height:36px" placeholder="Escalated, held silence longer...">
-            
-            <label style="color:var(--dim);margin-top:4px;">Could have done less</label>
-            <input type="text" id="goReviewLess" class="modal-note" style="height:36px" placeholder="Less apologizing, less interview questions...">
-            
-            <label style="color:var(--dim);margin-top:4px;">Better than expected</label>
-            <input type="text" id="goReviewBetter" class="modal-note" style="height:36px" placeholder="She was actually friendly, didn't stutter...">
-          </div>
-          
-          <div class="modal-actions" style="margin-top:16px;">
-            <button class="modal-cancel" onclick="closeGoReviewModal()">Cancel</button>
-            <button class="modal-confirm" onclick="confirmGoReview()">Save Review</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Power Level (stays on home as quick glance) -->
+      <!-- Power Level -->
       <div class="power-section">
         <h3>Power Level</h3>
         <div class="power-number" id="powerNumber">0</div>
@@ -3697,11 +3845,21 @@
         <div class="power-base" id="powerBase"></div>
       </div>
 
+      <!-- History -->
+      <div class="history-section" style="margin-top:20px;">
+        <h3>Last 28 Days</h3>
+        <div class="history-grid" id="historyGrid"></div>
+      </div>
+
       <div class="settings-toggle">
         <button onclick="toggleSettings()">Settings</button>
       </div>
 
       <div class="settings-panel" id="settingsPanel">
+        <div class="setting-row" style="margin-bottom:14px; padding-bottom:14px; border-bottom:1px solid var(--border);">
+          <label>Theme</label>
+          <button id="themeToggleBtn" onclick="toggleTheme()" style="background:var(--card); border:1px solid var(--border); border-radius:8px; color:var(--text); font-size:13px; padding:6px 14px; cursor:pointer; font-weight:600;">🌙 Dark</button>
+        </div>
         <div class="setting-row"><label>Days in window</label><input type="number" id="setTotalDays" value="195"
             onchange="saveSetting('totalDays', this.value)"></div>
         <div class="setting-row"><label>2nd meeting chance (%)</label><input type="number" id="setSecondChance"
@@ -3720,6 +3878,80 @@
             onchange="saveBirthday(this.value)"></div>
       </div>
 
+      <!-- Engagement Stat -->
+      <div class="people-section" style="margin-top:16px;" id="engagementSection">
+        <div class="people-header" onclick="document.getElementById('engagementBody').classList.toggle('open')" style="cursor:pointer;">
+          <h3>Engagement Stat</h3>
+          <span style="font-size:12px; color:var(--dim);">▼</span>
+        </div>
+        <div id="engagementBody" style="display:none;" class="">
+          <div style="font-size:12px; color:var(--dim); margin-bottom:12px;">When not engaged with life, approaching is harder. Build your world — it feeds your drive.</div>
+          <div id="engagementBarWrap" style="margin-bottom:14px;">
+            <div style="display:flex; justify-content:space-between; font-size:11px; color:var(--dim); margin-bottom:4px;">
+              <span>Disengaged</span><span id="engagementScore" style="color:var(--text); font-weight:700;">0%</span><span>In The Flow</span>
+            </div>
+            <div style="height:10px; border-radius:5px; background:rgba(255,255,255,0.1); overflow:hidden;">
+              <div id="engagementBar" style="height:100%; width:0%; border-radius:5px; background:var(--success); transition:width 0.3s;"></div>
+            </div>
+            <div id="engagementLabel" style="font-size:12px; color:var(--dim); text-align:center; margin-top:6px;">—</div>
+          </div>
+          <div style="display:flex; flex-direction:column; gap:10px;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <label style="font-size:13px;">Environments I'm in</label>
+              <input type="number" min="0" max="20" id="engEnvs" style="width:70px; text-align:center; background:var(--card); border:1px solid var(--border); border-radius:8px; color:var(--text); padding:6px; font-size:14px;" oninput="saveEngagement('environments', this.value)" placeholder="0">
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <label style="font-size:13px;">Friends I have</label>
+              <input type="number" min="0" max="200" id="engFriends" style="width:70px; text-align:center; background:var(--card); border:1px solid var(--border); border-radius:8px; color:var(--text); padding:6px; font-size:14px;" oninput="saveEngagement('friends', this.value)" placeholder="0">
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <label style="font-size:13px;">Daily social talks (0–5+)</label>
+              <input type="number" min="0" max="10" id="engTalks" style="width:70px; text-align:center; background:var(--card); border:1px solid var(--border); border-radius:8px; color:var(--text); padding:6px; font-size:14px;" oninput="saveEngagement('talksDaily', this.value)" placeholder="0">
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <label style="font-size:13px;">Last time socializing</label>
+              <input type="date" id="engLastSocial" style="background:var(--card); border:1px solid var(--border); border-radius:8px; color:var(--text); padding:6px; font-size:12px;" onchange="saveEngagement('lastSocialDate', this.value)">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Life's Hard Stat -->
+      <div class="people-section" style="margin-top:16px;" id="lifeHardSection">
+        <div class="people-header" onclick="document.getElementById('lifeHardBody').classList.toggle('open')" style="cursor:pointer;">
+          <h3>Life's Hard Stat</h3>
+          <span style="font-size:12px; color:var(--dim);">▼</span>
+        </div>
+        <div id="lifeHardBody" style="display:none;">
+          <div style="font-size:12px; color:var(--dim); margin-bottom:12px;">Everything around you becomes easier when you do hard things. Log them. Watch the world soften.</div>
+          <div style="margin-bottom:14px;">
+            <div style="display:flex; justify-content:space-between; font-size:11px; color:var(--dim); margin-bottom:4px;">
+              <span style="color:var(--danger);">🔴 Easy life</span>
+              <span id="lifeHardScore" style="color:var(--text); font-weight:700;">0</span>
+              <span style="color:var(--success);">🟢 Hard things done</span>
+            </div>
+            <div style="height:12px; border-radius:6px; background:rgba(255,255,255,0.1); overflow:hidden; position:relative;">
+              <div id="lifeHardBar" style="height:100%; width:0%; border-radius:6px; background:linear-gradient(90deg, var(--danger), var(--yellow), var(--success)); transition:width 0.3s;"></div>
+            </div>
+          </div>
+          <button class="people-add-btn" onclick="openLifeHardModal()">+ Log Hard Thing</button>
+          <div id="lifeHardList" style="margin-top:10px;"></div>
+        </div>
+      </div>
+
+      <!-- Feature Requests -->
+      <div class="people-section" style="margin-top:16px;" id="featureRequestsSection">
+        <div class="people-header" onclick="document.getElementById('featureRequestsBody').classList.toggle('open')" style="cursor:pointer;">
+          <h3>Feature Ideas</h3>
+          <span class="badge" id="featureRequestsCount">0</span>
+        </div>
+        <div id="featureRequestsBody" style="display:none;">
+          <div style="font-size:12px; color:var(--dim); margin-bottom:10px;">Log features you want in the app. Review and delete when done.</div>
+          <button class="people-add-btn" onclick="openFeatureRequestModal()">+ Add Feature Idea</button>
+          <div id="featureRequestsList" style="margin-top:10px;"></div>
+        </div>
+      </div>
+
       <div class="reset-section">
         <button class="reset-btn" onclick="exportData()">Export Backup</button>
         <button class="reset-btn" onclick="importData()" style="margin-left:8px">Import Backup</button>
@@ -3727,98 +3959,145 @@
           Data</button>
       </div>
     </div>
-  </div> <!-- /view-home -->
+  </div> <!-- /view-internal -->
 
-  <!-- ===== GO VIEW ===== -->
-  <div class="view-go" id="viewGo">
-    <div class="go-page" style="max-width:430px; margin:0 auto; padding:16px; padding-bottom:80px;">
+  <!-- Modals (shared across views) -->
 
-      <!-- Status Bar -->
-      <div class="go-status-bar">
-        <div class="go-status-item">
-          <span class="go-status-num" id="goTabTodayCount">0</span>
-          <span class="go-status-lbl">today</span>
+  <!-- Person Add/Interaction Modal -->
+  <div class="modal-overlay" id="personModal">
+    <div class="person-modal">
+      <h3 id="personModalTitle">Log a Person</h3>
+      <input type="text" id="personNickname" placeholder="Quick ID: Red jacket, Starbucks" maxlength="60">
+      <div class="status-toggle" id="personStatusToggle">
+        <button onclick="setPersonStatus('seen')" id="pStatusSeen" class="active-seen">Just Seen</button>
+        <button onclick="setPersonStatus('talked')" id="pStatusTalked">Talked To</button>
+      </div>
+      <div class="modal-datetime-row">
+        <div class="datetime-field">
+          <label>Date</label>
+          <input type="date" id="personDate">
         </div>
-        <div class="go-status-divider"></div>
-        <div class="go-status-item">
-          <span class="go-status-num" id="goTabDaysLeft">—</span>
-          <span class="go-status-lbl">days left</span>
-        </div>
-        <div class="go-status-divider"></div>
-        <div class="go-status-item">
-          <span class="go-status-num" id="goTabPower">0</span>
-          <span class="go-status-lbl">power</span>
+        <div class="datetime-field">
+          <label>Time</label>
+          <input type="time" id="personTime">
         </div>
       </div>
-
-      <!-- Scared Stat -->
-      <div class="scared-widget">
-        <div class="scared-label-col">
-          <div class="scared-title">😰 Scared Level</div>
-          <div class="scared-desc" id="scaredDesc">Honest self-assessment.<br>Drops when you actually GO.</div>
-        </div>
-        <div class="scared-controls">
-          <button class="scared-btn" onclick="adjustScaredLevel(-1)">−</button>
-          <div class="scared-num-wrap">
-            <div class="scared-num" id="scaredNum">5</div>
-            <div class="scared-out-of">out of 10</div>
-          </div>
-          <button class="scared-btn" onclick="adjustScaredLevel(1)">+</button>
-        </div>
+      <input type="text" id="personLocation" placeholder="Location: Starbucks, library, bus stop..." maxlength="80">
+      <textarea id="personNote" placeholder="Optional note..."></textarea>
+      <div class="modal-actions">
+        <button class="modal-cancel" onclick="closePersonModal()">Cancel</button>
+        <button class="modal-confirm" id="personModalConfirm" onclick="confirmPerson()">Log It</button>
       </div>
-
-      <!-- Primary CTA -->
-      <button class="go-trigger go-trigger-tab" onclick="openGoMode()">🔥 I SEE HER — GO MODE</button>
-
-      <!-- Fear Kit -->
-      <div class="go-toolkit-section">
-        <div class="go-toolkit-header">
-          <div class="go-toolkit-title">Fear Kit</div>
-          <div class="go-toolkit-sub">Tap a fear. Read the reframe. Go anyway.</div>
-        </div>
-        <div class="go-fear-cards" id="goFearCards"></div>
-      </div>
-
-      <!-- My Plans -->
-      <div class="go-toolkit-section">
-        <div class="go-toolkit-header">
-          <div class="go-toolkit-title">My Plans</div>
-          <div class="go-toolkit-sub">What you'll invite her to.</div>
-        </div>
-        <div class="go-plans-chips" id="goPlansChips">
-          <div class="go-plans-empty">No plans yet.</div>
-        </div>
-        <button class="go-plans-edit-btn" onclick="switchView('excuses')">+ Add plans</button>
-      </div>
-
-      <!-- Opening Lines -->
-      <div class="go-toolkit-section">
-        <div class="go-toolkit-header">
-          <div class="go-toolkit-title">Opening Lines</div>
-          <div class="go-toolkit-sub">Steal one. Say it. Works every time.</div>
-        </div>
-        <div class="go-openers-list">
-          <div class="go-opener-card">
-            <div class="go-opener-text">"Hey — I saw you and had to say something. You look really [specific thing]."</div>
-            <div class="go-opener-note">Direct. Honest. The specific thing makes it real.</div>
-          </div>
-          <div class="go-opener-card">
-            <div class="go-opener-text">"Excuse me — sorry to interrupt. I just noticed you and thought you seemed really interesting."</div>
-            <div class="go-opener-note">Works anywhere. The apology disarms her.</div>
-          </div>
-          <div class="go-opener-card">
-            <div class="go-opener-text">"Hey, random question — do you know anywhere good around here for [coffee/food/etc]?"</div>
-            <div class="go-opener-note">Low pressure opener. Easy to transition into conversation.</div>
-          </div>
-          <div class="go-opener-card">
-            <div class="go-opener-text">"Hey — this is a bit forward but you caught my eye. I'm [name]."</div>
-            <div class="go-opener-note">Owning it shows confidence. Short and to the point.</div>
-          </div>
-        </div>
-      </div>
-
     </div>
-  </div> <!-- /view-go -->
+  </div>
+
+  <!-- Interaction Note Modal -->
+  <div class="modal-overlay" id="interactionModal">
+    <div class="person-modal">
+      <h3>What happened?</h3>
+      <div class="modal-datetime-row">
+        <div class="datetime-field">
+          <label>Date</label>
+          <input type="date" id="interactionDate">
+        </div>
+        <div class="datetime-field">
+          <label>Time</label>
+          <input type="time" id="interactionTime">
+        </div>
+      </div>
+      <input type="text" id="interactionLocation" placeholder="Location: Starbucks, library, bus stop..."
+        maxlength="80">
+      <textarea id="interactionNote"
+        placeholder="She lent me her phone, got her number, quick chat about..."></textarea>
+
+      <div class="modal-actions" style="margin-top:12px;">
+        <button class="modal-cancel" onclick="closeInteractionModal()">Cancel</button>
+        <button class="modal-confirm" onclick="confirmInteraction()">Log It</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sighting Modal -->
+  <div class="modal-overlay" id="sightingModal">
+    <div class="person-modal">
+      <h3>Saw her again</h3>
+      <div class="modal-datetime-row">
+        <div class="datetime-field">
+          <label>Date</label>
+          <input type="date" id="sightingDate">
+        </div>
+        <div class="datetime-field">
+          <label>Time</label>
+          <input type="time" id="sightingTime">
+        </div>
+      </div>
+      <input type="text" id="sightingLocation" placeholder="Location (optional)" maxlength="80">
+      <textarea id="sightingNote" placeholder="Optional note..."></textarea>
+      <div class="modal-actions">
+        <button class="modal-cancel" onclick="closeSightingModal()">Cancel</button>
+        <button class="modal-confirm" onclick="confirmSighting()">Log It</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Prospect Modal -->
+  <div class="modal-overlay" id="prospectModal">
+    <div class="person-modal">
+      <h3 id="prospectModalTitle">Add Prospect</h3>
+      <input type="text" id="prospectNickname" placeholder="Quick ID: Red jacket at Starbucks" maxlength="60">
+      <div class="modal-datetime-row">
+        <div class="datetime-field">
+          <label>Date</label>
+          <input type="date" id="prospectDate">
+        </div>
+        <div class="datetime-field">
+          <label>Time</label>
+          <input type="time" id="prospectTime">
+        </div>
+      </div>
+      <input type="number" id="prospectRating" placeholder="Rating (1-10)" min="1" max="10">
+      <input type="number" id="prospectAge" placeholder="Estimated age" min="16" max="99">
+      <input type="text" id="prospectLocation" placeholder="Location" maxlength="80">
+      <textarea id="prospectNote" placeholder="Appearance, situation, what caught your eye..."></textarea>
+      <div class="modal-actions">
+        <button class="modal-cancel" onclick="closeProspectModal()">Cancel</button>
+        <button class="modal-confirm" onclick="confirmProspect()">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Go Attempt Review Modal -->
+  <div class="modal-overlay" id="goReviewModal">
+    <div class="person-modal">
+      <h3>Approach Review</h3>
+      <div class="modal-sub" id="goReviewSubtitle" style="margin-bottom:12px;"></div>
+
+      <div class="review-fields" style="display:flex; flex-direction:column; gap:8px; font-size:12px;">
+        <label style="color:var(--dim);">Full Story / Overview</label>
+        <textarea id="goReviewDesc" class="modal-note" style="min-height:60px; resize:vertical; background:var(--bg); border:1px solid var(--border); color:var(--text); border-radius:8px; padding:8px 10px; font-family:inherit; font-size:13px;" placeholder="Full description of what happened..."></textarea>
+
+        <label style="color:var(--dim);margin-top:4px;">Weakpoints</label>
+        <input type="text" id="goReviewWeak" class="modal-note" style="height:36px" placeholder="Talked too fast, fidgeted...">
+
+        <label style="color:var(--dim);margin-top:4px;">Goodpoints</label>
+        <input type="text" id="goReviewGood" class="modal-note" style="height:36px" placeholder="Eye contact, smiled, clear voice...">
+
+        <label style="color:var(--dim);margin-top:4px;">Could have done more</label>
+        <input type="text" id="goReviewMore" class="modal-note" style="height:36px" placeholder="Escalated, held silence longer...">
+
+        <label style="color:var(--dim);margin-top:4px;">Could have done less</label>
+        <input type="text" id="goReviewLess" class="modal-note" style="height:36px" placeholder="Less apologizing, less interview questions...">
+
+        <label style="color:var(--dim);margin-top:4px;">Better than expected</label>
+        <input type="text" id="goReviewBetter" class="modal-note" style="height:36px" placeholder="She was actually friendly, didn't stutter...">
+      </div>
+
+      <div class="modal-actions" style="margin-top:16px;">
+        <button class="modal-cancel" onclick="closeGoReviewModal()">Cancel</button>
+        <button class="modal-confirm" onclick="confirmGoReview()">Save Review</button>
+      </div>
+    </div>
+  </div>
 
   <!-- ===== STATS VIEW ===== -->
   <div class="view-stats" id="viewStats">
@@ -3826,6 +4105,19 @@
       <div class="stats-page-header">
         <h1>📊 STATS</h1>
         <div class="stats-sub">Your numbers, month by month</div>
+      </div>
+
+      <!-- Quick Nav Buttons -->
+      <div style="display:flex; gap:10px; margin-bottom:20px;">
+        <button onclick="switchView('looks')" style="flex:1; padding:14px 12px; border-radius:14px; border:1px solid rgba(255,255,255,0.12); background:rgba(255,255,255,0.06); color:var(--text); font-size:14px; font-weight:600; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px;">
+          👀 Looks
+        </button>
+        <button onclick="switchView('reviews')" style="flex:1; padding:14px 12px; border-radius:14px; border:1px solid rgba(255,255,255,0.12); background:rgba(255,255,255,0.06); color:var(--text); font-size:14px; font-weight:600; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px;">
+          📝 Reviews
+        </button>
+        <button onclick="switchView('encounters')" style="flex:1; padding:14px 12px; border-radius:14px; border:1px solid rgba(255,255,255,0.12); background:rgba(255,255,255,0.06); color:var(--text); font-size:14px; font-weight:600; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px;">
+          👩 Girls
+        </button>
       </div>
 
       <!-- Overview Cards -->
@@ -3842,7 +4134,7 @@
                 <th style="text-align:right">Talked</th>
                 <th style="text-align:right">Seen</th>
                 <th style="text-align:right">Boldness</th>
-                <th style="text-align:right">Missed</th>
+                <th style="text-align:right">Didn't Act</th>
                 <th style="text-align:right">GO</th>
               </tr>
             </thead>
@@ -3881,6 +4173,9 @@
         <div class="stats-week-grid" id="statsDow"></div>
       </div>
 
+      <!-- Weekly Summary Banner -->
+      <div id="statsWeeklySummary" style="background:rgba(255,107,53,0.08); border:1px solid rgba(255,107,53,0.25); border-radius:16px; padding:18px 16px; margin-bottom:16px; text-align:center;"></div>
+
       <!-- Weekly Breakdown Table -->
       <div class="stats-section">
         <h3>📈 Weekly Breakdown</h3>
@@ -3892,7 +4187,7 @@
                 <th style="text-align:right">Talked</th>
                 <th style="text-align:right">Seen</th>
                 <th style="text-align:right">Boldness</th>
-                <th style="text-align:right">Missed</th>
+                <th style="text-align:right">Didn't Act</th>
                 <th style="text-align:right">GO</th>
               </tr>
             </thead>
@@ -3970,18 +4265,13 @@
         <div class="decay-explain" id="decayExplain"></div>
       </div>
 
-      <!-- History -->
-      <div class="history-section">
-        <h3>Last 28 Days</h3>
-        <div class="history-grid" id="historyGrid"></div>
-      </div>
-
     </div>
   </div> <!-- /view-stats -->
 
   <!-- ===== ENCOUNTERS VIEW ===== -->
   <div class="view-encounters" id="viewEncounters">
     <div class="encounters-page">
+      <button onclick="switchView('stats')" style="background:none; border:none; color:var(--accent); font-size:14px; font-weight:600; cursor:pointer; padding:8px 0; margin-bottom:8px;">← Back to Stats</button>
       <div class="encounters-header">
         <h1>Encounters</h1>
         <p>Every girl you approached, her age, and why time matters.</p>
@@ -4000,27 +4290,15 @@
       <div class="enc-list-title" style="margin-top:20px;">All Encounters</div>
       <div id="encList"></div>
 
-      <!-- PRETTY GIRLS INJECTED HERE -->
-      <div style="margin-top:40px; border-top:1px solid var(--border); padding-top:20px;">
-        <div class="encounters-header" style="margin-bottom:16px;">
-          <h1>Pretty Girls Seen</h1>
-          <p>Log beautiful girls you noticed but didn't approach</p>
-        </div>
-        <button class="btn-add" style="width: 100%; height: 46px; border-radius: 12px; margin-bottom: 20px; font-size: 15px;" onclick="openPrettyModal()">
-          + Log a Pretty Girl
-        </button>
-        <div id="prettyAgeStats" style="margin-bottom:20px;"></div>
-        <div id="prettyList" style="margin-top:10px;"></div>
-      </div>
-      
     </div>
   </div> <!-- /view-encounters -->
 
   <!-- ===== EXCUSES VIEW ===== -->
   <div class="view-excuses" id="viewExcuses">
     <div class="excuses-page">
+      <button onclick="switchView('approach')" style="background:none; border:none; color:var(--accent); font-size:14px; font-weight:600; cursor:pointer; padding:8px 0; margin-bottom:8px;">← Back to Approach</button>
       <div class="excuses-page-header">
-        <h1>☕ YOUR EXCUSES</h1>
+        <h1>☕ YOUR PLANS</h1>
         <div class="excuses-page-sub">What are you gonna do with her? Have the answer ready.</div>
       </div>
 
@@ -4055,6 +4333,9 @@
 
   <!-- ===== VIEW: LOOKS ===== -->
   <div class="view-looks" id="viewLooks">
+    <div style="padding: 16px 16px 0;">
+      <button onclick="switchView('stats')" style="background:none; border:none; color:var(--accent); font-size:14px; font-weight:600; cursor:pointer; padding:8px 0;">← Back to Stats</button>
+    </div>
     <div class="header" style="padding-top: 10px;">
       <h1>Who Looked At You</h1>
       <div class="subtitle">Log the girls that stared</div>
@@ -4094,19 +4375,51 @@
 
   <!-- ===== VIEW: REVIEWS ===== -->
   <div class="view-reviews" id="viewReviews">
-    <div class="header" style="padding-top: 10px;">
-      <h1>Interaction Reviews</h1>
-      <div class="subtitle">Reflect and improve</div>
+    <div style="padding: 16px 16px 0;">
+      <button onclick="switchView('stats')" style="background:none; border:none; color:var(--accent); font-size:14px; font-weight:600; cursor:pointer; padding:8px 0;">← Back to Stats</button>
     </div>
-    <div style="padding: 16px;" id="reviewsInventoryContainer">
-      <!-- Inventory goes here -->
+    <div class="header" style="padding-top: 10px;">
+      <h1>Reviews</h1>
+      <div class="subtitle">Reflect on every approach</div>
+    </div>
+    <div style="padding: 16px;">
+      <div id="reviewsApproachList"></div>
+      <div id="reviewsInventoryContainer"></div>
+    </div>
+  </div>
+
+  <!-- ===== VIEW: OPENERS ===== -->
+  <div class="view-openers" id="viewOpeners">
+    <div style="padding: 16px 16px 0;">
+      <button onclick="switchView('approach')" style="background:none; border:none; color:var(--accent); font-size:14px; font-weight:600; cursor:pointer; padding:8px 0;">← Back to Approach</button>
+    </div>
+    <div class="header" style="padding-top: 10px;">
+      <h1>Opening Lines</h1>
+      <div class="subtitle">Steal one. Say it. Go.</div>
+    </div>
+    <div style="padding: 16px;">
+      <button class="btn-add" style="width:100%; height:46px; border-radius:12px; margin-bottom:20px; font-size:14px;" onclick="openOpenerModal()">+ Add Custom Opener</button>
+      <div id="openersList"></div>
+    </div>
+  </div>
+
+  <!-- Opener Add Modal -->
+  <div class="modal-overlay" id="openerModal">
+    <div class="person-modal">
+      <h3 id="openerModalTitle">Add Opening Line</h3>
+      <textarea id="openerText" class="modal-note" placeholder="What you'd say..." style="min-height:60px;"></textarea>
+      <input type="text" id="openerNote" placeholder="Why it works (optional)" maxlength="100" style="margin-top:8px;">
+      <div class="modal-actions" style="margin-top:12px;">
+        <button class="modal-cancel" onclick="closeOpenerModal()">Cancel</button>
+        <button class="modal-confirm" onclick="confirmOpener()">Save</button>
+      </div>
     </div>
   </div>
 
   <!-- Look Modal -->
   <div class="modal-overlay" id="lookModal">
     <div class="modal" style="text-align: left;">
-      <h3>Log a Look</h3>
+      <h3 id="lookModalTitle">Log a Look</h3>
       <div style="margin: 10px 0;">
         <label style="font-size: 12px; color: var(--dim);">Your Rating that day (1-10)</label>
         <input type="number" id="lookSelfRating" class="modal-note" style="height:40px" min="1" max="10" placeholder="e.g. 7">
@@ -4161,6 +4474,26 @@
     </div>
   </div>
 
+  <!-- Pretty Girl Sighting Modal -->
+  <div class="modal-overlay" id="sightingModal">
+    <div class="modal" style="text-align: left;">
+      <h3 style="text-align: center;">Saw Her Again</h3>
+      <input type="hidden" id="sightingPgId">
+      <div style="margin: 10px 0;">
+        <label style="font-size: 12px; color: var(--dim);">Date</label>
+        <input type="date" id="sightingDate" class="modal-note" style="height:40px;">
+      </div>
+      <div style="margin: 10px 0;">
+        <label style="font-size: 12px; color: var(--dim);">Situation (optional)</label>
+        <textarea id="sightingNote" class="modal-note" placeholder="Where you saw her..."></textarea>
+      </div>
+      <div class="modal-actions" style="margin-top: 20px;">
+        <button class="modal-cancel" onclick="document.getElementById('sightingModal').classList.remove('open')">Cancel</button>
+        <button class="modal-confirm" onclick="confirmSighting()">Log It</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Boldness Modal -->
   <div class="modal-overlay" id="boldnessModal">
     <div class="modal" style="text-align: left;">
@@ -4174,6 +4507,32 @@
     </div>
   </div>
 
+  <!-- Feature Request Modal -->
+  <div class="modal-overlay" id="featureRequestModal">
+    <div class="person-modal">
+      <h3 id="featureRequestModalTitle">Add Feature Idea</h3>
+      <input type="text" id="featureRequestTitle" placeholder="Feature title..." maxlength="80">
+      <textarea id="featureRequestDesc" class="modal-note" placeholder="What should it do? Why is it useful?"></textarea>
+      <div class="modal-actions" style="margin-top:12px;">
+        <button class="modal-cancel" onclick="closeFeatureRequestModal()">Cancel</button>
+        <button class="modal-confirm" onclick="confirmFeatureRequest()">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Life's Hard Modal -->
+  <div class="modal-overlay" id="lifeHardModal">
+    <div class="modal" style="text-align:left;">
+      <h3 style="text-align:center;">Log Hard Thing</h3>
+      <div style="font-size:12px; color:var(--dim); text-align:center; margin-bottom:10px;">What hard thing did you do?</div>
+      <textarea id="lifeHardText" class="modal-note" placeholder="Cold shower, had a difficult conversation, worked out when tired..."></textarea>
+      <div class="modal-actions" style="margin-top:16px;">
+        <button class="modal-cancel" onclick="document.getElementById('lifeHardModal').classList.remove('open')">Cancel</button>
+        <button class="modal-confirm" onclick="confirmLifeHard()">Log It</button>
+      </div>
+    </div>
+  </div>
+
   <!-- ===== WORLD VIEW ===== -->
   <div class="view-world" id="viewWorld">
     <div class="situations-page">
@@ -4181,12 +4540,10 @@
         <h1>🌍 WORLD</h1>
         <div class="situations-page-sub">Your environment. Your scenarios.</div>
       </div>
-
       <div class="world-tabs">
         <button class="world-tab active" id="worldTabSituations" onclick="switchWorldTab('situations')">🎭 Situations</button>
         <button class="world-tab" id="worldTabManifest" onclick="switchWorldTab('manifest')">✨ Manifest</button>
       </div>
-
       <div class="world-section active" id="worldSectionSituations">
         <div style="font-size:12px; color:var(--dim); margin-bottom:12px;">Describe it. Visualize it. Be ready.</div>
         <div class="situations-count-bar"><span id="situationCountPage">0</span> situations created</div>
@@ -4197,7 +4554,6 @@
           <div class="situations-tip-text">When you mentally rehearse a situation in detail — the setting, the words, the body language — you're training your brain to recognize and act when the moment arrives. No freezing. No blank mind. You've been here before.</div>
         </div>
       </div>
-
       <div class="world-section" id="worldSectionManifest">
         <div style="font-size:12px; color:var(--dim); margin-bottom:12px;">Write the exact situation you want. Claim it. Make it real.</div>
         <div class="manifest-count-bar"><span id="manifestCount">0</span> manifested · <span id="manifestPendingCount">0</span> pending</div>
@@ -4211,101 +4567,53 @@
     </div>
   </div>
 
-  <!-- Situation Add/Edit Modal -->
+  <!-- Situation Modal -->
   <div class="modal-overlay" id="situationModal">
     <div class="modal" style="text-align: left;">
       <h3 style="text-align:center;" id="situationModalTitle">Create Situation</h3>
-      <div class="situation-modal-field">
-        <label>Title</label>
-        <input type="text" id="sitTitle" placeholder="Coffee shop encounter, bus stop approach..." maxlength="80">
-      </div>
-      <div class="situation-modal-field">
-        <label>Setting / Location</label>
-        <input type="text" id="sitSetting" placeholder="Busy Starbucks, quiet library, park bench..." maxlength="100">
-      </div>
-      <div class="situation-modal-field">
-        <label>Full Description</label>
-        <textarea id="sitDescription" placeholder="Paint the whole picture. Where are you, where is she, what's happening around you..."></textarea>
-      </div>
-      <div class="situation-modal-field">
-        <label>What I'll Say</label>
-        <textarea id="sitWhatSay" placeholder="Opening line, follow-up, transition to asking for number..." style="min-height:50px"></textarea>
-      </div>
-      <div class="situation-modal-field">
-        <label>What I'll Do</label>
-        <textarea id="sitWhatDo" placeholder="Walk up calmly, eye contact, smile, open posture..." style="min-height:50px"></textarea>
-      </div>
-      <div class="situation-modal-field">
-        <label>Possible Outcomes</label>
-        <textarea id="sitOutcomes" placeholder="Best case: she's engaged, laughs, gives number. Worst case: polite rejection, I walk away proud I tried." style="min-height:50px"></textarea>
-      </div>
-      <div class="modal-actions" style="margin-top:16px">
-        <button class="modal-cancel" onclick="closeSituationModal()">Cancel</button>
-        <button class="modal-confirm" onclick="confirmSituation()">Save</button>
-      </div>
+      <div class="situation-modal-field"><label>Title</label><input type="text" id="sitTitle" placeholder="Coffee shop encounter, bus stop approach..." maxlength="80"></div>
+      <div class="situation-modal-field"><label>Setting / Location</label><input type="text" id="sitSetting" placeholder="Busy Starbucks, quiet library, park bench..." maxlength="100"></div>
+      <div class="situation-modal-field"><label>Full Description</label><textarea id="sitDescription" placeholder="Paint the whole picture..."></textarea></div>
+      <div class="situation-modal-field"><label>What I'll Say</label><textarea id="sitWhatSay" placeholder="Opening line, follow-up..." style="min-height:50px"></textarea></div>
+      <div class="situation-modal-field"><label>What I'll Do</label><textarea id="sitWhatDo" placeholder="Walk up calmly, eye contact, smile..." style="min-height:50px"></textarea></div>
+      <div class="situation-modal-field"><label>Possible Outcomes</label><textarea id="sitOutcomes" placeholder="Best case / worst case..." style="min-height:50px"></textarea></div>
+      <div class="modal-actions" style="margin-top:16px"><button class="modal-cancel" onclick="closeSituationModal()">Cancel</button><button class="modal-confirm" onclick="confirmSituation()">Save</button></div>
     </div>
   </div>
 
-  <!-- Manifest Add/Edit Modal -->
+  <!-- Manifest Modal -->
   <div class="modal-overlay" id="manifestModal">
     <div class="modal" style="text-align: left;">
       <h3 style="text-align:center;" id="manifestModalTitle">Create Manifest</h3>
-      <div class="manifest-modal-field">
-        <label>Title</label>
-        <input type="text" id="manTitle" placeholder="Get her number at the gym, land a date this week..." maxlength="80">
-      </div>
-      <div class="manifest-modal-field">
-        <label>The Exact Situation</label>
-        <textarea id="manSituation" placeholder="Describe exactly what happens. Where you are, what she looks like, what you say, how she reacts. Write it like it already happened."></textarea>
-      </div>
-      <div class="manifest-modal-field">
-        <label>Why I Want This</label>
-        <textarea id="manWhy" placeholder="What does this mean to me? Why does this matter?" style="min-height:50px"></textarea>
-      </div>
-      <div class="manifest-modal-field">
-        <label>By When (optional)</label>
-        <input type="date" id="manDeadline">
-      </div>
-      <div class="modal-actions" style="margin-top:16px">
-        <button class="modal-cancel" onclick="closeManifestModal()">Cancel</button>
-        <button class="modal-confirm" onclick="confirmManifest()">Save</button>
-      </div>
+      <div class="manifest-modal-field"><label>Title</label><input type="text" id="manTitle" placeholder="Get her number at the gym, land a date this week..." maxlength="80"></div>
+      <div class="manifest-modal-field"><label>The Exact Situation</label><textarea id="manSituation" placeholder="Describe exactly what happens. Write it like it already happened."></textarea></div>
+      <div class="manifest-modal-field"><label>Why I Want This</label><textarea id="manWhy" placeholder="What does this mean to me? Why does this matter?" style="min-height:50px"></textarea></div>
+      <div class="manifest-modal-field"><label>By When (optional)</label><input type="date" id="manDeadline"></div>
+      <div class="modal-actions" style="margin-top:16px"><button class="modal-cancel" onclick="closeManifestModal()">Cancel</button><button class="modal-confirm" onclick="confirmManifest()">Save</button></div>
     </div>
   </div>
 
   <!-- ===== BOTTOM NAV ===== -->
   <div class="bottom-nav">
-    <button class="active" id="navHome" onclick="switchView('home')">
-      <span class="nav-icon">🏠</span>
-      Home
+    <button id="navStats" onclick="switchView('stats')">
+      <span class="nav-icon">📊</span>
+      Stats
     </button>
-    <button id="navGo" onclick="switchView('go')">
+    <button class="active" id="navApproach" onclick="switchView('approach')">
       <span class="nav-icon">🔥</span>
-      Go
+      Approach
     </button>
-    <button id="navEncounters" onclick="switchView('encounters')">
-      <span class="nav-icon">👩</span>
-      Girls
+    <button id="navReport" onclick="switchView('report')">
+      <span class="nav-icon">📋</span>
+      Report
     </button>
-    <button id="navLooks" onclick="switchView('looks')">
-      <span class="nav-icon">👀</span>
-      Looks
-    </button>
-    <button id="navExcuses" onclick="switchView('excuses')">
-      <span class="nav-icon">☕</span>
-      Excuses
+    <button id="navInternal" onclick="switchView('internal')">
+      <span class="nav-icon">💪</span>
+      Internal
     </button>
     <button id="navWorld" onclick="switchView('world')">
       <span class="nav-icon">🌍</span>
       World
-    </button>
-    <button id="navReviews" onclick="switchView('reviews')">
-      <span class="nav-icon">📝</span>
-      Reviews
-    </button>
-    <button id="navStats" onclick="switchView('stats')">
-      <span class="nav-icon">📊</span>
-      Stats
     </button>
   </div>
 
@@ -4355,30 +4663,35 @@
           <button class="rc-btn rc-go-back" onclick="closeRealityCheck(); goBackForHer()">She's still there?</button>
         </div>
       </div>
-      <!-- Screen 2: Will you see her again? -->
+      <!-- Screen 2: Where did you see her? (determines chance of seeing again) -->
       <div class="rc-odds-screen" id="rcOddsScreen">
-        <div class="rc-odds-title">Will you ever see her again?</div>
-        <div class="rc-odds-sub">Be honest with yourself.</div>
+        <div class="rc-odds-title">Where did you see her?</div>
+        <div class="rc-odds-sub">Location determines your chance of seeing her again.</div>
         <div class="rc-odds-grid">
-          <button class="rc-odds-btn" onclick="logReencounterOdds('daily', 80)">
-            <div><span class="odds-label">Same place daily</span><br><span class="odds-desc">Gym, class, commute, coffee shop</span></div>
-            <span class="odds-pct">~80%</span>
-            <div class="odds-xp-preview"><span class="missed-xp-lost">-20 XP</span> · <span class="missed-xp-avoided">+24 saved</span></div>
+          <button class="rc-odds-btn" onclick="logReencounterOdds('school', 85)">
+            <div><span class="odds-label">School / Class</span><br><span class="odds-desc">You'll almost definitely see her again</span></div>
+            <span class="odds-pct">~85%</span>
+            <div class="odds-xp-preview"><span class="missed-xp-lost">-15 XP</span> · <span class="missed-xp-avoided">+25 saved</span></div>
           </button>
-          <button class="rc-odds-btn" onclick="logReencounterOdds('weekly', 40)">
-            <div><span class="odds-label">Same area sometimes</span><br><span class="odds-desc">Campus, neighborhood, regular spot</span></div>
+          <button class="rc-odds-btn" onclick="logReencounterOdds('hometown', 70)">
+            <div><span class="odds-label">My Hometown</span><br><span class="odds-desc">Small town, familiar faces</span></div>
+            <span class="odds-pct">~70%</span>
+            <div class="odds-xp-preview"><span class="missed-xp-lost">-30 XP</span> · <span class="missed-xp-avoided">+21 saved</span></div>
+          </button>
+          <button class="rc-odds-btn" onclick="logReencounterOdds('city', 40)">
+            <div><span class="odds-label">City</span><br><span class="odds-desc">Urban area, same neighborhood maybe</span></div>
             <span class="odds-pct">~40%</span>
             <div class="odds-xp-preview"><span class="missed-xp-lost">-60 XP</span> · <span class="missed-xp-avoided">+12 saved</span></div>
           </button>
-          <button class="rc-odds-btn" onclick="logReencounterOdds('random', 10)">
-            <div><span class="odds-label">Random encounter</span><br><span class="odds-desc">Street, mall, one-time event</span></div>
-            <span class="odds-pct">~10%</span>
-            <div class="odds-xp-preview"><span class="missed-xp-lost">-90 XP</span> · <span class="missed-xp-avoided">+3 saved</span></div>
+          <button class="rc-odds-btn" onclick="logReencounterOdds('restaurant', 30)">
+            <div><span class="odds-label">Restaurant</span><br><span class="odds-desc">Might be local, might be a one-time visit</span></div>
+            <span class="odds-pct">~30%</span>
+            <div class="odds-xp-preview"><span class="missed-xp-lost">-70 XP</span> · <span class="missed-xp-avoided">+9 saved</span></div>
           </button>
-          <button class="rc-odds-btn" onclick="logReencounterOdds('never', 2)">
-            <div><span class="odds-label">Probably never</span><br><span class="odds-desc">Tourist, traveler, passing through</span></div>
-            <span class="odds-pct">~2%</span>
-            <div class="odds-xp-preview"><span class="missed-xp-lost">-98 XP</span> · <span class="missed-xp-avoided">+1 saved</span></div>
+          <button class="rc-odds-btn" onclick="logReencounterOdds('train', 15)">
+            <div><span class="odds-label">Train</span><br><span class="odds-desc">Transit — probably not coming back</span></div>
+            <span class="odds-pct">~15%</span>
+            <div class="odds-xp-preview"><span class="missed-xp-lost">-85 XP</span> · <span class="missed-xp-avoided">+4 saved</span></div>
           </button>
         </div>
       </div>
@@ -4400,6 +4713,7 @@
       'Felt not good enough',
       'Too fast / walked past',
       'To do what exactly',
+      'Dysregulated',
       'Other'
     ];
 
@@ -4427,6 +4741,13 @@
       if (!data.boldnessLogs) data.boldnessLogs = [];
       if (!data.prettyGirls) data.prettyGirls = [];
       if (!data.quickLooks) data.quickLooks = {};
+      // New fields migration
+      if (!data.prospects) data.prospects = [];
+      if (!data.openers) data.openers = [];
+      if (!data.featureRequests) data.featureRequests = [];
+      if (data.totalLostOpportunityPct == null) data.totalLostOpportunityPct = 0;
+      if (!data.engagementFactors) data.engagementFactors = { environments: 1, friends: 0, talksDaily: 0, lastSocialDate: '' };
+      if (!data.lifeHard) data.lifeHard = { logs: [] };
       if (!data.situations) data.situations = [];
       if (!data.manifests) data.manifests = [];
       delete data.settings.girlsPerDay;
@@ -4434,7 +4755,7 @@
     }
 
     function createFreshData() {
-      const data = { startDate: todayStr(), settings: { ...DEFAULTS }, days: {}, seen: {}, missed: [], people: [], goAttempts: [], excuses: [], scaredLevel: 5, looks: [], boldnessLogs: [], prettyGirls: [], quickLooks: {}, situations: [], manifests: [] };
+      const data = { startDate: todayStr(), settings: { ...DEFAULTS }, days: {}, seen: {}, missed: [], people: [], goAttempts: [], excuses: [], scaredLevel: 5, looks: [], boldnessLogs: [], prettyGirls: [], quickLooks: {}, prospects: [], openers: [], featureRequests: [], totalLostOpportunityPct: 0, engagementFactors: { environments: 1, friends: 0, talksDaily: 0, lastSocialDate: '' }, lifeHard: { logs: [] }, situations: [], manifests: [] };
       localStorage.setItem('approachData', JSON.stringify(data));
       return data;
     }
@@ -4545,6 +4866,7 @@
       closeMissedModal();
       render();
       if (navigator.vibrate) navigator.vibrate([30, 50, 30]);
+      showEncStatsModal('miss', entry);
       showRealityCheck(data, entry);
     }
 
@@ -4722,6 +5044,21 @@
     function toggleSettings() {
       document.getElementById('settingsPanel').classList.toggle('open');
     }
+
+    function applyTheme(isLight) {
+      document.body.classList.toggle('light', isLight);
+      const btn = document.getElementById('themeToggleBtn');
+      if (btn) btn.textContent = isLight ? '☀️ Light' : '🌙 Dark';
+    }
+
+    function toggleTheme() {
+      const isLight = !document.body.classList.contains('light');
+      localStorage.setItem('approachTheme', isLight ? 'light' : 'dark');
+      applyTheme(isLight);
+    }
+
+    // Apply saved theme immediately
+    applyTheme(localStorage.getItem('approachTheme') === 'light');
 
     function exportData() {
       const data = localStorage.getItem('approachData');
@@ -5105,6 +5442,352 @@
       });
     }
 
+    // --- PROSPECTS ---
+    let editingProspectId = null;
+
+    function openProspectModal(id = null) {
+      editingProspectId = id;
+      if (id) {
+        const data = getData();
+        const p = (data.prospects || []).find(x => x.id === id);
+        if (p) {
+          document.getElementById('prospectNickname').value = p.nickname || '';
+          document.getElementById('prospectDate').value = p.date || todayStr();
+          document.getElementById('prospectTime').value = p.time || toHHMM();
+          document.getElementById('prospectRating').value = p.rating || '';
+          document.getElementById('prospectAge').value = p.age || '';
+          document.getElementById('prospectLocation').value = p.location || '';
+          document.getElementById('prospectNote').value = p.note || '';
+        }
+        document.getElementById('prospectModalTitle').textContent = 'Edit Prospect';
+      } else {
+        document.getElementById('prospectNickname').value = '';
+        document.getElementById('prospectDate').value = todayStr();
+        document.getElementById('prospectTime').value = toHHMM();
+        document.getElementById('prospectRating').value = '';
+        document.getElementById('prospectAge').value = '';
+        document.getElementById('prospectLocation').value = '';
+        document.getElementById('prospectNote').value = '';
+        document.getElementById('prospectModalTitle').textContent = 'Add Prospect';
+      }
+      document.getElementById('prospectModal').classList.add('open');
+      setTimeout(() => document.getElementById('prospectNickname').focus(), 100);
+    }
+
+    function closeProspectModal() {
+      document.getElementById('prospectModal').classList.remove('open');
+      editingProspectId = null;
+    }
+
+    function confirmProspect() {
+      const nick = document.getElementById('prospectNickname').value.trim();
+      if (!nick) { alert('Give her a quick ID'); return; }
+      const data = getData();
+      if (!data.prospects) data.prospects = [];
+      const entry = {
+        id: editingProspectId || Date.now(),
+        nickname: nick,
+        date: document.getElementById('prospectDate').value || todayStr(),
+        time: document.getElementById('prospectTime').value || toHHMM(),
+        rating: document.getElementById('prospectRating').value,
+        age: document.getElementById('prospectAge').value,
+        location: document.getElementById('prospectLocation').value.trim(),
+        note: document.getElementById('prospectNote').value.trim(),
+      };
+      if (editingProspectId) {
+        const idx = data.prospects.findIndex(x => x.id === editingProspectId);
+        if (idx > -1) data.prospects[idx] = entry;
+      } else {
+        data.prospects.push(entry);
+      }
+      saveData(data);
+      closeProspectModal();
+      renderProspects(data);
+    }
+
+    function deleteProspect(id) {
+      if (!confirm('Delete this prospect?')) return;
+      const data = getData();
+      data.prospects = (data.prospects || []).filter(x => x.id !== id);
+      saveData(data);
+      renderProspects(data);
+    }
+
+    function renderProspects(data) {
+      const list = document.getElementById('prospectsList');
+      const countEl = document.getElementById('prospectsCount');
+      if (!list) return;
+      const prospects = data.prospects || [];
+      if (countEl) countEl.textContent = prospects.length;
+      if (prospects.length === 0) {
+        list.innerHTML = '<div style="font-size:12px; color:var(--dim); text-align:center; padding:12px 0;">No prospects logged yet.</div>';
+        return;
+      }
+      const sorted = [...prospects].sort((a, b) => b.id - a.id);
+      list.innerHTML = sorted.map(p => `
+        <div class="person-card seen-only" style="margin-bottom:10px;">
+          <div class="person-top">
+            <span class="person-nick">${escHtml(p.nickname)}</span>
+            <div class="person-meta">
+              ${p.rating ? `<span class="person-status seen">${p.rating}/10</span>` : ''}
+            </div>
+          </div>
+          <div class="person-stats-row">
+            ${p.age ? `<span>Age ~${p.age}</span>` : ''}
+            ${p.location ? `<span>📍 ${escHtml(p.location)}</span>` : ''}
+            <span>${p.date}</span>
+          </div>
+          ${p.note ? `<div style="font-size:12px; color:var(--dim); margin-top:6px; font-style:italic;">"${escHtml(p.note)}"</div>` : ''}
+          <div class="person-actions" style="margin-top:8px;">
+            <button class="person-action-btn" onclick="openProspectModal(${p.id})">Edit</button>
+            <button class="person-action-btn danger" onclick="deleteProspect(${p.id})">Delete</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // --- Sub-page render functions (from hamburger menu) ---
+
+    function renderPrettyGirlsPage() {
+      const data = getData();
+      const prettyGirls = data.prettyGirls || [];
+      const ageStatsEl = document.getElementById('pgAgeStats');
+      const listEl = document.getElementById('pgList');
+      if (!listEl) return;
+
+      if (prettyGirls.length === 0) {
+        ageStatsEl.innerHTML = '';
+        listEl.innerHTML = '<div style="font-size:13px; color:var(--dim); text-align:center; padding:20px 0;">No pretty girls logged yet. Tap the button above to log one.</div>';
+        return;
+      }
+
+      // Age stats chart
+      const pgAges = {};
+      prettyGirls.forEach(pg => {
+        if (!pg.age) return;
+        if (!pgAges[pg.age]) pgAges[pg.age] = { count: 0, totalRating: 0 };
+        pgAges[pg.age].count++;
+        pgAges[pg.age].totalRating += parseFloat(pg.rating) || 0;
+      });
+      let maxPgCount = 1;
+      Object.values(pgAges).forEach(a => { if (a.count > maxPgCount) maxPgCount = a.count; });
+      let pgAgeHtml = '';
+      Object.keys(pgAges).sort((a,b)=>Number(a)-Number(b)).forEach(ag => {
+        const avg = (pgAges[ag].totalRating / pgAges[ag].count).toFixed(1);
+        const pct = (pgAges[ag].count / maxPgCount) * 100;
+        pgAgeHtml += `<div class="funnel-step" style="align-items:center;">
+          <span class="funnel-label" style="width:60px;">${ag}</span>
+          <div class="funnel-bar-bg" style="flex:1;">
+            <div class="funnel-bar-fill" style="width:${Math.max(2,pct)}%;background:var(--accent)"></div>
+            <span class="funnel-bar-text" style="color:#fff; padding-left:6px; font-size:11px;">${pgAges[ag].count}x</span>
+          </div>
+          <div style="width:70px; text-align:right;">
+            <div style="font-size:18px; font-weight:800; color:var(--text); line-height:1;">${avg}</div>
+            <div style="font-size:9px; color:var(--dim); text-transform:uppercase; letter-spacing:0.5px; margin-top:4px;">Avg Rating</div>
+          </div>
+        </div>`;
+      });
+      ageStatsEl.innerHTML = Object.keys(pgAges).length > 0
+        ? `<h4 style="font-size:13px; margin-bottom:10px; color:var(--text);">Age Stats & Ratings</h4><div style="display:flex; flex-direction:column; gap:8px; margin-bottom:16px;">${pgAgeHtml}</div>`
+        : '';
+
+      listEl.innerHTML = [...prettyGirls].sort((a,b)=>b.id-a.id).map(pg => {
+        const sightings = pg.sightings || [];
+        const lastSeen = sightings.length > 0 ? [...sightings].sort((a,b)=>b.date.localeCompare(a.date))[0] : null;
+        const sightingsHtml = sightings.length > 0 ? `
+          <div style="margin-top:8px; padding-top:8px; border-top:1px solid var(--border);">
+            <div style="font-size:11px; font-weight:600; color:var(--dim); margin-bottom:4px;">Sightings (${sightings.length})</div>
+            ${sightings.map((s, idx) => `
+              <div style="display:flex; justify-content:space-between; align-items:center; font-size:11px; padding:3px 0;">
+                <span style="color:var(--text);">${s.date}${s.note ? ` — <em>${escHtml(s.note)}</em>` : ''}</span>
+                <button onclick="deleteSighting(${pg.id}, ${idx})" style="background:none;border:none;color:var(--danger);font-size:10px;cursor:pointer;">✕</button>
+              </div>
+            `).join('')}
+          </div>
+        ` : '';
+        return `
+        <div style="background:var(--card); border:1px solid var(--border); border-radius:10px; padding:10px; margin-bottom:8px; font-size:12px;">
+          <div style="display:flex; justify-content:space-between; color:var(--dim); font-size:11px; margin-bottom:6px;">
+            <span>First seen: ${pg.date} ${pg.time||''}</span>
+            <div>
+              <button onclick="openPrettyModal(${pg.id})" style="background:none;border:none;color:var(--accent);font-size:11px;cursor:pointer;margin-right:8px;">Edit</button>
+              <button onclick="deletePrettyGirlPage(${pg.id})" style="background:none;border:none;color:var(--danger);font-size:11px;cursor:pointer;">Delete</button>
+            </div>
+          </div>
+          <div>Rating <strong>${pg.rating}/10</strong>${pg.age ? ` — Age ${pg.age}` : ''}${pg.location ? ` — ${escHtml(pg.location)}` : ''}</div>
+          ${pg.appearance ? `<div style="margin-top:4px; color:var(--dim);">Looks: ${escHtml(pg.appearance)}</div>` : ''}
+          ${pg.situation ? `<div style="margin-top:4px; font-style:italic;">"${escHtml(pg.situation)}"</div>` : ''}
+          ${lastSeen ? `<div style="margin-top:4px; font-size:11px; color:var(--dim);">Last seen: ${lastSeen.date}</div>` : ''}
+          ${sightingsHtml}
+          <button onclick="openSightingModal(${pg.id})" style="margin-top:8px; width:100%; background:none; border:1px solid var(--border); border-radius:8px; color:var(--dim); font-size:12px; padding:6px; cursor:pointer;">👀 Saw Her Again</button>
+        </div>`;
+      }).join('');
+    }
+
+    function deletePrettyGirlPage(id) {
+      if (!confirm('Delete?')) return;
+      const data = getData();
+      data.prettyGirls = (data.prettyGirls || []).filter(x => x.id !== id);
+      saveData(data);
+      renderPrettyGirlsPage();
+    }
+
+    function openSightingModal(pgId) {
+      document.getElementById('sightingPgId').value = pgId;
+      document.getElementById('sightingDate').value = todayStr();
+      document.getElementById('sightingNote').value = '';
+      document.getElementById('sightingModal').classList.add('open');
+    }
+
+    function confirmSighting() {
+      const pgId = parseInt(document.getElementById('sightingPgId').value);
+      const date = document.getElementById('sightingDate').value || todayStr();
+      const note = document.getElementById('sightingNote').value.trim();
+      const data = getData();
+      const pg = (data.prettyGirls || []).find(p => p.id === pgId);
+      if (pg) {
+        if (!pg.sightings) pg.sightings = [];
+        pg.sightings.push({ date, time: toHHMM(), note });
+        saveData(data);
+      }
+      document.getElementById('sightingModal').classList.remove('open');
+      renderPrettyGirlsPage();
+    }
+
+    function deleteSighting(pgId, idx) {
+      const data = getData();
+      const pg = (data.prettyGirls || []).find(p => p.id === pgId);
+      if (pg && pg.sightings) {
+        pg.sightings.splice(idx, 1);
+        saveData(data);
+        renderPrettyGirlsPage();
+      }
+    }
+
+    function renderAgeRatingsPage() {
+      const data = getData();
+      const looks = data.looks || [];
+      const chartEl = document.getElementById('arChart');
+      const listEl = document.getElementById('arList');
+      if (!chartEl || !listEl) return;
+
+      if (looks.length === 0) {
+        chartEl.innerHTML = '<div style="font-size:13px; color:var(--dim); text-align:center; padding:20px 0;">No looks logged yet. Log a look from the Looks page.</div>';
+        listEl.innerHTML = '';
+        return;
+      }
+
+      const ages = {};
+      looks.forEach(l => {
+        const ag = l.age || 'Unknown';
+        if (!ages[ag]) ages[ag] = { count: 0, totalRating: 0 };
+        ages[ag].count++;
+        ages[ag].totalRating += parseFloat(l.her) || 0;
+      });
+      let maxCount = 1;
+      Object.values(ages).forEach(a => { if (a.count > maxCount) maxCount = a.count; });
+      let htmlAges = '';
+      Object.keys(ages).sort().forEach(ag => {
+        const avgRating = (ages[ag].totalRating / ages[ag].count).toFixed(1);
+        const pct = (ages[ag].count / maxCount) * 100;
+        htmlAges += `<div class="funnel-step" style="align-items:center;">
+          <span class="funnel-label" style="width:60px;">${ag}</span>
+          <div class="funnel-bar-bg" style="flex:1;">
+            <div class="funnel-bar-fill" style="width:${Math.max(2, pct)}%;background:var(--blue)"></div>
+            <span class="funnel-bar-text" style="color:#fff; padding-left:6px; font-size:11px;">${ages[ag].count}x</span>
+          </div>
+          <div style="width:70px; text-align:right;">
+            <div style="font-size:18px; font-weight:800; color:var(--text); line-height:1;">${avgRating}</div>
+            <div style="font-size:9px; color:var(--dim); text-transform:uppercase; letter-spacing:0.5px; margin-top:4px;">Avg Rating</div>
+          </div>
+        </div>`;
+      });
+      chartEl.innerHTML = `<h4 style="font-size:13px; margin-bottom:10px;">By Age</h4><div style="display:flex; flex-direction:column; gap:8px;">${htmlAges}</div>`;
+
+      const recentLooks = [...looks].sort((a,b)=>b.id-a.id).slice(0, 20);
+      listEl.innerHTML = `<h4 style="font-size:13px; margin:16px 0 10px;">Recent Entries</h4>` + recentLooks.map(l => `
+        <div style="background:var(--card); border:1px solid var(--border); border-radius:10px; padding:10px; margin-bottom:8px; font-size:12px;">
+          <div style="display:flex; justify-content:space-between; color:var(--dim); font-size:11px; margin-bottom:6px;">
+            <span>${l.date} ${l.time || ''}</span>
+          </div>
+          <div><span style="color:var(--dim)">Me:</span> ${l.self}/10 — ${escHtml(l.outfit||'')}</div>
+          <div style="margin-top:4px; border-top:1px solid var(--border); padding-top:4px;">
+            <span style="color:var(--dim)">Her:</span> Age ${l.age}, Rating <strong>${l.her}/10</strong>${l.app ? ` — ${escHtml(l.app)}` : ''}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderSeenAgainPage() {
+      const data = getData();
+      const missed = data.missed || [];
+      const statsEl = document.getElementById('saStats');
+      const chartEl = document.getElementById('saChart');
+      if (!chartEl) return;
+
+      if (missed.length === 0) {
+        statsEl.innerHTML = '';
+        chartEl.innerHTML = '<div style="font-size:13px; color:var(--dim); text-align:center; padding:20px 0;">No missed girls logged yet.</div>';
+        return;
+      }
+
+      const dist = { 0: 0, 1: 0, 2: 0, 3: 0, 4: 0, '5+': 0 };
+      missed.forEach(m => {
+        const n = (m.sightings || []).length;
+        if (n >= 5) dist['5+']++;
+        else dist[n]++;
+      });
+      const maxDist = Math.max(1, ...Object.values(dist));
+      const labels = ['0', '1', '2', '3', '4', '5+'];
+      const colors = ['var(--danger)', 'var(--yellow)', 'var(--yellow)', 'var(--success)', 'var(--success)', 'var(--success)'];
+      let html = '<div style="display:flex; flex-direction:column; gap:8px; margin-bottom:20px;">';
+      labels.forEach((lbl, i) => {
+        const count = dist[lbl === '5+' ? '5+' : Number(lbl)];
+        const pct = (count / maxDist) * 100;
+        html += `<div class="funnel-step" style="align-items:center;">
+          <span class="funnel-label" style="width:36px; font-size:13px;">${lbl}x</span>
+          <div class="funnel-bar-bg" style="flex:1;">
+            <div class="funnel-bar-fill" style="width:${count > 0 ? Math.max(2, pct) : 0}%;background:${colors[i]}"></div>
+            ${count > 0 ? `<span class="funnel-bar-text" style="color:#fff; padding-left:6px; font-size:11px;">${count}</span>` : ''}
+          </div>
+          <span style="width:50px; text-align:right; font-size:12px; color:var(--dim);">${count} girl${count !== 1 ? 's' : ''}</span>
+        </div>`;
+      });
+      html += '</div>';
+      statsEl.textContent = `${dist[0]} never seen again (${Math.round(dist[0]/missed.length*100)}% gone forever)`;
+
+      html += `<div style="border-top:1px solid var(--border); padding-top:16px;">`;
+      [...missed].reverse().forEach(m => {
+        const n = (m.sightings || []).length;
+        const lastSeen = n > 0 ? m.sightings[n - 1] : null;
+        html += `<div style="background:var(--card); border:1px solid var(--border); border-radius:10px; padding:10px; margin-bottom:8px; font-size:12px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+            <span style="color:var(--dim); font-size:11px;">${m.date} — ${escHtml(m.reason)}</span>
+            <span style="font-size:11px; color:${n > 0 ? 'var(--success)' : 'var(--danger)'};">${n}x seen again</span>
+          </div>
+          ${m.note ? `<div style="color:var(--dim); font-style:italic; font-size:11px; margin-bottom:6px;">"${escHtml(m.note)}"</div>` : ''}
+          ${lastSeen ? `<div style="font-size:11px; color:var(--dim); margin-bottom:6px;">Last: ${lastSeen}</div>` : ''}
+          <button class="missed-entry-btn saw-again${n > 0 ? ' active' : ''}" onclick="markSawAgainPage(${m.id})" style="font-size:11px;">Saw her again</button>
+        </div>`;
+      });
+      html += '</div>';
+      chartEl.innerHTML = html;
+    }
+
+    function markSawAgainPage(id) {
+      const data = getData();
+      const entry = (data.missed || []).find(m => m.id === id);
+      if (!entry) return;
+      if (!entry.sightings) entry.sightings = [];
+      entry.sightings.push(todayStr());
+      saveData(data);
+      renderSeenAgainPage();
+    }
+
+    function renderProspectsPage() {
+      renderProspects(getData());
+    }
+
     // --- Power Level Calculation ---
     function calcPowerLevel(totalTalks, totalSeen, activeDays, daysPassed, totalDays, avgTalksPerActiveDay, data) {
       // Base Power
@@ -5198,11 +5881,9 @@
     // --- SITUATIONS ---
     let situationModalMode = 'add';
     let situationEditId = null;
-
     function openSituationModal(editId) {
       if (editId) {
-        situationModalMode = 'edit';
-        situationEditId = editId;
+        situationModalMode = 'edit'; situationEditId = editId;
         const data = getData();
         const sit = data.situations.find(s => s.id === editId);
         if (!sit) return;
@@ -5214,24 +5895,14 @@
         document.getElementById('sitWhatDo').value = sit.whatDo || '';
         document.getElementById('sitOutcomes').value = sit.outcomes || '';
       } else {
-        situationModalMode = 'add';
-        situationEditId = null;
+        situationModalMode = 'add'; situationEditId = null;
         document.getElementById('situationModalTitle').textContent = 'Create Situation';
-        document.getElementById('sitTitle').value = '';
-        document.getElementById('sitSetting').value = '';
-        document.getElementById('sitDescription').value = '';
-        document.getElementById('sitWhatSay').value = '';
-        document.getElementById('sitWhatDo').value = '';
-        document.getElementById('sitOutcomes').value = '';
+        ['sitTitle','sitSetting','sitDescription','sitWhatSay','sitWhatDo','sitOutcomes'].forEach(id => document.getElementById(id).value = '');
       }
       document.getElementById('situationModal').classList.add('open');
       setTimeout(() => document.getElementById('sitTitle').focus(), 100);
     }
-
-    function closeSituationModal() {
-      document.getElementById('situationModal').classList.remove('open');
-    }
-
+    function closeSituationModal() { document.getElementById('situationModal').classList.remove('open'); }
     function confirmSituation() {
       const title = document.getElementById('sitTitle').value.trim();
       if (!title) { document.getElementById('sitTitle').focus(); return; }
@@ -5241,45 +5912,25 @@
       const whatDo = document.getElementById('sitWhatDo').value.trim();
       const outcomes = document.getElementById('sitOutcomes').value.trim();
       const data = getData();
-
       if (situationModalMode === 'edit' && situationEditId) {
         const sit = data.situations.find(s => s.id === situationEditId);
-        if (sit) {
-          sit.title = title; sit.setting = setting; sit.description = description;
-          sit.whatSay = whatSay; sit.whatDo = whatDo; sit.outcomes = outcomes;
-        }
+        if (sit) { sit.title = title; sit.setting = setting; sit.description = description; sit.whatSay = whatSay; sit.whatDo = whatDo; sit.outcomes = outcomes; }
       } else {
         data.situations.push({ id: Date.now(), title, setting, description, whatSay, whatDo, outcomes, created: todayStr() });
       }
-      saveData(data);
-      closeSituationModal();
-      renderSituations();
+      saveData(data); closeSituationModal(); renderSituations();
     }
-
     function deleteSituation(id) {
       if (!confirm('Delete this situation?')) return;
-      const data = getData();
-      data.situations = data.situations.filter(s => s.id !== id);
-      saveData(data);
-      renderSituations();
+      const data = getData(); data.situations = data.situations.filter(s => s.id !== id); saveData(data); renderSituations();
     }
-
-    function toggleSituationCard(id) {
-      const card = document.getElementById('sitCard' + id);
-      if (card) card.classList.toggle('expanded');
-    }
-
+    function toggleSituationCard(id) { const card = document.getElementById('sitCard' + id); if (card) card.classList.toggle('expanded'); }
     function renderSituations() {
-      const data = getData();
-      const sits = data.situations || [];
+      const data = getData(); const sits = data.situations || [];
       document.getElementById('situationCountPage').textContent = sits.length;
       const container = document.getElementById('situationList');
       const tip = document.getElementById('situationsTip');
-      if (sits.length === 0) {
-        container.innerHTML = '<div class="situations-empty"><div class="empty-icon">🎭</div>No situations yet.<br>Create one and mentally rehearse your approach.</div>';
-        tip.style.display = '';
-        return;
-      }
+      if (sits.length === 0) { container.innerHTML = '<div class="situations-empty"><div class="empty-icon">🎭</div>No situations yet.<br>Create one and mentally rehearse your approach.</div>'; tip.style.display = ''; return; }
       tip.style.display = sits.length > 2 ? 'none' : '';
       let html = '';
       sits.slice().reverse().forEach(sit => {
@@ -5288,25 +5939,7 @@
         if (sit.whatSay) fields.push({ label: "What I'll Say", text: sit.whatSay });
         if (sit.whatDo) fields.push({ label: "What I'll Do", text: sit.whatDo });
         if (sit.outcomes) fields.push({ label: 'Possible Outcomes', text: sit.outcomes });
-        html += `<div class="situation-card" id="sitCard${sit.id}">
-          <div class="situation-card-header" onclick="toggleSituationCard(${sit.id})">
-            <div class="situation-card-title">
-              <span>${escHtml(sit.title)}</span>
-              <span class="expand-icon">▼</span>
-            </div>
-            ${sit.setting ? `<div class="situation-card-setting">📍 ${escHtml(sit.setting)}</div>` : ''}
-          </div>
-          <div class="situation-card-body">
-            ${fields.map(f => `<div class="situation-field">
-              <div class="situation-field-label">${f.label}</div>
-              <div class="situation-field-text">${escHtml(f.text)}</div>
-            </div>`).join('')}
-            <div class="situation-card-actions">
-              <button class="sit-edit" onclick="openSituationModal(${sit.id})">Edit</button>
-              <button class="sit-delete" onclick="deleteSituation(${sit.id})">Delete</button>
-            </div>
-          </div>
-        </div>`;
+        html += `<div class="situation-card" id="sitCard${sit.id}"><div class="situation-card-header" onclick="toggleSituationCard(${sit.id})"><div class="situation-card-title"><span>${escHtml(sit.title)}</span><span class="expand-icon">▼</span></div>${sit.setting ? `<div class="situation-card-setting">📍 ${escHtml(sit.setting)}</div>` : ''}</div><div class="situation-card-body">${fields.map(f => `<div class="situation-field"><div class="situation-field-label">${f.label}</div><div class="situation-field-text">${escHtml(f.text)}</div></div>`).join('')}<div class="situation-card-actions"><button class="sit-edit" onclick="openSituationModal(${sit.id})">Edit</button><button class="sit-delete" onclick="deleteSituation(${sit.id})">Delete</button></div></div></div>`;
       });
       container.innerHTML = html;
     }
@@ -5323,36 +5956,24 @@
     // --- MANIFESTS ---
     let manifestModalMode = 'add';
     let manifestEditId = null;
-
     function openManifestModal(editId) {
       if (editId) {
-        manifestModalMode = 'edit';
-        manifestEditId = editId;
-        const data = getData();
-        const m = data.manifests.find(x => x.id === editId);
-        if (!m) return;
+        manifestModalMode = 'edit'; manifestEditId = editId;
+        const data = getData(); const m = data.manifests.find(x => x.id === editId); if (!m) return;
         document.getElementById('manifestModalTitle').textContent = 'Edit Manifest';
         document.getElementById('manTitle').value = m.title;
         document.getElementById('manSituation').value = m.situation || '';
         document.getElementById('manWhy').value = m.why || '';
         document.getElementById('manDeadline').value = m.deadline || '';
       } else {
-        manifestModalMode = 'add';
-        manifestEditId = null;
+        manifestModalMode = 'add'; manifestEditId = null;
         document.getElementById('manifestModalTitle').textContent = 'Create Manifest';
-        document.getElementById('manTitle').value = '';
-        document.getElementById('manSituation').value = '';
-        document.getElementById('manWhy').value = '';
-        document.getElementById('manDeadline').value = '';
+        ['manTitle','manSituation','manWhy','manDeadline'].forEach(id => document.getElementById(id).value = '');
       }
       document.getElementById('manifestModal').classList.add('open');
       setTimeout(() => document.getElementById('manTitle').focus(), 100);
     }
-
-    function closeManifestModal() {
-      document.getElementById('manifestModal').classList.remove('open');
-    }
-
+    function closeManifestModal() { document.getElementById('manifestModal').classList.remove('open'); }
     function confirmManifest() {
       const title = document.getElementById('manTitle').value.trim();
       if (!title) { document.getElementById('manTitle').focus(); return; }
@@ -5366,49 +5987,29 @@
       } else {
         data.manifests.push({ id: Date.now(), title, situation, why, deadline, status: 'pending', created: todayStr() });
       }
-      saveData(data);
-      closeManifestModal();
-      renderManifests();
+      saveData(data); closeManifestModal(); renderManifests();
     }
-
     function deleteManifest(id) {
       if (!confirm('Delete this manifest?')) return;
-      const data = getData();
-      data.manifests = data.manifests.filter(x => x.id !== id);
-      saveData(data);
-      renderManifests();
+      const data = getData(); data.manifests = data.manifests.filter(x => x.id !== id); saveData(data); renderManifests();
     }
-
     function toggleManifestStatus(id) {
-      const data = getData();
-      const m = data.manifests.find(x => x.id === id);
-      if (!m) return;
+      const data = getData(); const m = data.manifests.find(x => x.id === id); if (!m) return;
       m.status = m.status === 'manifested' ? 'pending' : 'manifested';
       if (m.status === 'manifested') m.manifestedDate = todayStr();
-      saveData(data);
-      renderManifests();
+      saveData(data); renderManifests();
       if (navigator.vibrate) navigator.vibrate(30);
     }
-
-    function toggleManifestCard(id) {
-      const card = document.getElementById('manCard' + id);
-      if (card) card.classList.toggle('expanded');
-    }
-
+    function toggleManifestCard(id) { const card = document.getElementById('manCard' + id); if (card) card.classList.toggle('expanded'); }
     function renderManifests() {
-      const data = getData();
-      const mans = data.manifests || [];
+      const data = getData(); const mans = data.manifests || [];
       const pending = mans.filter(m => m.status !== 'manifested');
       const done = mans.filter(m => m.status === 'manifested');
       document.getElementById('manifestCount').textContent = done.length;
       document.getElementById('manifestPendingCount').textContent = pending.length;
       const container = document.getElementById('manifestList');
       const tip = document.getElementById('manifestTip');
-      if (mans.length === 0) {
-        container.innerHTML = '<div class="manifest-empty"><div class="empty-icon">✨</div>No manifests yet.<br>Write exactly what you want to happen. Own it.</div>';
-        tip.style.display = '';
-        return;
-      }
+      if (mans.length === 0) { container.innerHTML = '<div class="manifest-empty"><div class="empty-icon">✨</div>No manifests yet.<br>Write exactly what you want to happen. Own it.</div>'; tip.style.display = ''; return; }
       tip.style.display = mans.length > 2 ? 'none' : '';
       let html = '';
       [...pending.slice().reverse(), ...done.slice().reverse()].forEach(m => {
@@ -5420,26 +6021,7 @@
         const statusLabel = m.status === 'manifested' ? '✅ Manifested' : '⏳ Pending';
         const statusClass = m.status === 'manifested' ? 'manifested' : 'pending';
         const toggleLabel = m.status === 'manifested' ? 'Undo' : '✅ Mark Manifested';
-        html += `<div class="manifest-card" id="manCard${m.id}">
-          <div class="manifest-card-header" onclick="toggleManifestCard(${m.id})">
-            <div class="manifest-card-title">
-              <span>${escHtml(m.title)}</span>
-              <span class="expand-icon">▼</span>
-            </div>
-            <div class="manifest-card-status ${statusClass}">${statusLabel}</div>
-          </div>
-          <div class="manifest-card-body">
-            ${fields.map(f => `<div class="manifest-field">
-              <div class="manifest-field-label">${f.label}</div>
-              <div class="manifest-field-text">${escHtml(f.text)}</div>
-            </div>`).join('')}
-            <div class="manifest-card-actions">
-              <button class="man-toggle" onclick="toggleManifestStatus(${m.id})">${toggleLabel}</button>
-              <button class="man-edit" onclick="openManifestModal(${m.id})">Edit</button>
-              <button class="man-delete" onclick="deleteManifest(${m.id})">Delete</button>
-            </div>
-          </div>
-        </div>`;
+        html += `<div class="manifest-card" id="manCard${m.id}"><div class="manifest-card-header" onclick="toggleManifestCard(${m.id})"><div class="manifest-card-title"><span>${escHtml(m.title)}</span><span class="expand-icon">▼</span></div><div class="manifest-card-status ${statusClass}">${statusLabel}</div></div><div class="manifest-card-body">${fields.map(f => `<div class="manifest-field"><div class="manifest-field-label">${f.label}</div><div class="manifest-field-text">${escHtml(f.text)}</div></div>`).join('')}<div class="manifest-card-actions"><button class="man-toggle" onclick="toggleManifestStatus(${m.id})">${toggleLabel}</button><button class="man-edit" onclick="openManifestModal(${m.id})">Edit</button><button class="man-delete" onclick="deleteManifest(${m.id})">Delete</button></div></div></div>`;
       });
       container.innerHTML = html;
     }
@@ -5732,7 +6314,7 @@
         </div>
         <div class="enc-summary-card">
           <div class="enc-summary-num">${bailedEnc.length}</div>
-          <div class="enc-summary-lbl">Missed</div>
+          <div class="enc-summary-lbl">Didn't Act</div>
         </div>
         <div class="enc-summary-card">
           <div class="enc-summary-num">${avgAge || '—'}</div>
@@ -5758,7 +6340,7 @@
         <h3>All Girls Inventory</h3>
         <div class="enc-kv"><span class="k">Total encounters with age logged</span><span class="v">${totalEnc}</span></div>
         <div class="enc-kv"><span class="k">Talked</span><span class="v">${approached.length}</span></div>
-        <div class="enc-kv"><span class="k">Missed</span><span class="v">${bailedEnc.length}</span></div>
+        <div class="enc-kv"><span class="k">Didn't Act</span><span class="v">${bailedEnc.length}</span></div>
         ${ageInventory || '<div class="enc-kv"><span class="k">Ages</span><span class="v">No age data yet</span></div>'}
       `;
 
@@ -5904,7 +6486,7 @@
       }
       saveData(data);
       closePrettyModal();
-      render();
+      renderPrettyGirlsPage();
     }
 
     function deletePrettyGirl(id) {
@@ -5912,7 +6494,7 @@
       const data = getData();
       data.prettyGirls = (data.prettyGirls || []).filter(p => p.id !== id);
       saveData(data);
-      render();
+      renderPrettyGirlsPage();
     }
 
     function renderPrettyGirls(data) {
@@ -5985,6 +6567,16 @@
       `).join('');
     }
 
+    function toggleReportSection(id) {
+      document.getElementById(id).classList.toggle('open');
+    }
+
+    function renderReportExtras(data) {
+      // These sections have been moved to their own sub-pages via the hamburger menu.
+      // Render is now handled by renderPrettyGirlsPage(), renderAgeRatingsPage(),
+      // renderSeenAgainPage(), and renderProspectsPage() when those views are opened.
+    }
+
     // --- GO MODE ---
     const GO_FEARS = [
       'Scared of rejection',
@@ -6011,6 +6603,26 @@
     };
 
     let selectedGoFear = null;
+    let goIntention = null; // 'yes' | 'no' | null
+
+    function setGoIntention(val) {
+      goIntention = val;
+      document.getElementById('goIntentionYes').style.background = val === 'yes' ? 'rgba(48,209,88,0.25)' : 'rgba(48,209,88,0.08)';
+      document.getElementById('goIntentionNo').style.background = val === 'no' ? 'rgba(255,69,58,0.25)' : 'rgba(255,69,58,0.08)';
+      if (val === 'yes') {
+        document.getElementById('goAgreementSection').style.display = 'block';
+      } else {
+        document.getElementById('goAgreementSection').style.display = 'none';
+        // No intention → just close and show stats
+        closeGoMode();
+        showEncStatsModal('miss', null);
+      }
+    }
+
+    function goAgreementExit() {
+      closeGoMode();
+      showEncStatsModal('miss', null);
+    }
 
     function openGoMode() {
       document.getElementById('goReason').value = '';
@@ -6029,6 +6641,11 @@
       document.getElementById('goUrgencyHint').style.display = 'none';
       selectedSeeAgain = null;
       document.querySelectorAll('.go-see-btn').forEach(b => b.classList.remove('selected'));
+      // Reset intention state
+      goIntention = null;
+      document.getElementById('goAgreementSection').style.display = 'none';
+      document.getElementById('goIntentionYes').style.background = 'rgba(48,209,88,0.08)';
+      document.getElementById('goIntentionNo').style.background = 'rgba(255,69,58,0.08)';
 
       // Render fear buttons
       const grid = document.getElementById('goFearGrid');
@@ -6138,7 +6755,10 @@
       // Show success flash
       const flash = document.getElementById('goSuccessFlash');
       flash.classList.add('show');
-      setTimeout(() => flash.classList.remove('show'), 900);
+      setTimeout(() => {
+        flash.classList.remove('show');
+        showEncStatsModal('approach', attempt);
+      }, 900);
 
       if (navigator.vibrate) navigator.vibrate([50, 100, 50, 100, 50]);
       render();
@@ -6393,6 +7013,11 @@
       // Boldness
       calculateBoldness();
 
+      // Engagement + Life's Hard + Feature Requests
+      renderEngagement(data);
+      renderLifeHard(data);
+      renderFeatureRequests(data);
+
       // Re-encounter Reality Check
       if (missed.length > 0) {
         document.getElementById('reencounterSection').style.display = '';
@@ -6507,7 +7132,7 @@
       // People Log
       renderPeople(data);
       renderExcuses(data);
-      renderPrettyGirls(data);
+      // Prospects, PrettyGirls, AgeRatings, SeenAgain are rendered in their sub-pages via hamburger menu
 
       // Funnel
       const funnelData = [
@@ -6635,20 +7260,436 @@
       navigator.serviceWorker.register('/sw.js');
     }
 
+    // --- ENCOUNTER STATS MODAL (Win/Loss) ---
+    let encStatsPendingMiss = false; // track if we should open miss modal on log
+
+    function showEncStatsModal(type, context) {
+      const data = getData();
+      const s = data.settings;
+      const seeAgainPct = s.secondChance || 10;
+
+      const lostEl = document.getElementById('encStatsLostList');
+      const wonEl = document.getElementById('encStatsWonList');
+      const zeroEl = document.getElementById('encStatsZero');
+      const cumulEl = document.getElementById('encStatsCumulative');
+      const logBtn = document.getElementById('encStatsLogBtn');
+      const titleEl = document.getElementById('encStatsTitle');
+      const subEl = document.getElementById('encStatsSub');
+      const iconEl = document.getElementById('encStatsIcon');
+
+      const makeLost = (text) => `<div style="background:rgba(255,69,58,0.08); border:1px solid rgba(255,69,58,0.2); border-radius:8px; padding:8px 12px; font-size:13px; color:var(--danger);">${text}</div>`;
+      const makeWon = (text) => `<div style="background:rgba(48,209,88,0.08); border:1px solid rgba(48,209,88,0.2); border-radius:8px; padding:8px 12px; font-size:13px; color:var(--success);">${text}</div>`;
+
+      if (type === 'miss') {
+        iconEl.textContent = '📉';
+        titleEl.textContent = 'Results.';
+        subEl.textContent = 'Every number is real.';
+
+        // Calculate funnel projections
+        const convoChance = Math.round(s.convoRate || 40);
+        const dateChance = Math.round((s.convoRate / 100) * (s.numberRate / 100) * (s.dateRate / 100) * 100);
+
+        lostEl.innerHTML = [
+          makeLost(`Potential new connection — gone`),
+          makeLost(`~${convoChance}% chance of a real conversation — gone`),
+          makeLost(`~${dateChance}% chance of a date — gone`),
+          makeLost(`${100 - seeAgainPct}% chance she's gone forever`),
+        ].join('');
+
+        wonEl.innerHTML = [
+          makeWon('Some personal time preserved'),
+          makeWon('Comfort zone intact — for now'),
+        ].join('');
+
+        zeroEl.style.display = 'block';
+
+        // Accumulate lost opportunity %
+        const lossPoints = (100 - seeAgainPct) + convoChance + dateChance;
+        data.totalLostOpportunityPct = (data.totalLostOpportunityPct || 0) + lossPoints;
+        saveData(data);
+
+        const totalMisses = (data.missed || []).length;
+        if (totalMisses > 0) {
+          cumulEl.style.display = 'block';
+          cumulEl.innerHTML = `Total opportunity cost: <strong style="color:var(--danger)">${Math.round(data.totalLostOpportunityPct)}%</strong> across ${totalMisses} miss${totalMisses !== 1 ? 'es' : ''}`;
+        } else {
+          cumulEl.style.display = 'none';
+        }
+
+        logBtn.style.display = 'block';
+        encStatsPendingMiss = true;
+
+      } else if (type === 'approach') {
+        iconEl.textContent = '🔥';
+        titleEl.textContent = 'You did it.';
+        subEl.textContent = 'This is what taking action looks like.';
+
+        wonEl.innerHTML = [
+          makeWon('New connection attempt — logged'),
+          makeWon('+Boldness — confidence increases by doing'),
+          makeWon('You gave yourself a chance'),
+          makeWon('The scared version of you lost today'),
+        ].join('');
+
+        lostEl.innerHTML = [
+          makeLost('Comfort zone spent'),
+          makeLost('A few seconds of uncertainty'),
+        ].join('');
+
+        zeroEl.style.display = 'none';
+        cumulEl.style.display = 'none';
+        logBtn.style.display = 'none';
+        encStatsPendingMiss = false;
+      }
+
+      document.getElementById('encStatsModal').classList.add('open');
+    }
+
+    function closeEncStatsModal() {
+      document.getElementById('encStatsModal').classList.remove('open');
+      encStatsPendingMiss = false;
+    }
+
+    function encStatsLogMiss() {
+      closeEncStatsModal();
+      openMissedModal();
+    }
+
+    // --- FEATURE REQUESTS ---
+    let editingFeatureRequestId = null;
+
+    function openFeatureRequestModal(id = null) {
+      editingFeatureRequestId = id;
+      if (id) {
+        const data = getData();
+        const fr = (data.featureRequests || []).find(f => f.id === id);
+        if (fr) {
+          document.getElementById('featureRequestTitle').value = fr.title || '';
+          document.getElementById('featureRequestDesc').value = fr.description || '';
+        }
+        document.getElementById('featureRequestModalTitle').textContent = 'Edit Feature Idea';
+      } else {
+        document.getElementById('featureRequestTitle').value = '';
+        document.getElementById('featureRequestDesc').value = '';
+        document.getElementById('featureRequestModalTitle').textContent = 'Add Feature Idea';
+      }
+      document.getElementById('featureRequestModal').classList.add('open');
+      setTimeout(() => document.getElementById('featureRequestTitle').focus(), 100);
+    }
+
+    function closeFeatureRequestModal() {
+      document.getElementById('featureRequestModal').classList.remove('open');
+      editingFeatureRequestId = null;
+    }
+
+    function confirmFeatureRequest() {
+      const title = document.getElementById('featureRequestTitle').value.trim();
+      if (!title) return;
+      const desc = document.getElementById('featureRequestDesc').value.trim();
+      const data = getData();
+      if (!data.featureRequests) data.featureRequests = [];
+      if (editingFeatureRequestId) {
+        const fr = data.featureRequests.find(f => f.id === editingFeatureRequestId);
+        if (fr) { fr.title = title; fr.description = desc; }
+      } else {
+        data.featureRequests.push({ id: Date.now(), date: todayStr(), title, description: desc });
+      }
+      saveData(data);
+      closeFeatureRequestModal();
+      renderFeatureRequests(data);
+    }
+
+    function deleteFeatureRequest(id) {
+      if (!confirm('Delete this feature idea?')) return;
+      const data = getData();
+      data.featureRequests = (data.featureRequests || []).filter(f => f.id !== id);
+      saveData(data);
+      renderFeatureRequests(data);
+    }
+
+    function renderFeatureRequests(data) {
+      const list = document.getElementById('featureRequestsList');
+      const countEl = document.getElementById('featureRequestsCount');
+      if (!list) return;
+      const frs = data.featureRequests || [];
+      if (countEl) countEl.textContent = frs.length;
+      if (frs.length === 0) {
+        list.innerHTML = '<div style="font-size:12px; color:var(--dim); text-align:center; padding:10px 0;">No feature ideas yet.</div>';
+        return;
+      }
+      list.innerHTML = [...frs].reverse().map(fr => `
+        <div style="background:var(--card); border:1px solid var(--border); border-radius:10px; padding:12px; margin-bottom:8px;">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:4px;">
+            <div style="font-size:14px; font-weight:600;">${escHtml(fr.title)}</div>
+            <div style="display:flex; gap:8px; flex-shrink:0; margin-left:8px;">
+              <button onclick="openFeatureRequestModal(${fr.id})" style="background:none;border:none;color:var(--blue);font-size:12px;cursor:pointer;">Edit</button>
+              <button onclick="deleteFeatureRequest(${fr.id})" style="background:none;border:none;color:var(--danger);font-size:12px;cursor:pointer;">Delete</button>
+            </div>
+          </div>
+          ${fr.description ? `<div style="font-size:12px; color:var(--dim); line-height:1.4;">${escHtml(fr.description)}</div>` : ''}
+          <div style="font-size:10px; color:var(--dim); margin-top:6px;">${fr.date}</div>
+        </div>
+      `).join('');
+    }
+
+    // --- ENGAGEMENT STAT ---
+    function saveEngagement(key, value) {
+      const data = getData();
+      if (!data.engagementFactors) data.engagementFactors = { environments: 1, friends: 0, talksDaily: 0, lastSocialDate: '' };
+      data.engagementFactors[key] = key === 'lastSocialDate' ? value : (parseFloat(value) || 0);
+      saveData(data);
+      renderEngagement(data);
+    }
+
+    function calcEngagementScore(ef) {
+      // environments: 0-10 → 0-30 pts
+      // friends: 0-50+ → 0-30 pts (cap at 50 for 100%)
+      // talksDaily: 0-5+ → 0-20 pts
+      // lastSocialDate: recent → 0-20 pts
+      const envScore = Math.min(30, (ef.environments || 0) * 3);
+      const friendScore = Math.min(30, ((ef.friends || 0) / 50) * 30);
+      const talkScore = Math.min(20, (ef.talksDaily || 0) * 4);
+      let socialScore = 0;
+      if (ef.lastSocialDate) {
+        const daysAgo = daysBetween(ef.lastSocialDate, todayStr());
+        socialScore = daysAgo <= 1 ? 20 : daysAgo <= 3 ? 15 : daysAgo <= 7 ? 10 : daysAgo <= 14 ? 5 : 0;
+      }
+      return Math.min(100, Math.round(envScore + friendScore + talkScore + socialScore));
+    }
+
+    function renderEngagement(data) {
+      const ef = data.engagementFactors || {};
+      const score = calcEngagementScore(ef);
+      const scoreEl = document.getElementById('engagementScore');
+      const barEl = document.getElementById('engagementBar');
+      const labelEl = document.getElementById('engagementLabel');
+      if (scoreEl) scoreEl.textContent = score + '%';
+      if (barEl) {
+        barEl.style.width = score + '%';
+        barEl.style.background = score >= 70 ? 'var(--success)' : score >= 40 ? 'var(--yellow)' : 'var(--danger)';
+      }
+      const labels = [[0,'Disengaged — approach feels impossible'],[30,'Building — getting out there'],[60,'Engaged — you\'re in the flow'],[80,'Highly Engaged — world is your playground']];
+      const lbl = [...labels].reverse().find(([min]) => score >= min);
+      if (labelEl) labelEl.textContent = lbl ? lbl[1] : '—';
+      // Populate inputs
+      const envIn = document.getElementById('engEnvs');
+      const friendIn = document.getElementById('engFriends');
+      const talkIn = document.getElementById('engTalks');
+      const socialIn = document.getElementById('engLastSocial');
+      if (envIn && !envIn.matches(':focus')) envIn.value = ef.environments || '';
+      if (friendIn && !friendIn.matches(':focus')) friendIn.value = ef.friends || '';
+      if (talkIn && !talkIn.matches(':focus')) talkIn.value = ef.talksDaily || '';
+      if (socialIn && !socialIn.matches(':focus')) socialIn.value = ef.lastSocialDate || '';
+    }
+
+    // --- LIFE'S HARD STAT ---
+    function openLifeHardModal() {
+      document.getElementById('lifeHardText').value = '';
+      document.getElementById('lifeHardModal').classList.add('open');
+      setTimeout(() => document.getElementById('lifeHardText').focus(), 100);
+    }
+
+    function confirmLifeHard() {
+      const text = document.getElementById('lifeHardText').value.trim();
+      if (!text) return;
+      const data = getData();
+      if (!data.lifeHard) data.lifeHard = { logs: [] };
+      data.lifeHard.logs.unshift({ id: Date.now(), date: todayStr(), text, points: 10 });
+      saveData(data);
+      document.getElementById('lifeHardModal').classList.remove('open');
+      renderLifeHard(data);
+    }
+
+    function deleteLifeHardEntry(id) {
+      const data = getData();
+      data.lifeHard.logs = (data.lifeHard.logs || []).filter(l => l.id !== id);
+      saveData(data);
+      renderLifeHard(data);
+    }
+
+    function calcLifeHardScore(lifeHard) {
+      const today = new Date(todayStr());
+      let score = 0;
+      (lifeHard.logs || []).forEach(log => {
+        const logDate = new Date(log.date);
+        const daysAgo = Math.round((today - logDate) / 86400000);
+        const pts = Math.max(0, (log.points || 10) - daysAgo);
+        score += pts;
+      });
+      return Math.min(100, score);
+    }
+
+    function renderLifeHard(data) {
+      const lh = data.lifeHard || { logs: [] };
+      const score = calcLifeHardScore(lh);
+      const scoreEl = document.getElementById('lifeHardScore');
+      const barEl = document.getElementById('lifeHardBar');
+      const listEl = document.getElementById('lifeHardList');
+      if (scoreEl) scoreEl.textContent = score;
+      if (barEl) barEl.style.width = Math.max(2, score) + '%';
+      if (!listEl) return;
+      if (lh.logs.length === 0) {
+        listEl.innerHTML = '<div style="font-size:12px; color:var(--dim); text-align:center; padding:10px 0;">No hard things logged yet. Go do something hard.</div>';
+        return;
+      }
+      const today = new Date(todayStr());
+      listEl.innerHTML = lh.logs.slice(0, 15).map(log => {
+        const daysAgo = Math.round((today - new Date(log.date)) / 86400000);
+        const pts = Math.max(0, (log.points || 10) - daysAgo);
+        return `<div style="padding:10px; border-left:2px solid var(--success); margin-bottom:8px; background:rgba(48,209,88,0.05); border-radius:0 8px 8px 0;">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+            <div style="font-size:13px; font-weight:600; flex:1;">${escHtml(log.text)}</div>
+            <button onclick="deleteLifeHardEntry(${log.id})" style="background:none;border:none;color:var(--danger);font-size:11px;cursor:pointer;margin-left:8px;">✕</button>
+          </div>
+          <div style="font-size:11px; color:var(--dim); margin-top:4px;">${log.date} · +${pts} pts remaining</div>
+        </div>`;
+      }).join('');
+    }
+
+    // --- OPENING LINES ---
+    const DEFAULT_OPENERS = [
+      { text: '"Hey — I saw you and had to say something. You look really [specific thing]."', note: 'Direct. Honest. The specific thing makes it real.' },
+      { text: '"Excuse me — sorry to interrupt. I just noticed you and thought you seemed really interesting."', note: 'Works anywhere. The apology disarms her.' },
+      { text: '"Hey, random question — do you know anywhere good around here for [coffee/food/etc]?"', note: 'Low pressure. Easy to transition into conversation.' },
+      { text: '"Hey — this is a bit forward but you caught my eye. I\'m [name]."', note: 'Owning it shows confidence. Short and to the point.' },
+      { text: '"You look like someone I need to meet. I\'m [name]."', note: 'Bold. Confident. She knows exactly what\'s happening.' },
+      { text: '"I just had to say something — you have a really interesting [style/vibe/energy]."', note: 'Observation-based. Personal without being creepy.' },
+    ];
+
+    function renderRandomOpeners() {
+      const el = document.getElementById('goRandomOpeners');
+      if (!el) return;
+      const data = getData();
+      const all = [...DEFAULT_OPENERS, ...(data.openers || []).map(o => ({ text: o.text, note: o.note || '' }))];
+      // Pick 2 random, different ones
+      const shuffled = all.sort(() => Math.random() - 0.5).slice(0, 2);
+      el.innerHTML = shuffled.map(o => `
+        <div class="go-opener-card">
+          <div class="go-opener-text">${escHtml(o.text)}</div>
+          ${o.note ? `<div class="go-opener-note">${escHtml(o.note)}</div>` : ''}
+        </div>
+      `).join('');
+    }
+
+    let editingOpenerId = null;
+
+    function openOpenerModal(id = null) {
+      editingOpenerId = id;
+      if (id) {
+        const data = getData();
+        const op = (data.openers || []).find(o => o.id === id);
+        if (op) {
+          document.getElementById('openerText').value = op.text || '';
+          document.getElementById('openerNote').value = op.note || '';
+        }
+        document.getElementById('openerModalTitle').textContent = 'Edit Opening Line';
+      } else {
+        document.getElementById('openerText').value = '';
+        document.getElementById('openerNote').value = '';
+        document.getElementById('openerModalTitle').textContent = 'Add Opening Line';
+      }
+      document.getElementById('openerModal').classList.add('open');
+      setTimeout(() => document.getElementById('openerText').focus(), 100);
+    }
+
+    function closeOpenerModal() {
+      document.getElementById('openerModal').classList.remove('open');
+      editingOpenerId = null;
+    }
+
+    function confirmOpener() {
+      const text = document.getElementById('openerText').value.trim();
+      if (!text) return;
+      const note = document.getElementById('openerNote').value.trim();
+      const data = getData();
+      if (!data.openers) data.openers = [];
+      if (editingOpenerId) {
+        const op = data.openers.find(o => o.id === editingOpenerId);
+        if (op) { op.text = text; op.note = note; }
+      } else {
+        data.openers.push({ id: Date.now(), text, note });
+      }
+      saveData(data);
+      closeOpenerModal();
+      renderOpeners();
+    }
+
+    function deleteOpener(id) {
+      if (!confirm('Delete this opener?')) return;
+      const data = getData();
+      data.openers = (data.openers || []).filter(o => o.id !== id);
+      saveData(data);
+      renderOpeners();
+    }
+
+    function renderOpeners() {
+      const el = document.getElementById('openersList');
+      if (!el) return;
+      const data = getData();
+      let html = '';
+      html += `<h3 style="font-size:13px; color:var(--dim); text-transform:uppercase; letter-spacing:1px; margin-bottom:12px;">Default</h3>`;
+      DEFAULT_OPENERS.forEach(o => {
+        html += `<div class="go-opener-card" style="margin-bottom:10px;">
+          <div class="go-opener-text">${escHtml(o.text)}</div>
+          ${o.note ? `<div class="go-opener-note">${escHtml(o.note)}</div>` : ''}
+        </div>`;
+      });
+      const custom = data.openers || [];
+      if (custom.length > 0) {
+        html += `<h3 style="font-size:13px; color:var(--dim); text-transform:uppercase; letter-spacing:1px; margin:16px 0 12px;">Your Custom Lines</h3>`;
+        custom.forEach(o => {
+          html += `<div class="go-opener-card" style="margin-bottom:10px;">
+            <div class="go-opener-text">${escHtml(o.text)}</div>
+            ${o.note ? `<div class="go-opener-note">${escHtml(o.note)}</div>` : ''}
+            <div style="display:flex; gap:10px; margin-top:8px;">
+              <button onclick="openOpenerModal(${o.id})" style="background:none;border:none;color:var(--blue);font-size:12px;cursor:pointer;">Edit</button>
+              <button onclick="deleteOpener(${o.id})" style="background:none;border:none;color:var(--danger);font-size:12px;cursor:pointer;">Delete</button>
+            </div>
+          </div>`;
+        });
+      }
+      el.innerHTML = html;
+    }
+
     // --- NAVIGATION ---
+    const mainViews = ['Approach','Stats','Report','Internal','World'];
+    const subViews = ['Excuses','Encounters','Looks','Reviews','Openers','Prettygirls','Ageratings','Seenagain','Prospects'];
+    const allViews = mainViews.concat(subViews);
+
+    function openReportDrawer() {
+      document.getElementById('reportDrawerOverlay').classList.add('open');
+      document.getElementById('reportDrawerPanel').classList.add('open');
+    }
+    function closeReportDrawer() {
+      document.getElementById('reportDrawerOverlay').classList.remove('open');
+      document.getElementById('reportDrawerPanel').classList.remove('open');
+    }
+
     function switchView(view) {
-      ['Home','Stats','Excuses','Go','Encounters','Looks','Reviews','World'].forEach(v => {
+      allViews.forEach(v => {
         const k = v.toLowerCase();
-        document.getElementById('view' + v).classList.toggle('active', view === k);
-        document.getElementById('nav' + v).classList.toggle('active', view === k);
+        const el = document.getElementById('view' + v);
+        if (el) el.classList.toggle('active', view === k);
+      });
+      // Nav buttons only exist for main views
+      mainViews.forEach(v => {
+        const navEl = document.getElementById('nav' + v);
+        if (navEl) navEl.classList.toggle('active', view === v.toLowerCase());
       });
       window.scrollTo(0, 0);
+      if (view === 'approach') { renderGoTab(getData()); renderRandomOpeners(); }
+      if (view === 'report') render();
+      if (view === 'internal') render();
       if (view === 'stats') renderStats();
       if (view === 'excuses') renderExcuses(getData());
-      if (view === 'go') renderGoTab(getData());
       if (view === 'encounters') renderEncounters(getData());
       if (view === 'looks') renderLooks();
       if (view === 'reviews') renderReviews();
+      if (view === 'openers') renderOpeners();
+      if (view === 'prettygirls') renderPrettyGirlsPage();
+      if (view === 'ageratings') renderAgeRatingsPage();
+      if (view === 'seenagain') renderSeenAgainPage();
+      if (view === 'prospects') renderProspectsPage();
       if (view === 'world') { renderSituations(); renderManifests(); }
     }
 
@@ -6906,6 +7947,23 @@
         weekStartDate.setDate(weekStartDate.getDate() + 7);
       }
 
+      // Weekly Summary Banner (current week = last entry)
+      const summaryEl = document.getElementById('statsWeeklySummary');
+      if (summaryEl && weeks.length > 0) {
+        const cw = weeks[weeks.length - 1];
+        const cwBoldColor = cw.boldness >= 50 ? 'var(--success)' : cw.boldness >= 20 ? 'var(--yellow)' : 'var(--danger)';
+        summaryEl.innerHTML = `
+          <div style="font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--dim); margin-bottom:6px;">${cw.label} · This Week</div>
+          <div style="font-size:54px; font-weight:900; color:var(--accent); line-height:1;">${cw.seen}</div>
+          <div style="font-size:16px; font-weight:700; color:var(--dim); margin-bottom:12px;">approachable girls seen</div>
+          <div style="display:flex; justify-content:center; gap:20px; font-size:13px;">
+            <div><span style="color:var(--text); font-weight:700;">${cw.talked}</span> <span style="color:var(--dim);">talked</span></div>
+            <div><span style="color:${cwBoldColor}; font-weight:700;">${cw.boldness}%</span> <span style="color:var(--dim);">boldness</span></div>
+            <div><span style="color:var(--danger); font-weight:700;">${cw.missed}</span> <span style="color:var(--dim);">didn't act</span></div>
+          </div>
+        `;
+      }
+
       // Weekly Breakdown Table
       const wTbody = document.getElementById('statsWeeklyBody');
       wTbody.innerHTML = '';
@@ -6983,6 +8041,7 @@
     }
 
     render();
+    renderRandomOpeners();
 
     // --- BOLDNESS ---
     function openBoldnessModal() {
@@ -7028,14 +8087,32 @@
     }
 
     // --- LOOKS ---
-    function openLookModal() {
-      document.getElementById('lookSelfRating').value = '';
-      document.getElementById('lookOutfit').value = '';
-      document.getElementById('lookSituation').value = '';
-      document.getElementById('lookHerRating').value = '';
-      document.getElementById('lookHerAge').value = '';
-      document.getElementById('lookAppearance').value = '';
-      document.getElementById('lookDoHer').value = 'yes';
+    let editingLookId = null;
+
+    function openLookModal(id) {
+      editingLookId = id || null;
+      document.getElementById('lookModalTitle').textContent = id ? 'Edit Look' : 'Log a Look';
+      if (id) {
+        const data = getData();
+        const look = (data.looks || []).find(l => l.id === id);
+        if (look) {
+          document.getElementById('lookSelfRating').value = look.self || '';
+          document.getElementById('lookOutfit').value = look.outfit || '';
+          document.getElementById('lookSituation').value = look.sit || '';
+          document.getElementById('lookHerRating').value = look.her || '';
+          document.getElementById('lookHerAge').value = look.age || '';
+          document.getElementById('lookAppearance').value = look.app || '';
+          document.getElementById('lookDoHer').value = look.doHer || 'yes';
+        }
+      } else {
+        document.getElementById('lookSelfRating').value = '';
+        document.getElementById('lookOutfit').value = '';
+        document.getElementById('lookSituation').value = '';
+        document.getElementById('lookHerRating').value = '';
+        document.getElementById('lookHerAge').value = '';
+        document.getElementById('lookAppearance').value = '';
+        document.getElementById('lookDoHer').value = 'yes';
+      }
       document.getElementById('lookModal').classList.add('open');
     }
 
@@ -7047,9 +8124,16 @@
       const age = document.getElementById('lookHerAge').value;
       const app = document.getElementById('lookAppearance').value;
       const doHer = document.getElementById('lookDoHer').value;
-      
+
       const data = getData();
-      data.looks.push({ id: Date.now(), date: todayStr(), time: toHHMM(), self, outfit, sit, her, age, app, doHer });
+      if (editingLookId) {
+        const idx = (data.looks || []).findIndex(l => l.id === editingLookId);
+        if (idx !== -1) {
+          data.looks[idx] = { ...data.looks[idx], self, outfit, sit, her, age, app, doHer };
+        }
+      } else {
+        data.looks.push({ id: Date.now(), date: todayStr(), time: toHHMM(), self, outfit, sit, her, age, app, doHer });
+      }
       saveData(data);
       document.getElementById('lookModal').classList.remove('open');
       renderLooks();
@@ -7131,6 +8215,7 @@
         <div style="background:var(--card); border:1px solid var(--border); border-radius:12px; padding:12px; margin-bottom:10px;">
           <div style="display:flex; justify-content:space-between; align-items:center;">
             <div style="font-size:11px; color:var(--dim);">${l.date} ${l.time || ''}</div>
+            <button onclick="openLookModal(${l.id})" style="background:none;border:none;color:var(--dim);font-size:12px;cursor:pointer;margin-right:8px;">Edit</button>
             <button onclick="deleteLook(${l.id})" style="background:none;border:none;color:var(--danger);font-size:12px;cursor:pointer;">Delete</button>
           </div>
           <div style="margin-top:8px; font-size:13px;">
@@ -7156,37 +8241,60 @@
     // --- REVIEWS ---
     function renderReviews() {
         const data = getData();
+        const approaches = (data.goAttempts || []).filter(a => !a.bailed);
         const reviews = [];
-        (data.goAttempts || []).forEach(a => {
-            if (!a.bailed && a.review) {
-                // Use firstLine as the identifier, or 'Approach' if empty
+        approaches.forEach(a => {
+            if (a.review) {
                 const identifier = a.firstLine ? a.firstLine : 'Approach';
-                reviews.push({ ...a.review, personName: `"${identifier}"`, date: a.date });
+                reviews.push({ ...a.review, personName: `"${identifier}"`, date: a.date, attemptId: a.id });
             }
         });
-        
+
+        // Top section: all approaches with write/edit review buttons
+        const approachListEl = document.getElementById('reviewsApproachList');
+        if (approaches.length === 0) {
+            approachListEl.innerHTML = '<div style="color:var(--dim);font-size:13px;text-align:center;padding:20px 0;">No approaches logged yet. Use GO Mode on the Approach tab to log one.</div>';
+        } else {
+            const sorted = [...approaches].reverse();
+            approachListEl.innerHTML = `
+              <h3 style="font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:var(--dim); margin-bottom:12px;">Your Approaches</h3>
+              ${sorted.map(a => `
+                <div style="background:var(--card); border:1px solid var(--border); border-radius:12px; padding:12px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center;">
+                  <div>
+                    <div style="font-size:13px; font-weight:600;">${a.firstLine ? escHtml(a.firstLine) : 'Approach'}</div>
+                    <div style="font-size:11px; color:var(--dim); margin-top:2px;">${a.date}${a.time ? ' · ' + a.time : ''}${a.review ? ' · <span style="color:var(--success);">reviewed</span>' : ''}</div>
+                  </div>
+                  <button onclick="openGoReviewModal(${a.id})" style="background:${a.review ? 'rgba(48,209,88,0.1)' : 'rgba(255,107,53,0.15)'}; border:1px solid ${a.review ? 'rgba(48,209,88,0.3)' : 'rgba(255,107,53,0.4)'}; border-radius:8px; color:${a.review ? 'var(--success)' : 'var(--accent)'}; font-size:12px; font-weight:700; padding:6px 12px; cursor:pointer; white-space:nowrap;">
+                    ${a.review ? 'Edit Review' : '+ Write Review'}
+                  </button>
+                </div>
+              `).join('')}
+              <div style="border-top:1px solid var(--border); margin:20px 0;"></div>
+            `;
+        }
+
         let html = '';
         if (reviews.length === 0) {
-           html = '<div style="color:var(--dim);font-size:13px;text-align:center;margin-top:20px;">No approach reviews logged yet.<br>Add them from the Go Mode history in Encounters.</div>';
+           html = '';
         } else {
            // Full Reviews Section
            html += `<div style="margin-bottom:30px;">
              <h3 style="font-size:16px; color:var(--text); margin-bottom:12px; border-bottom:1px solid var(--border); padding-bottom:6px;">Full Reviews</h3>`;
            
            reviews.forEach(r => {
-             // Only show the Full Review box if there is a description OR if they want it anyway. 
-             // We'll show all reviews as a full box.
              html += `<div style="background:var(--card); border:1px solid var(--border); border-radius:12px; padding:14px; margin-bottom:12px;">
-               <div style="font-weight:700; font-size:14px; margin-bottom:4px; color:var(--accent);">${r.personName}</div>
+               <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:4px;">
+                 <div style="font-weight:700; font-size:14px; color:var(--accent);">${r.personName}</div>
+                 <button onclick="openGoReviewModal(${r.attemptId})" style="background:none;border:none;color:var(--blue);font-size:12px;font-weight:600;cursor:pointer;padding:0;">Edit</button>
+               </div>
                <div style="font-size:11px; color:var(--dim); margin-bottom:10px;">${r.date}</div>
-               ${r.desc ? `<div style="font-size:13px; margin-bottom:12px; line-height:1.5;">${r.desc.replace(/\\n/g, '<br>')}</div>` : ''}
-               
+               ${r.desc ? `<div style="font-size:13px; margin-bottom:12px; line-height:1.5;">${escHtml(r.desc).replace(/\n/g, '<br>')}</div>` : ''}
                <div style="font-size:12px; display:flex; flex-direction:column; gap:4px; padding-top:10px; border-top:1px solid var(--border);">
-                 ${r.weakpoints ? `<div><span style="color:var(--dim);">Weakpoints:</span> ${r.weakpoints}</div>` : ''}
-                 ${r.goodpoints ? `<div><span style="color:var(--dim);">Goodpoints:</span> ${r.goodpoints}</div>` : ''}
-                 ${r.more ? `<div><span style="color:var(--dim);">More:</span> ${r.more}</div>` : ''}
-                 ${r.less ? `<div><span style="color:var(--dim);">Less:</span> ${r.less}</div>` : ''}
-                 ${r.better ? `<div><span style="color:var(--dim);">Better:</span> ${r.better}</div>` : ''}
+                 ${r.weakpoints ? `<div><span style="color:var(--dim);">Weakpoints:</span> ${escHtml(r.weakpoints)}</div>` : ''}
+                 ${r.goodpoints ? `<div><span style="color:var(--dim);">Goodpoints:</span> ${escHtml(r.goodpoints)}</div>` : ''}
+                 ${r.more ? `<div><span style="color:var(--dim);">More:</span> ${escHtml(r.more)}</div>` : ''}
+                 ${r.less ? `<div><span style="color:var(--dim);">Less:</span> ${escHtml(r.less)}</div>` : ''}
+                 ${r.better ? `<div><span style="color:var(--dim);">Better:</span> ${escHtml(r.better)}</div>` : ''}
                </div>
              </div>`;
            });
@@ -7283,6 +8391,40 @@
       renderLooks();
     }
   </script>
+  <!-- ===== ENCOUNTER STATS MODAL (Win/Loss) ===== -->
+  <div class="modal-overlay" id="encStatsModal" style="z-index:1200; align-items:flex-start; padding-top:20px;">
+    <div class="person-modal" style="max-height:85vh; overflow-y:auto; width:100%;">
+      <div id="encStatsHeader" style="text-align:center; margin-bottom:16px;">
+        <div id="encStatsIcon" style="font-size:36px; margin-bottom:6px;"></div>
+        <div id="encStatsTitle" style="font-size:20px; font-weight:800;"></div>
+        <div id="encStatsSub" style="font-size:12px; color:var(--dim); margin-top:4px;"></div>
+      </div>
+
+      <div id="encStatsLost" style="margin-bottom:14px;">
+        <div style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:var(--danger); margin-bottom:8px;">🔴 Lost</div>
+        <div id="encStatsLostList" style="display:flex; flex-direction:column; gap:6px;"></div>
+      </div>
+
+      <div id="encStatsWon" style="margin-bottom:16px;">
+        <div style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:var(--success); margin-bottom:8px;">🟢 Won</div>
+        <div id="encStatsWonList" style="display:flex; flex-direction:column; gap:6px;"></div>
+      </div>
+
+      <div id="encStatsZero" style="background:rgba(255,69,58,0.1); border:1px solid rgba(255,69,58,0.3); border-radius:10px; padding:12px; text-align:center; margin-bottom:16px; display:none;">
+        <div style="font-size:13px; font-weight:700; color:var(--danger);">You made the % of something happening:</div>
+        <div style="font-size:36px; font-weight:900; color:var(--danger); margin:4px 0;">0%</div>
+        <div style="font-size:11px; color:var(--dim);">By not approaching, every outcome became impossible.</div>
+      </div>
+
+      <div id="encStatsCumulative" style="background:rgba(255,255,255,0.05); border:1px solid var(--border); border-radius:10px; padding:10px; text-align:center; margin-bottom:16px; font-size:12px; color:var(--dim); display:none;"></div>
+
+      <div id="encStatsActions" style="display:flex; flex-direction:column; gap:8px;">
+        <button id="encStatsLogBtn" onclick="encStatsLogMiss()" style="display:none; padding:12px; border-radius:12px; border:1px solid rgba(255,107,53,0.3); background:rgba(255,107,53,0.08); color:var(--accent); font-size:14px; font-weight:600; cursor:pointer;">Log this miss in detail →</button>
+        <button onclick="closeEncStatsModal()" style="padding:14px; border-radius:12px; border:none; background:rgba(255,255,255,0.1); color:var(--text); font-size:15px; font-weight:700; cursor:pointer;">Continue</button>
+      </div>
+    </div>
+  </div>
+
   <!-- GO MODE Overlay — outside all views so display:none on tabs doesn't block it -->
   <div class="go-overlay" id="goOverlay">
     <div class="go-panel">
@@ -7357,7 +8499,26 @@
         </div>
       </div>
 
-      <button class="go-execute" id="goExecute" onclick="executeGo()" disabled>GO</button>
+      <!-- Intention to Approach -->
+      <div id="goIntentionSection" style="margin-top:16px; background:rgba(255,255,255,0.05); border:1px solid var(--border); border-radius:14px; padding:14px;">
+        <div style="font-size:14px; font-weight:700; text-align:center; margin-bottom:12px;">Is your intention to approach?</div>
+        <div style="display:flex; gap:10px;">
+          <button onclick="setGoIntention('yes')" id="goIntentionYes" style="flex:1; padding:12px; border-radius:12px; border:1px solid rgba(48,209,88,0.3); background:rgba(48,209,88,0.08); color:var(--success); font-size:15px; font-weight:700; cursor:pointer;">YES</button>
+          <button onclick="setGoIntention('no')" id="goIntentionNo" style="flex:1; padding:12px; border-radius:12px; border:1px solid rgba(255,69,58,0.3); background:rgba(255,69,58,0.08); color:var(--danger); font-size:15px; font-weight:700; cursor:pointer;">NO</button>
+        </div>
+      </div>
+
+      <!-- Agreement (shown after YES) -->
+      <div id="goAgreementSection" style="display:none; margin-top:12px; background:rgba(48,209,88,0.06); border:1px solid rgba(48,209,88,0.25); border-radius:14px; padding:16px; text-align:center;">
+        <div style="font-size:15px; font-weight:700; color:var(--success); margin-bottom:8px;">Forget about wanting her.</div>
+        <div style="font-size:13px; color:var(--dim); line-height:1.5; margin-bottom:14px;">Do it without a goal — no outcome needed. Just approach. The rest is not your job right now.</div>
+        <div style="display:flex; gap:10px;">
+          <button onclick="goAgreementExit()" style="flex:1; padding:12px; border-radius:12px; border:1px solid var(--border); background:rgba(255,255,255,0.06); color:var(--dim); font-size:14px; font-weight:600; cursor:pointer;">Exit</button>
+          <button onclick="executeGo()" style="flex:1; padding:12px; border-radius:12px; border:none; background:var(--success); color:#000; font-size:15px; font-weight:800; cursor:pointer;">I AGREE — GO 🔥</button>
+        </div>
+      </div>
+
+      <button class="go-execute" id="goExecute" onclick="executeGo()" disabled style="display:none;">GO</button>
       <button class="go-bail" onclick="executeBail()">I didn't do it — log the miss</button>
     </div>
   </div>
