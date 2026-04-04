@@ -2789,6 +2789,22 @@
     .manifest-modal-field textarea { resize: vertical; min-height: 70px; }
     .manifest-modal-field input::placeholder, .manifest-modal-field textarea::placeholder { color: var(--dim); }
 
+    /* ===== STATUS PAGE (EPIC SERVERS STYLE) ===== */
+    .status-page-section { border-radius: var(--radius-md); overflow: hidden; }
+    .status-banner { background: var(--success); padding: 16px 20px; font-size: 15px; font-weight: 700; color: #fff; border-radius: var(--radius-sm); margin-bottom: 16px; }
+    .status-list { background: var(--card); border: 1px solid var(--glass-border); border-radius: var(--radius-sm); overflow: hidden; backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); box-shadow: var(--glass-specular), 0 4px 24px rgba(0, 0, 0, 0.3); }
+    .status-row { display: flex; justify-content: space-between; align-items: center; padding: 18px 16px; border-bottom: 1px solid rgba(255,255,255,0.06); cursor: pointer; -webkit-tap-highlight-color: transparent; transition: background 0.15s; }
+    .status-row:last-child { border-bottom: none; }
+    .status-row:active { background: rgba(255,255,255,0.04); }
+    .status-row-left { display: flex; align-items: center; gap: 10px; }
+    .status-expand { font-size: 14px; color: var(--dim); font-weight: 600; width: 18px; text-align: center; transition: transform 0.2s; }
+    .status-row.expanded .status-expand { transform: rotate(45deg); }
+    .status-row-name { font-size: 15px; font-weight: 600; color: var(--text); }
+    .status-label { font-size: 13px; font-weight: 600; }
+    .status-label.operational { color: var(--success); }
+    .status-label.degraded { color: var(--yellow); }
+    .status-label.down { color: var(--danger); }
+
     /* ===== GO TAB ACTION HUB ===== */
     .go-status-bar {
       display: flex;
@@ -3949,6 +3965,36 @@
           <div style="font-size:12px; color:var(--dim); margin-bottom:10px;">Log features you want in the app. Review and delete when done.</div>
           <button class="people-add-btn" onclick="openFeatureRequestModal()">+ Add Feature Idea</button>
           <div id="featureRequestsList" style="margin-top:10px;"></div>
+        </div>
+      </div>
+
+      <!-- Server Status -->
+      <div class="status-page-section" style="margin-top:16px;">
+        <div class="status-banner" id="statusBanner">
+          <span>All Systems Operational</span>
+        </div>
+        <div class="status-list">
+          <div class="status-row" onclick="toggleStatusRow(this)">
+            <div class="status-row-left">
+              <span class="status-expand">+</span>
+              <span class="status-row-name">Building</span>
+            </div>
+            <span class="status-label operational">Operational</span>
+          </div>
+          <div class="status-row" onclick="toggleStatusRow(this)">
+            <div class="status-row-left">
+              <span class="status-expand">+</span>
+              <span class="status-row-name">Selling</span>
+            </div>
+            <span class="status-label operational">Operational</span>
+          </div>
+          <div class="status-row" onclick="toggleStatusRow(this)">
+            <div class="status-row-left">
+              <span class="status-expand">+</span>
+              <span class="status-row-name">Marketing</span>
+            </div>
+            <span class="status-label operational">Operational</span>
+          </div>
         </div>
       </div>
 
@@ -7649,6 +7695,11 @@
         });
       }
       el.innerHTML = html;
+    }
+
+    // --- STATUS PAGE ---
+    function toggleStatusRow(row) {
+      row.classList.toggle('expanded');
     }
 
     // --- NAVIGATION ---
