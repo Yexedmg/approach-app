@@ -3873,8 +3873,9 @@
       </div>
 
       <div class="reset-section">
-        <button class="reset-btn" onclick="exportData()">Export Backup</button>
-        <button class="reset-btn" onclick="importData()" style="margin-left:8px">Import Backup</button>
+        <button class="reset-btn" onclick="exportData()">⬇ Export Backup (.json)</button>
+        <button class="reset-btn" onclick="importData()" style="margin-left:8px">⬆ Import Backup</button>
+        <input type="file" id="importFileInput" accept=".json,application/json" style="display:none" onchange="handleImportFile(this)">
         <button class="reset-btn" onclick="resetAll()" style="margin-top:10px;border-color:#ff3b3b44">Reset All
           Data</button>
       </div>
@@ -4915,24 +4916,41 @@
     applyTheme(localStorage.getItem('approachTheme') === 'light');
 
     function exportData() {
-      const data = localStorage.getItem('approachData');
-      if (!data) { alert('No data to export'); return; }
-      const encoded = btoa(unescape(encodeURIComponent(data)));
-      navigator.clipboard.writeText(encoded).then(() => {
-        alert('Backup copied to clipboard! Paste it somewhere safe.');
-      }).catch(() => { prompt('Copy this backup code:', encoded); });
+      const raw = localStorage.getItem('approachData');
+      if (!raw) { alert('No data to export.'); return; }
+      const date = new Date().toISOString().slice(0, 10);
+      const blob = new Blob([raw], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `approach-backup-${date}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
     }
 
     function importData() {
-      const encoded = prompt('Paste your backup code:');
-      if (!encoded) return;
-      try {
-        const data = JSON.parse(decodeURIComponent(escape(atob(encoded))));
-        if (!data.startDate || !data.settings || !data.days) throw new Error('Invalid');
-        localStorage.setItem('approachData', JSON.stringify(data));
-        render();
-        alert('Data restored!');
-      } catch { alert('Invalid backup code.'); }
+      document.getElementById('importFileInput').click();
+    }
+
+    function handleImportFile(input) {
+      const file = input.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const data = JSON.parse(e.target.result);
+          if (!data.startDate || !data.settings || !data.days) throw new Error('Invalid structure');
+          localStorage.setItem('approachData', JSON.stringify(data));
+          render();
+          alert('Data restored successfully!');
+        } catch(err) {
+          alert('Could not restore: ' + (err.message || 'Invalid file.'));
+        }
+        input.value = '';
+      };
+      reader.readAsText(file);
     }
 
     function resetAll() {
