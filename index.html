@@ -1439,31 +1439,149 @@
     }
 
     /* Reality Check Modal */
-    .reality-check { text-align: center; }
-    .reality-check .rc-icon { font-size: 48px; margin-bottom: 12px; }
-    .reality-check .rc-headline { font-size: 18px; font-weight: 800; color: var(--danger); margin-bottom: 8px; }
-    .reality-check .rc-truth { font-size: 13px; color: var(--dim); line-height: 1.6; margin-bottom: 16px; }
-    .reality-check .rc-truth strong { color: var(--text); }
-    .reality-check .rc-stat { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 12px; margin-bottom: 12px; }
-    .reality-check .rc-stat-num { font-size: 28px; font-weight: 800; color: var(--danger); }
-    .reality-check .rc-stat-label { font-size: 11px; color: var(--dim); margin-top: 2px; }
-    .reality-check .rc-btn-row { display: flex; gap: 8px; margin-top: 16px; }
-    .reality-check .rc-btn { flex: 1; padding: 14px 10px; border-radius: 12px; font-size: 13px; font-weight: 700; cursor: pointer; border: none; -webkit-tap-highlight-color: transparent; }
-    .reality-check .rc-dismiss { background: var(--bg); color: var(--dim); border: 1px solid var(--border); }
-    .reality-check .rc-go-back { background: var(--success); color: #000; }
+    .reality-check {
+      text-align: center;
+    }
+
+    .reality-check .rc-icon {
+      font-size: 48px;
+      margin-bottom: 12px;
+    }
+
+    .reality-check .rc-headline {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--danger);
+      margin-bottom: 8px;
+    }
+
+    .reality-check .rc-truth {
+      font-size: 13px;
+      color: var(--dim);
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+
+    .reality-check .rc-truth strong {
+      color: var(--text);
+    }
+
+    .reality-check .rc-stat {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px;
+      margin-bottom: 12px;
+    }
+
+    .reality-check .rc-stat-num {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--danger);
+    }
+
+    .reality-check .rc-stat-label {
+      font-size: 11px;
+      color: var(--dim);
+      margin-top: 2px;
+    }
+
+    .reality-check .rc-btn-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .reality-check .rc-btn {
+      flex: 1;
+      padding: 14px 10px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .reality-check .rc-dismiss {
+      background: var(--bg);
+      color: var(--dim);
+      border: 1px solid var(--border);
+    }
+
+    .reality-check .rc-go-back {
+      background: var(--success);
+      color: #000;
+    }
 
     /* Re-encounter Odds Screen */
-    .rc-odds-screen { display: none; }
-    .rc-odds-screen.active { display: block; }
-    .rc-main-screen.hidden { display: none; }
-    .rc-odds-title { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
-    .rc-odds-sub { font-size: 12px; color: var(--dim); margin-bottom: 14px; }
-    .rc-odds-grid { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
-    .rc-odds-btn { display: flex; justify-content: space-between; align-items: center; padding: 12px 14px; border: 1px solid var(--border); background: var(--bg); border-radius: 10px; color: var(--text); font-size: 13px; cursor: pointer; -webkit-tap-highlight-color: transparent; transition: border-color 0.15s; }
-    .rc-odds-btn:active, .rc-odds-btn.selected { border-color: var(--danger); background: rgba(255, 59, 59, 0.08); }
-    .rc-odds-btn .odds-label { font-weight: 600; }
-    .rc-odds-btn .odds-pct { color: var(--danger); font-weight: 800; font-size: 15px; }
-    .rc-odds-btn .odds-desc { font-size: 10px; color: var(--dim); font-weight: 400; }
+    .rc-odds-screen {
+      display: none;
+    }
+
+    .rc-odds-screen.active {
+      display: block;
+    }
+
+    .rc-main-screen.hidden {
+      display: none;
+    }
+
+    .rc-odds-title {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .rc-odds-sub {
+      font-size: 12px;
+      color: var(--dim);
+      margin-bottom: 14px;
+    }
+
+    .rc-odds-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .rc-odds-btn {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 14px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      border-radius: 10px;
+      color: var(--text);
+      font-size: 13px;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      transition: border-color 0.15s;
+    }
+
+    .rc-odds-btn:active,
+    .rc-odds-btn.selected {
+      border-color: var(--danger);
+      background: rgba(255, 59, 59, 0.08);
+    }
+
+    .rc-odds-btn .odds-label {
+      font-weight: 600;
+    }
+
+    .rc-odds-btn .odds-pct {
+      color: var(--danger);
+      font-weight: 800;
+      font-size: 15px;
+    }
+
+    .rc-odds-btn .odds-desc {
+      font-size: 10px;
+      color: var(--dim);
+      font-weight: 400;
+    }
 
     /* Person Expanded */
     .person-expanded {
@@ -1626,37 +1744,232 @@
     }
 
     /* Excuses / Plans */
-    .excuses-section { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; margin: 16px 0; }
-    .excuses-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
-    .excuses-header h3 { font-size: 14px; font-weight: 700; }
-    .excuses-sub { font-size: 11px; color: var(--dim); margin-bottom: 10px; }
-    .excuse-add-btn { width: 100%; padding: 10px; border: 2px dashed var(--success); background: rgba(52,211,153,0.05); border-radius: 10px; color: var(--success); font-size: 13px; font-weight: 700; cursor: pointer; -webkit-tap-highlight-color: transparent; margin-bottom: 10px; }
-    .excuse-add-btn:active { transform: scale(0.97); }
-    .excuse-list { display: flex; flex-direction: column; gap: 6px; }
-    .excuse-card { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; }
-    .excuse-card-top { display: flex; justify-content: space-between; align-items: center; }
-    .excuse-title { font-size: 13px; font-weight: 700; color: var(--success); }
-    .excuse-date { font-size: 10px; color: var(--dim); }
-    .excuse-desc { font-size: 11px; color: var(--dim); margin-top: 4px; line-height: 1.4; }
-    .excuse-actions { display: flex; gap: 6px; margin-top: 8px; }
-    .excuse-action-btn { padding: 4px 8px; border-radius: 6px; font-size: 10px; font-weight: 600; cursor: pointer; border: 1px solid var(--border); background: var(--card); color: var(--dim); -webkit-tap-highlight-color: transparent; }
-    .excuse-action-btn.danger { border-color: #333; color: #555; }
-    .excuse-empty { text-align: center; padding: 16px; color: var(--dim); font-size: 12px; font-style: italic; }
-    .excuses-page { max-width: 430px; margin: 0 auto; padding: 16px; padding-bottom: 80px; }
-    .excuses-page-header { text-align: center; margin-bottom: 8px; }
-    .excuses-page-header h1 { font-size: 22px; font-weight: 800; letter-spacing: 1px; }
-    .excuses-page-sub { font-size: 12px; color: var(--dim); margin-top: 4px; }
-    .excuses-count-bar { text-align: center; font-size: 14px; font-weight: 700; color: var(--success); padding: 10px; background: rgba(52,211,153,0.08); border: 1px solid rgba(52,211,153,0.2); border-radius: 10px; margin-top: 12px; }
-    .excuses-tip { margin-top: 20px; padding: 14px; background: rgba(52,211,153,0.05); border: 1px solid rgba(52,211,153,0.15); border-radius: 10px; }
-    .excuses-tip-title { font-size: 12px; font-weight: 700; color: var(--success); margin-bottom: 6px; }
-    .excuses-tip-text { font-size: 11px; color: var(--dim); line-height: 1.5; }
-    .excuse-desc { font-size: 11px; color: var(--dim); margin-top: 4px; line-height: 1.4; white-space: pre-line; }
-    .excuse-modal input, .excuse-modal textarea { width: 100%; background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 10px; color: var(--text); font-size: 13px; font-family: inherit; margin-bottom: 10px; box-sizing: border-box; }
-    .excuse-modal textarea { resize: none; height: 60px; }
-    .excuse-modal input::placeholder, .excuse-modal textarea::placeholder { color: var(--dim); }
-    .rc-excuses { margin-top: 12px; border-top: 1px solid var(--border); padding-top: 10px; }
-    .rc-excuses-title { font-size: 11px; font-weight: 700; color: var(--success); text-transform: uppercase; margin-bottom: 6px; }
-    .rc-excuse-chip { display: inline-block; background: rgba(52,211,153,0.1); border: 1px solid rgba(52,211,153,0.3); border-radius: 8px; padding: 4px 10px; font-size: 11px; color: var(--success); font-weight: 600; margin: 2px 4px 2px 0; }
+    .excuses-section {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      margin: 16px 0;
+    }
+
+    .excuses-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 4px;
+    }
+
+    .excuses-header h3 {
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .excuses-sub {
+      font-size: 11px;
+      color: var(--dim);
+      margin-bottom: 10px;
+    }
+
+    .excuse-add-btn {
+      width: 100%;
+      padding: 10px;
+      border: 2px dashed var(--success);
+      background: rgba(52, 211, 153, 0.05);
+      border-radius: 10px;
+      color: var(--success);
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      margin-bottom: 10px;
+    }
+
+    .excuse-add-btn:active {
+      transform: scale(0.97);
+    }
+
+    .excuse-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .excuse-card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 12px;
+    }
+
+    .excuse-card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .excuse-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--success);
+    }
+
+    .excuse-date {
+      font-size: 10px;
+      color: var(--dim);
+    }
+
+    .excuse-desc {
+      font-size: 11px;
+      color: var(--dim);
+      margin-top: 4px;
+      line-height: 1.4;
+    }
+
+    .excuse-actions {
+      display: flex;
+      gap: 6px;
+      margin-top: 8px;
+    }
+
+    .excuse-action-btn {
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--dim);
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .excuse-action-btn.danger {
+      border-color: #333;
+      color: #555;
+    }
+
+    .excuse-empty {
+      text-align: center;
+      padding: 16px;
+      color: var(--dim);
+      font-size: 12px;
+      font-style: italic;
+    }
+
+    .excuses-page {
+      max-width: 430px;
+      margin: 0 auto;
+      padding: 16px;
+      padding-bottom: 80px;
+    }
+
+    .excuses-page-header {
+      text-align: center;
+      margin-bottom: 8px;
+    }
+
+    .excuses-page-header h1 {
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: 1px;
+    }
+
+    .excuses-page-sub {
+      font-size: 12px;
+      color: var(--dim);
+      margin-top: 4px;
+    }
+
+    .excuses-count-bar {
+      text-align: center;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--success);
+      padding: 10px;
+      background: rgba(52, 211, 153, 0.08);
+      border: 1px solid rgba(52, 211, 153, 0.2);
+      border-radius: 10px;
+      margin-top: 12px;
+    }
+
+    .excuses-tip {
+      margin-top: 20px;
+      padding: 14px;
+      background: rgba(52, 211, 153, 0.05);
+      border: 1px solid rgba(52, 211, 153, 0.15);
+      border-radius: 10px;
+    }
+
+    .excuses-tip-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--success);
+      margin-bottom: 6px;
+    }
+
+    .excuses-tip-text {
+      font-size: 11px;
+      color: var(--dim);
+      line-height: 1.5;
+    }
+
+    .excuse-desc {
+      font-size: 11px;
+      color: var(--dim);
+      margin-top: 4px;
+      line-height: 1.4;
+      white-space: pre-line;
+    }
+
+    .excuse-modal input,
+    .excuse-modal textarea {
+      width: 100%;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px;
+      color: var(--text);
+      font-size: 13px;
+      font-family: inherit;
+      margin-bottom: 10px;
+      box-sizing: border-box;
+    }
+
+    .excuse-modal textarea {
+      resize: none;
+      height: 60px;
+    }
+
+    .excuse-modal input::placeholder,
+    .excuse-modal textarea::placeholder {
+      color: var(--dim);
+    }
+
+    .rc-excuses {
+      margin-top: 12px;
+      border-top: 1px solid var(--border);
+      padding-top: 10px;
+    }
+
+    .rc-excuses-title {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--success);
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .rc-excuse-chip {
+      display: inline-block;
+      background: rgba(52, 211, 153, 0.1);
+      border: 1px solid rgba(52, 211, 153, 0.3);
+      border-radius: 8px;
+      padding: 4px 10px;
+      font-size: 11px;
+      color: var(--success);
+      font-weight: 600;
+      margin: 2px 4px 2px 0;
+    }
 
     /* History */
     .history-section {
@@ -2391,7 +2704,11 @@
       justify-content: center;
       animation: go-flash 1s ease-out forwards;
     }
-    .go-bail-flash.show { display: flex; }
+
+    .go-bail-flash.show {
+      display: flex;
+    }
+
     .go-bail-flash-text {
       font-size: 22px;
       font-weight: 700;
@@ -2462,7 +2779,8 @@
     .view-excuses,
     .view-go,
     .view-looks,
-    .view-reviews {
+    .view-reviews,
+    .view-situations {
       display: none;
     }
 
@@ -2471,8 +2789,232 @@
     .view-excuses.active,
     .view-go.active,
     .view-looks.active,
-    .view-reviews.active {
+    .view-reviews.active,
+    .view-situations.active {
       display: block;
+    }
+
+    /* ===== SITUATIONS VIEW ===== */
+    .situations-page {
+      max-width: 430px;
+      margin: 0 auto;
+      padding: 16px;
+      padding-bottom: 80px;
+    }
+
+    .situations-page-header {
+      text-align: center;
+      margin-bottom: 16px;
+    }
+
+    .situations-page-header h1 {
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: 1px;
+    }
+
+    .situations-page-sub {
+      font-size: 13px;
+      color: var(--dim);
+      margin-top: 4px;
+    }
+
+    .situations-count-bar {
+      text-align: center;
+      font-size: 13px;
+      color: var(--dim);
+      padding: 8px 0;
+    }
+
+    .situations-count-bar span {
+      color: var(--purple);
+      font-weight: 700;
+    }
+
+    .situation-add-btn {
+      width: 100%;
+      padding: 14px;
+      border: 2px dashed var(--purple);
+      background: rgba(167, 139, 250, 0.05);
+      border-radius: 12px;
+      color: var(--purple);
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      transition: transform 0.1s;
+    }
+
+    .situation-add-btn:active {
+      transform: scale(0.97);
+    }
+
+    .situation-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      margin-bottom: 10px;
+      overflow: hidden;
+      transition: border-color 0.2s;
+    }
+
+    .situation-card:hover {
+      border-color: rgba(167, 139, 250, 0.3);
+    }
+
+    .situation-card-header {
+      padding: 14px;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .situation-card-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .situation-card-title .expand-icon {
+      font-size: 12px;
+      color: var(--dim);
+      transition: transform 0.2s;
+    }
+
+    .situation-card.expanded .expand-icon {
+      transform: rotate(180deg);
+    }
+
+    .situation-card-setting {
+      font-size: 12px;
+      color: var(--purple);
+      margin-top: 3px;
+    }
+
+    .situation-card-body {
+      display: none;
+      padding: 0 14px 14px;
+      border-top: 1px solid var(--border);
+    }
+
+    .situation-card.expanded .situation-card-body {
+      display: block;
+    }
+
+    .situation-field {
+      margin-top: 10px;
+    }
+
+    .situation-field-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--dim);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 3px;
+    }
+
+    .situation-field-text {
+      font-size: 13px;
+      color: var(--text);
+      line-height: 1.5;
+      white-space: pre-wrap;
+    }
+
+    .situation-card-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .situation-card-actions button {
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .situation-card-actions .sit-edit {
+      color: var(--purple);
+      border-color: rgba(167, 139, 250, 0.3);
+    }
+
+    .situation-card-actions .sit-delete {
+      color: var(--danger);
+      border-color: rgba(255, 59, 59, 0.2);
+    }
+
+    .situations-tip {
+      background: linear-gradient(135deg, rgba(167, 139, 250, 0.06), rgba(167, 139, 250, 0.12));
+      border: 1px solid rgba(167, 139, 250, 0.15);
+      border-radius: 12px;
+      padding: 14px;
+      margin-top: 20px;
+    }
+
+    .situations-tip-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--purple);
+      margin-bottom: 4px;
+    }
+
+    .situations-tip-text {
+      font-size: 12px;
+      color: var(--dim);
+      line-height: 1.5;
+    }
+
+    .situation-modal-field {
+      margin: 10px 0;
+    }
+
+    .situation-modal-field label {
+      font-size: 12px;
+      color: var(--dim);
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .situation-modal-field input,
+    .situation-modal-field textarea {
+      width: 100%;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px;
+      color: var(--text);
+      font-size: 13px;
+      font-family: inherit;
+    }
+
+    .situation-modal-field textarea {
+      resize: vertical;
+      min-height: 70px;
+    }
+
+    .situation-modal-field input::placeholder,
+    .situation-modal-field textarea::placeholder {
+      color: var(--dim);
+    }
+
+    .situations-empty {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--dim);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .situations-empty .empty-icon {
+      font-size: 40px;
+      margin-bottom: 10px;
     }
 
     /* ===== GO TAB ACTION HUB ===== */
@@ -2481,12 +3023,13 @@
       align-items: center;
       justify-content: center;
       gap: 0;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
       border-radius: 14px;
       padding: 14px 0;
       margin-bottom: 16px;
     }
+
     .go-status-item {
       flex: 1;
       display: flex;
@@ -2494,37 +3037,44 @@
       align-items: center;
       gap: 2px;
     }
+
     .go-status-num {
       font-size: 22px;
       font-weight: 700;
       color: #fff;
       line-height: 1;
     }
+
     .go-status-lbl {
       font-size: 11px;
-      color: rgba(255,255,255,0.4);
+      color: rgba(255, 255, 255, 0.4);
       text-transform: uppercase;
       letter-spacing: 0.05em;
     }
+
     .go-status-divider {
       width: 1px;
       height: 32px;
-      background: rgba(255,255,255,0.1);
+      background: rgba(255, 255, 255, 0.1);
     }
+
     .go-trigger-tab {
       width: 100%;
       margin-bottom: 20px;
     }
+
     .go-toolkit-section {
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.07);
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.07);
       border-radius: 16px;
       padding: 16px;
       margin-bottom: 14px;
     }
+
     .go-toolkit-header {
       margin-bottom: 12px;
     }
+
     .go-toolkit-title {
       font-size: 15px;
       font-weight: 700;
@@ -2532,27 +3082,32 @@
       letter-spacing: 0.02em;
       margin-bottom: 2px;
     }
+
     .go-toolkit-sub {
       font-size: 12px;
-      color: rgba(255,255,255,0.4);
+      color: rgba(255, 255, 255, 0.4);
     }
+
     /* Fear cards */
     .go-fear-cards {
       display: flex;
       flex-direction: column;
       gap: 8px;
     }
+
     .go-fear-card {
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
       border-radius: 10px;
       overflow: hidden;
       cursor: pointer;
       transition: border-color 0.15s;
     }
+
     .go-fear-card.open {
-      border-color: rgba(255,107,53,0.4);
+      border-color: rgba(255, 107, 53, 0.4);
     }
+
     .go-fear-card-trigger {
       display: flex;
       align-items: center;
@@ -2560,30 +3115,35 @@
       padding: 11px 14px;
       font-size: 14px;
       font-weight: 500;
-      color: rgba(255,255,255,0.85);
+      color: rgba(255, 255, 255, 0.85);
       user-select: none;
     }
+
     .go-fear-card-arrow {
       font-size: 11px;
-      color: rgba(255,255,255,0.3);
+      color: rgba(255, 255, 255, 0.3);
       transition: transform 0.2s;
     }
+
     .go-fear-card.open .go-fear-card-arrow {
       transform: rotate(180deg);
       color: var(--accent);
     }
+
     .go-fear-card-reframe {
       display: none;
       padding: 0 14px 12px;
       font-size: 13px;
       line-height: 1.55;
-      color: rgba(255,255,255,0.7);
-      border-top: 1px solid rgba(255,255,255,0.06);
+      color: rgba(255, 255, 255, 0.7);
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
       padding-top: 10px;
     }
+
     .go-fear-card.open .go-fear-card-reframe {
       display: block;
     }
+
     /* Plans chips */
     .go-plans-chips {
       display: flex;
@@ -2591,25 +3151,28 @@
       gap: 8px;
       margin-bottom: 10px;
     }
+
     .go-plan-chip {
-      background: rgba(52,211,153,0.12);
-      border: 1px solid rgba(52,211,153,0.25);
+      background: rgba(52, 211, 153, 0.12);
+      border: 1px solid rgba(52, 211, 153, 0.25);
       border-radius: 20px;
       padding: 6px 12px;
       font-size: 13px;
       color: var(--success);
       font-weight: 500;
     }
+
     .go-plans-empty {
       font-size: 13px;
-      color: rgba(255,255,255,0.3);
+      color: rgba(255, 255, 255, 0.3);
       padding: 4px 0;
     }
+
     .go-plans-edit-btn {
       background: none;
-      border: 1px solid rgba(255,255,255,0.12);
+      border: 1px solid rgba(255, 255, 255, 0.12);
       border-radius: 8px;
-      color: rgba(255,255,255,0.5);
+      color: rgba(255, 255, 255, 0.5);
       font-size: 13px;
       padding: 7px 14px;
       cursor: pointer;
@@ -2617,32 +3180,37 @@
       text-align: center;
       transition: border-color 0.15s, color 0.15s;
     }
+
     .go-plans-edit-btn:active {
-      border-color: rgba(255,255,255,0.3);
-      color: rgba(255,255,255,0.8);
+      border-color: rgba(255, 255, 255, 0.3);
+      color: rgba(255, 255, 255, 0.8);
     }
+
     /* Opening lines */
     .go-openers-list {
       display: flex;
       flex-direction: column;
       gap: 8px;
     }
+
     .go-opener-card {
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.07);
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.07);
       border-radius: 10px;
       padding: 12px 14px;
     }
+
     .go-opener-text {
       font-size: 13px;
-      color: rgba(255,255,255,0.85);
+      color: rgba(255, 255, 255, 0.85);
       line-height: 1.5;
       margin-bottom: 5px;
       font-style: italic;
     }
+
     .go-opener-note {
       font-size: 11px;
-      color: rgba(255,255,255,0.35);
+      color: rgba(255, 255, 255, 0.35);
     }
 
     /* ===== STATS PAGE ===== */
@@ -2882,14 +3450,16 @@
       color: var(--blue);
       font-weight: 600;
     }
+
     /* ===== GO EXTRAS (age + see again) ===== */
     .go-extras {
       margin-top: 10px;
       padding: 10px 12px;
-      background: rgba(255,255,255,0.03);
+      background: rgba(255, 255, 255, 0.03);
       border: 1px solid var(--border);
       border-radius: 10px;
     }
+
     .go-extra-row {
       display: flex;
       align-items: center;
@@ -2897,12 +3467,17 @@
       gap: 8px;
       margin-bottom: 8px;
     }
-    .go-extra-row:last-of-type { margin-bottom: 0; }
+
+    .go-extra-row:last-of-type {
+      margin-bottom: 0;
+    }
+
     .go-extra-label {
       font-size: 12px;
       color: var(--dim);
       flex-shrink: 0;
     }
+
     .go-extra-input {
       width: 60px;
       text-align: center;
@@ -2914,10 +3489,12 @@
       font-size: 14px;
       font-weight: 600;
     }
+
     .go-see-again-btns {
       display: flex;
       gap: 4px;
     }
+
     .go-see-btn {
       padding: 5px 10px;
       border: 1px solid var(--border);
@@ -2929,11 +3506,13 @@
       -webkit-tap-highlight-color: transparent;
       transition: all 0.15s;
     }
+
     .go-see-btn.selected {
       border-color: var(--yellow);
       color: var(--yellow);
       background: rgba(251, 191, 36, 0.08);
     }
+
     .go-urgency-hint {
       margin-top: 8px;
       padding: 8px 10px;
@@ -2941,11 +3520,13 @@
       font-size: 11px;
       line-height: 1.4;
     }
+
     .go-urgency-hint.urgent {
       background: rgba(255, 59, 59, 0.1);
       border: 1px solid rgba(255, 59, 59, 0.25);
       color: var(--danger);
     }
+
     .go-urgency-hint.ok {
       background: rgba(52, 211, 153, 0.08);
       border: 1px solid rgba(52, 211, 153, 0.2);
@@ -2953,32 +3534,43 @@
     }
 
     /* ===== ENCOUNTERS VIEW ===== */
-    .view-encounters { display: none; }
-    .view-encounters.active { display: block; }
+    .view-encounters {
+      display: none;
+    }
+
+    .view-encounters.active {
+      display: block;
+    }
+
     .encounters-page {
       max-width: 430px;
       margin: 0 auto;
       padding: 16px;
       padding-bottom: 80px;
     }
+
     .encounters-header {
       margin-bottom: 16px;
     }
+
     .encounters-header h1 {
       font-size: 22px;
       margin: 0 0 4px;
     }
+
     .encounters-header p {
       font-size: 12px;
       color: var(--dim);
       margin: 0;
     }
+
     .encounters-summary {
       display: grid;
       grid-template-columns: 1fr 1fr 1fr;
       gap: 8px;
       margin-bottom: 14px;
     }
+
     .enc-summary-card {
       background: var(--card);
       border: 1px solid var(--border);
@@ -2986,16 +3578,19 @@
       padding: 10px 8px;
       text-align: center;
     }
+
     .enc-summary-num {
       font-size: 24px;
       font-weight: 800;
     }
+
     .enc-summary-lbl {
       font-size: 10px;
       color: var(--dim);
       text-transform: uppercase;
       letter-spacing: 0.05em;
     }
+
     .enc-urgency-banner {
       background: rgba(255, 59, 59, 0.08);
       border: 1px solid rgba(255, 59, 59, 0.2);
@@ -3003,26 +3598,31 @@
       padding: 12px;
       margin-bottom: 14px;
     }
+
     .enc-urgency-title {
       font-size: 13px;
       font-weight: 700;
       color: var(--danger);
       margin-bottom: 6px;
     }
+
     .enc-urgency-line {
       font-size: 12px;
       color: var(--text);
       margin-bottom: 4px;
       line-height: 1.4;
     }
+
     .enc-urgency-line .gap-num {
       font-weight: 700;
       color: var(--danger);
     }
+
     .enc-urgency-line .year-tag {
       font-size: 10px;
       color: var(--dim);
     }
+
     .enc-list-title {
       font-size: 13px;
       font-weight: 700;
@@ -3031,6 +3631,7 @@
       text-transform: uppercase;
       letter-spacing: 0.05em;
     }
+
     .enc-card {
       background: var(--card);
       border: 1px solid var(--border);
@@ -3038,46 +3639,66 @@
       padding: 12px;
       margin-bottom: 8px;
     }
+
     .enc-card-top {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 4px;
     }
+
     .enc-card-age {
       font-size: 18px;
       font-weight: 800;
     }
+
     .enc-card-gap {
       font-size: 12px;
       font-weight: 600;
       padding: 2px 8px;
       border-radius: 6px;
     }
-    .enc-card-gap.urgent { background: rgba(255,59,59,0.15); color: var(--danger); }
-    .enc-card-gap.ok { background: rgba(52,211,153,0.1); color: var(--success); }
-    .enc-card-gap.neutral { background: rgba(255,255,255,0.05); color: var(--dim); }
+
+    .enc-card-gap.urgent {
+      background: rgba(255, 59, 59, 0.15);
+      color: var(--danger);
+    }
+
+    .enc-card-gap.ok {
+      background: rgba(52, 211, 153, 0.1);
+      color: var(--success);
+    }
+
+    .enc-card-gap.neutral {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--dim);
+    }
+
     .enc-card-reason {
       font-size: 12px;
       color: var(--dim);
       margin-bottom: 2px;
     }
+
     .enc-card-meta {
       font-size: 11px;
       color: var(--dim);
       display: flex;
       gap: 10px;
     }
+
     .enc-card-see-again {
       font-size: 11px;
       margin-top: 4px;
     }
+
     .enc-empty {
       text-align: center;
       padding: 40px 20px;
       color: var(--dim);
       font-size: 13px;
     }
+
     .enc-inventory {
       background: var(--card);
       border: 1px solid var(--border);
@@ -3085,20 +3706,32 @@
       padding: 12px;
       margin-bottom: 12px;
     }
+
     .enc-inventory h3 {
       font-size: 13px;
       margin-bottom: 8px;
     }
+
     .enc-kv {
       display: flex;
       justify-content: space-between;
       font-size: 12px;
       padding: 4px 0;
-      border-bottom: 1px dashed rgba(255,255,255,0.05);
+      border-bottom: 1px dashed rgba(255, 255, 255, 0.05);
     }
-    .enc-kv:last-child { border-bottom: none; }
-    .enc-kv .k { color: var(--dim); }
-    .enc-kv .v { font-weight: 700; }
+
+    .enc-kv:last-child {
+      border-bottom: none;
+    }
+
+    .enc-kv .k {
+      color: var(--dim);
+    }
+
+    .enc-kv .v {
+      font-weight: 700;
+    }
+
     .enc-review {
       background: var(--card);
       border: 1px solid var(--border);
@@ -3106,10 +3739,12 @@
       padding: 12px;
       margin-bottom: 12px;
     }
+
     .enc-review h3 {
       font-size: 13px;
       margin-bottom: 8px;
     }
+
     .enc-review-text {
       white-space: pre-wrap;
       font-size: 12px;
@@ -3121,16 +3756,19 @@
       padding: 10px;
       margin-top: 8px;
     }
+
     .enc-review-empty {
       font-size: 12px;
       color: var(--dim);
       line-height: 1.4;
     }
+
     .enc-card-actions {
       margin-top: 8px;
       display: flex;
       justify-content: flex-end;
     }
+
     .enc-delete-btn {
       border: 1px solid rgba(255, 59, 59, 0.3);
       color: var(--danger);
@@ -3154,10 +3792,12 @@
       justify-content: space-between;
       gap: 10px;
     }
+
     .scared-label-col {
       flex: 1;
       min-width: 0;
     }
+
     .scared-title {
       font-size: 11px;
       font-weight: 700;
@@ -3166,17 +3806,20 @@
       color: var(--dim);
       margin-bottom: 2px;
     }
+
     .scared-desc {
       font-size: 11px;
       color: var(--dim);
       line-height: 1.3;
     }
+
     .scared-controls {
       display: flex;
       align-items: center;
       gap: 10px;
       flex-shrink: 0;
     }
+
     .scared-btn {
       width: 36px;
       height: 36px;
@@ -3193,26 +3836,40 @@
       -webkit-tap-highlight-color: transparent;
       transition: border-color 0.15s, background 0.15s;
     }
-    .scared-btn:active { background: var(--border); }
+
+    .scared-btn:active {
+      background: var(--border);
+    }
+
     .scared-num-wrap {
       text-align: center;
       min-width: 52px;
     }
+
     .scared-num {
       font-size: 36px;
       font-weight: 800;
       line-height: 1;
       transition: color 0.3s;
     }
-    .scared-num.level-low  { color: var(--success); }
-    .scared-num.level-mid  { color: var(--yellow); }
-    .scared-num.level-high { color: var(--danger); }
+
+    .scared-num.level-low {
+      color: var(--success);
+    }
+
+    .scared-num.level-mid {
+      color: var(--yellow);
+    }
+
+    .scared-num.level-high {
+      color: var(--danger);
+    }
+
     .scared-out-of {
       font-size: 11px;
       color: var(--dim);
       margin-top: 1px;
     }
-
   </style>
 </head>
 
@@ -3248,8 +3905,10 @@
       <div class="today-section" style="margin-top: 16px; text-align: center;">
         <h2 style="font-size:16px; color:var(--accent);">Boldness Stat</h2>
         <div style="font-size:42px; font-weight:800; margin:10px 0; color:var(--accent);" id="boldnessScore">0</div>
-        <div style="font-size:12px; color:var(--dim); margin-bottom:16px;">This increases your boldness stat that decreases through the days if you don't keep it up.</div>
-        <button class="btn-add" style="width: 100%; height: 40px; border-radius: 10px; font-size: 14px;" onclick="openBoldnessModal()">
+        <div style="font-size:12px; color:var(--dim); margin-bottom:16px;">This increases your boldness stat that
+          decreases through the days if you don't keep it up.</div>
+        <button class="btn-add" style="width: 100%; height: 40px; border-radius: 10px; font-size: 14px;"
+          onclick="openBoldnessModal()">
           + Log Bold Action
         </button>
         <div id="boldnessTimeline" style="margin-top:20px; text-align:left;"></div>
@@ -3407,7 +4066,7 @@
             maxlength="80">
           <textarea id="interactionNote"
             placeholder="She lent me her phone, got her number, quick chat about..."></textarea>
-          
+
           <div class="modal-actions" style="margin-top:12px;">
             <button class="modal-cancel" onclick="closeInteractionModal()">Cancel</button>
             <button class="modal-confirm" onclick="confirmInteraction()">Log It</button>
@@ -3443,27 +4102,34 @@
         <div class="person-modal">
           <h3>Approach Review</h3>
           <div class="modal-sub" id="goReviewSubtitle" style="margin-bottom:12px;"></div>
-          
+
           <div class="review-fields" style="display:flex; flex-direction:column; gap:8px; font-size:12px;">
             <label style="color:var(--dim);">Full Story / Overview</label>
-            <textarea id="goReviewDesc" class="modal-note" style="min-height:60px; resize:vertical; background:var(--bg); border:1px solid var(--border); color:var(--text); border-radius:8px; padding:8px 10px; font-family:inherit; font-size:13px;" placeholder="Full description of what happened..."></textarea>
-            
+            <textarea id="goReviewDesc" class="modal-note"
+              style="min-height:60px; resize:vertical; background:var(--bg); border:1px solid var(--border); color:var(--text); border-radius:8px; padding:8px 10px; font-family:inherit; font-size:13px;"
+              placeholder="Full description of what happened..."></textarea>
+
             <label style="color:var(--dim);margin-top:4px;">Weakpoints</label>
-            <input type="text" id="goReviewWeak" class="modal-note" style="height:36px" placeholder="Talked too fast, fidgeted...">
-            
+            <input type="text" id="goReviewWeak" class="modal-note" style="height:36px"
+              placeholder="Talked too fast, fidgeted...">
+
             <label style="color:var(--dim);margin-top:4px;">Goodpoints</label>
-            <input type="text" id="goReviewGood" class="modal-note" style="height:36px" placeholder="Eye contact, smiled, clear voice...">
-            
+            <input type="text" id="goReviewGood" class="modal-note" style="height:36px"
+              placeholder="Eye contact, smiled, clear voice...">
+
             <label style="color:var(--dim);margin-top:4px;">Could have done more</label>
-            <input type="text" id="goReviewMore" class="modal-note" style="height:36px" placeholder="Escalated, held silence longer...">
-            
+            <input type="text" id="goReviewMore" class="modal-note" style="height:36px"
+              placeholder="Escalated, held silence longer...">
+
             <label style="color:var(--dim);margin-top:4px;">Could have done less</label>
-            <input type="text" id="goReviewLess" class="modal-note" style="height:36px" placeholder="Less apologizing, less interview questions...">
-            
+            <input type="text" id="goReviewLess" class="modal-note" style="height:36px"
+              placeholder="Less apologizing, less interview questions...">
+
             <label style="color:var(--dim);margin-top:4px;">Better than expected</label>
-            <input type="text" id="goReviewBetter" class="modal-note" style="height:36px" placeholder="She was actually friendly, didn't stutter...">
+            <input type="text" id="goReviewBetter" class="modal-note" style="height:36px"
+              placeholder="She was actually friendly, didn't stutter...">
           </div>
-          
+
           <div class="modal-actions" style="margin-top:16px;">
             <button class="modal-cancel" onclick="closeGoReviewModal()">Cancel</button>
             <button class="modal-confirm" onclick="confirmGoReview()">Save Review</button>
@@ -3559,8 +4225,8 @@
       <!-- Fear Kit -->
       <div class="go-toolkit-section">
         <div class="go-toolkit-header">
-          <div class="go-toolkit-title">Fear Kit</div>
-          <div class="go-toolkit-sub">Tap a fear. Read the reframe. Go anyway.</div>
+          <div class="go-toolkit-title">Fears</div>
+          <div class="go-toolkit-sub">Read the reframe.</div>
         </div>
         <div class="go-fear-cards" id="goFearCards"></div>
       </div>
@@ -3585,15 +4251,18 @@
         </div>
         <div class="go-openers-list">
           <div class="go-opener-card">
-            <div class="go-opener-text">"Hey — I saw you and had to say something. You look really [specific thing]."</div>
+            <div class="go-opener-text">"Hey — I saw you and had to say something. You look really [specific thing]."
+            </div>
             <div class="go-opener-note">Direct. Honest. The specific thing makes it real.</div>
           </div>
           <div class="go-opener-card">
-            <div class="go-opener-text">"Excuse me — sorry to interrupt. I just noticed you and thought you seemed really interesting."</div>
+            <div class="go-opener-text">"Excuse me — sorry to interrupt. I just noticed you and thought you seemed
+              really interesting."</div>
             <div class="go-opener-note">Works anywhere. The apology disarms her.</div>
           </div>
           <div class="go-opener-card">
-            <div class="go-opener-text">"Hey, random question — do you know anywhere good around here for [coffee/food/etc]?"</div>
+            <div class="go-opener-text">"Hey, random question — do you know anywhere good around here for
+              [coffee/food/etc]?"</div>
             <div class="go-opener-note">Low pressure opener. Easy to transition into conversation.</div>
           </div>
           <div class="go-opener-card">
@@ -3739,12 +4408,17 @@
         <div class="regret-big" id="regretTotal">0</div>
         <div class="regret-sub">people gone forever who you could have talked to</div>
         <div class="regret-breakdown">
-          <div class="regret-row"><span class="rl">Total people seen</span><span class="rv" id="regretSeen">0</span></div>
+          <div class="regret-row"><span class="rl">Total people seen</span><span class="rv" id="regretSeen">0</span>
+          </div>
           <div class="regret-row"><span class="rl">You talked to</span><span class="rv" id="regretTalked">0</span></div>
-          <div class="regret-row"><span class="rl">Ignored</span><span class="rv" id="regretIgnored" style="color:var(--danger)">0</span></div>
-          <div class="regret-row"><span class="rl">Of those, gone permanently (90%)</span><span class="rv" id="regretGone" style="color:var(--danger)">0</span></div>
-          <div class="regret-row"><span class="rl">Among them, potential connections lost</span><span class="rv" id="regretConnections" style="color:var(--danger)">0</span></div>
-          <div class="regret-row"><span class="rl">Among them, potential dates lost</span><span class="rv" id="regretDates" style="color:var(--danger)">0</span></div>
+          <div class="regret-row"><span class="rl">Ignored</span><span class="rv" id="regretIgnored"
+              style="color:var(--danger)">0</span></div>
+          <div class="regret-row"><span class="rl">Of those, gone permanently (90%)</span><span class="rv"
+              id="regretGone" style="color:var(--danger)">0</span></div>
+          <div class="regret-row"><span class="rl">Among them, potential connections lost</span><span class="rv"
+              id="regretConnections" style="color:var(--danger)">0</span></div>
+          <div class="regret-row"><span class="rl">Among them, potential dates lost</span><span class="rv"
+              id="regretDates" style="color:var(--danger)">0</span></div>
         </div>
       </div>
 
@@ -3779,7 +4453,9 @@
 
       <div class="enc-review">
         <h3>Talk Review Draft</h3>
-        <div class="enc-review-empty" id="encReviewEmpty">Once you log at least one talked encounter, this page will draft a self-review with good points, weak points, where you could do more/less, and what went better than expected.</div>
+        <div class="enc-review-empty" id="encReviewEmpty">Once you log at least one talked encounter, this page will
+          draft a self-review with good points, weak points, where you could do more/less, and what went better than
+          expected.</div>
         <div class="enc-review-text" id="encReviewText" style="display:none"></div>
       </div>
 
@@ -3792,13 +4468,15 @@
           <h1>Pretty Girls Seen</h1>
           <p>Log beautiful girls you noticed but didn't approach</p>
         </div>
-        <button class="btn-add" style="width: 100%; height: 46px; border-radius: 12px; margin-bottom: 20px; font-size: 15px;" onclick="openPrettyModal()">
+        <button class="btn-add"
+          style="width: 100%; height: 46px; border-radius: 12px; margin-bottom: 20px; font-size: 15px;"
+          onclick="openPrettyModal()">
           + Log a Pretty Girl
         </button>
         <div id="prettyAgeStats" style="margin-bottom:20px;"></div>
         <div id="prettyList" style="margin-top:10px;"></div>
       </div>
-      
+
     </div>
   </div> <!-- /view-encounters -->
 
@@ -3820,7 +4498,8 @@
 
       <div class="excuses-tip" id="excusesTip">
         <div class="excuses-tip-title">Why this matters</div>
-        <div class="excuses-tip-text">When you see her and your brain says "to do what exactly?" — you already have the answer. No thinking. No hesitation. You know exactly what you'd invite her to.</div>
+        <div class="excuses-tip-text">When you see her and your brain says "to do what exactly?" — you already have the
+          answer. No thinking. No hesitation. You know exactly what you'd invite her to.</div>
       </div>
     </div>
   </div> <!-- /view-excuses -->
@@ -3830,11 +4509,70 @@
     <div class="person-modal excuse-modal">
       <h3 id="excuseModalTitle">Add an Excuse</h3>
       <input type="text" id="excuseTitle" placeholder="Walk in the park, coffee date, gym together..." maxlength="80">
-      <textarea id="excuseDesc" placeholder="What does it look like? e.g. Walk in nature, talk about fantasy shit..."></textarea>
+      <textarea id="excuseDesc"
+        placeholder="What does it look like? e.g. Walk in nature, talk about fantasy shit..."></textarea>
       <input type="date" id="excuseDate">
       <div class="modal-actions">
         <button class="modal-cancel" onclick="closeExcuseModal()">Cancel</button>
         <button class="modal-confirm" onclick="confirmExcuse()">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SITUATIONS VIEW ===== -->
+  <div class="view-situations" id="viewSituations">
+    <div class="situations-page">
+      <div class="situations-page-header">
+        <h1>🎭 SITUATIONS</h1>
+        <div class="situations-page-sub">Describe it. Visualize it. Be ready.</div>
+      </div>
+
+      <div class="situations-count-bar">
+        <span id="situationCountPage">0</span> situations created
+      </div>
+
+      <button class="situation-add-btn" onclick="openSituationModal()" style="margin-top:12px">+ Create Situation</button>
+
+      <div id="situationList" style="margin-top:12px"></div>
+
+      <div class="situations-tip" id="situationsTip">
+        <div class="situations-tip-title">Why this works</div>
+        <div class="situations-tip-text">When you mentally rehearse a situation in detail — the setting, the words, the body language — you're training your brain to recognize and act when the moment arrives. No freezing. No blank mind. You've been here before.</div>
+      </div>
+    </div>
+  </div> <!-- /view-situations -->
+
+  <!-- Situation Add/Edit Modal -->
+  <div class="modal-overlay" id="situationModal">
+    <div class="modal" style="text-align: left;">
+      <h3 style="text-align:center;" id="situationModalTitle">Create Situation</h3>
+      <div class="situation-modal-field">
+        <label>Title</label>
+        <input type="text" id="sitTitle" placeholder="Coffee shop encounter, bus stop approach..." maxlength="80">
+      </div>
+      <div class="situation-modal-field">
+        <label>Setting / Location</label>
+        <input type="text" id="sitSetting" placeholder="Busy Starbucks, quiet library, park bench..." maxlength="100">
+      </div>
+      <div class="situation-modal-field">
+        <label>Full Description</label>
+        <textarea id="sitDescription" placeholder="Paint the whole picture. Where are you, where is she, what's happening around you..."></textarea>
+      </div>
+      <div class="situation-modal-field">
+        <label>What I'll Say</label>
+        <textarea id="sitWhatSay" placeholder="Opening line, follow-up, transition to asking for number..." style="min-height:50px"></textarea>
+      </div>
+      <div class="situation-modal-field">
+        <label>What I'll Do</label>
+        <textarea id="sitWhatDo" placeholder="Walk up calmly, eye contact, smile, open posture..." style="min-height:50px"></textarea>
+      </div>
+      <div class="situation-modal-field">
+        <label>Possible Outcomes</label>
+        <textarea id="sitOutcomes" placeholder="Best case: she's engaged, laughs, gives number. Worst case: polite rejection, I walk away proud I tried." style="min-height:50px"></textarea>
+      </div>
+      <div class="modal-actions" style="margin-top:16px">
+        <button class="modal-cancel" onclick="closeSituationModal()">Cancel</button>
+        <button class="modal-confirm" onclick="confirmSituation()">Save</button>
       </div>
     </div>
   </div>
@@ -3845,34 +4583,40 @@
       <h1>Who Looked At You</h1>
       <div class="subtitle">Log the girls that stared</div>
     </div>
-    
+
     <div style="padding: 16px;">
-      <div style="background:var(--card); border:1px solid var(--border); border-radius:12px; padding:16px; margin-bottom:20px; display:flex; justify-content:space-between; align-items:center;">
+      <div
+        style="background:var(--card); border:1px solid var(--border); border-radius:12px; padding:16px; margin-bottom:20px; display:flex; justify-content:space-between; align-items:center;">
         <div>
           <div style="font-size:14px; font-weight:600; color:var(--text);">Quick Tally</div>
           <div style="font-size:11px; color:var(--dim);">Just log a stare today (+1)</div>
         </div>
         <div style="display:flex; align-items:center; gap:12px;">
-          <button onclick="adjustQuickLooks(-1)" style="width:36px; height:36px; border-radius:18px; border:none; background:rgba(255,255,255,0.1); color:var(--text); font-size:18px;">-</button>
+          <button onclick="adjustQuickLooks(-1)"
+            style="width:36px; height:36px; border-radius:18px; border:none; background:rgba(255,255,255,0.1); color:var(--text); font-size:18px;">-</button>
           <div id="quickLooksToday" style="font-size:24px; font-weight:700;">0</div>
-          <button onclick="adjustQuickLooks(1)" style="width:36px; height:36px; border-radius:18px; border:none; background:var(--accent); color:#fff; font-size:18px;">+</button>
+          <button onclick="adjustQuickLooks(1)"
+            style="width:36px; height:36px; border-radius:18px; border:none; background:var(--accent); color:#fff; font-size:18px;">+</button>
         </div>
       </div>
 
-      <button class="btn-add" style="width: 100%; height: 50px; border-radius: 12px; margin-bottom: 20px; font-size: 16px;" onclick="openLookModal()">
+      <button class="btn-add"
+        style="width: 100%; height: 50px; border-radius: 12px; margin-bottom: 20px; font-size: 16px;"
+        onclick="openLookModal()">
         + Log Look Details
       </button>
 
       <div id="looksStats" class="stats-grid" style="margin-bottom: 20px;">
         <div class="stat-card accent" style="grid-column: span 2;">
           <div class="stat-value" id="looksLookRate" style="font-size:42px;">0%</div>
-          <div class="stat-label">Look Rate (<span id="looksTotalCount">0</span> stared / <span id="looksSeenCount">0</span> seen)</div>
+          <div class="stat-label">Look Rate (<span id="looksTotalCount">0</span> stared / <span
+              id="looksSeenCount">0</span> seen)</div>
         </div>
       </div>
-      
+
       <h3 style="font-size:14px; margin-bottom:10px;">Age Distribution & Ratings</h3>
       <div id="looksAgeStats" class="stats-grid" style="margin-bottom: 20px;"></div>
-      
+
       <h3>Recent Looks</h3>
       <div id="looksList" style="margin-top:10px;"></div>
     </div>
@@ -3895,7 +4639,8 @@
       <h3>Log a Look</h3>
       <div style="margin: 10px 0;">
         <label style="font-size: 12px; color: var(--dim);">Your Rating that day (1-10)</label>
-        <input type="number" id="lookSelfRating" class="modal-note" style="height:40px" min="1" max="10" placeholder="e.g. 7">
+        <input type="number" id="lookSelfRating" class="modal-note" style="height:40px" min="1" max="10"
+          placeholder="e.g. 7">
       </div>
       <div style="margin: 10px 0;">
         <label style="font-size: 12px; color: var(--dim);">What you wore</label>
@@ -3907,7 +4652,8 @@
       </div>
       <div style="margin: 10px 0;">
         <label style="font-size: 12px; color: var(--dim);">Her Rating (1-10)</label>
-        <input type="number" id="lookHerRating" class="modal-note" style="height:40px" min="1" max="10" placeholder="e.g. 8">
+        <input type="number" id="lookHerRating" class="modal-note" style="height:40px" min="1" max="10"
+          placeholder="e.g. 8">
       </div>
       <div style="margin: 10px 0;">
         <label style="font-size: 12px; color: var(--dim);">Her Age</label>
@@ -3925,7 +4671,8 @@
         </select>
       </div>
       <div class="modal-actions" style="margin-top: 20px;">
-        <button class="modal-cancel" onclick="document.getElementById('lookModal').classList.remove('open')">Cancel</button>
+        <button class="modal-cancel"
+          onclick="document.getElementById('lookModal').classList.remove('open')">Cancel</button>
         <button class="modal-confirm" onclick="confirmLook()">Save</button>
       </div>
     </div>
@@ -3938,8 +4685,10 @@
       <div style="margin: 10px 0; font-size: 12px; color: var(--dim); text-align:center;">Who did you see?</div>
       <input type="number" id="prettyRating" placeholder="Rating (1-10)" min="1" max="10" style="margin-bottom:8px">
       <input type="number" id="prettyAge" placeholder="Estimated Age" min="16" max="99" style="margin-bottom:8px">
-      <input type="text" id="prettyAppearance" placeholder="Appearance (e.g. Blonde, sundress)" maxlength="80" style="margin-bottom:8px">
-      <textarea id="prettySituation" class="modal-note" placeholder="Where/Situation (e.g. Walking dog in park)"></textarea>
+      <input type="text" id="prettyAppearance" placeholder="Appearance (e.g. Blonde, sundress)" maxlength="80"
+        style="margin-bottom:8px">
+      <textarea id="prettySituation" class="modal-note"
+        placeholder="Where/Situation (e.g. Walking dog in park)"></textarea>
       <div class="modal-actions" style="margin-top: 20px;">
         <button class="modal-cancel" onclick="closePrettyModal()">Cancel</button>
         <button class="modal-confirm" onclick="confirmPretty()">Save</button>
@@ -3954,7 +4703,8 @@
       <div style="margin: 10px 0; font-size: 12px; color: var(--dim); text-align:center;">What did you do?</div>
       <textarea id="boldnessText" class="modal-note" placeholder="Approached a group, spoke loud..."></textarea>
       <div class="modal-actions" style="margin-top: 20px;">
-        <button class="modal-cancel" onclick="document.getElementById('boldnessModal').classList.remove('open')">Cancel</button>
+        <button class="modal-cancel"
+          onclick="document.getElementById('boldnessModal').classList.remove('open')">Cancel</button>
         <button class="modal-confirm" onclick="confirmBoldAction()">Save</button>
       </div>
     </div>
@@ -3981,6 +4731,10 @@
     <button id="navExcuses" onclick="switchView('excuses')">
       <span class="nav-icon">☕</span>
       Excuses
+    </button>
+    <button id="navSituations" onclick="switchView('situations')">
+      <span class="nav-icon">🎭</span>
+      Situations
     </button>
     <button id="navReviews" onclick="switchView('reviews')">
       <span class="nav-icon">📝</span>
@@ -4031,7 +4785,8 @@
         <div class="rc-excuses" id="rcExcuses" style="display:none">
           <div class="rc-excuses-title">Look at your excuses:</div>
           <div id="rcExcuseChips"></div>
-          <button class="rc-btn rc-go-back" style="margin-top:10px;width:100%" onclick="closeRealityCheck(); switchView('excuses')">☕ Open Excuses</button>
+          <button class="rc-btn rc-go-back" style="margin-top:10px;width:100%"
+            onclick="closeRealityCheck(); switchView('excuses')">☕ Open Excuses</button>
         </div>
         <div class="rc-btn-row">
           <button class="rc-btn rc-dismiss" onclick="showOddsScreen()">I know...</button>
@@ -4044,24 +4799,32 @@
         <div class="rc-odds-sub">Be honest with yourself.</div>
         <div class="rc-odds-grid">
           <button class="rc-odds-btn" onclick="logReencounterOdds('daily', 80)">
-            <div><span class="odds-label">Same place daily</span><br><span class="odds-desc">Gym, class, commute, coffee shop</span></div>
+            <div><span class="odds-label">Same place daily</span><br><span class="odds-desc">Gym, class, commute, coffee
+                shop</span></div>
             <span class="odds-pct">~80%</span>
-            <div class="odds-xp-preview"><span class="missed-xp-lost">-20 XP</span> · <span class="missed-xp-avoided">+24 saved</span></div>
+            <div class="odds-xp-preview"><span class="missed-xp-lost">-20 XP</span> · <span
+                class="missed-xp-avoided">+24 saved</span></div>
           </button>
           <button class="rc-odds-btn" onclick="logReencounterOdds('weekly', 40)">
-            <div><span class="odds-label">Same area sometimes</span><br><span class="odds-desc">Campus, neighborhood, regular spot</span></div>
+            <div><span class="odds-label">Same area sometimes</span><br><span class="odds-desc">Campus, neighborhood,
+                regular spot</span></div>
             <span class="odds-pct">~40%</span>
-            <div class="odds-xp-preview"><span class="missed-xp-lost">-60 XP</span> · <span class="missed-xp-avoided">+12 saved</span></div>
+            <div class="odds-xp-preview"><span class="missed-xp-lost">-60 XP</span> · <span
+                class="missed-xp-avoided">+12 saved</span></div>
           </button>
           <button class="rc-odds-btn" onclick="logReencounterOdds('random', 10)">
-            <div><span class="odds-label">Random encounter</span><br><span class="odds-desc">Street, mall, one-time event</span></div>
+            <div><span class="odds-label">Random encounter</span><br><span class="odds-desc">Street, mall, one-time
+                event</span></div>
             <span class="odds-pct">~10%</span>
-            <div class="odds-xp-preview"><span class="missed-xp-lost">-90 XP</span> · <span class="missed-xp-avoided">+3 saved</span></div>
+            <div class="odds-xp-preview"><span class="missed-xp-lost">-90 XP</span> · <span class="missed-xp-avoided">+3
+                saved</span></div>
           </button>
           <button class="rc-odds-btn" onclick="logReencounterOdds('never', 2)">
-            <div><span class="odds-label">Probably never</span><br><span class="odds-desc">Tourist, traveler, passing through</span></div>
+            <div><span class="odds-label">Probably never</span><br><span class="odds-desc">Tourist, traveler, passing
+                through</span></div>
             <span class="odds-pct">~2%</span>
-            <div class="odds-xp-preview"><span class="missed-xp-lost">-98 XP</span> · <span class="missed-xp-avoided">+1 saved</span></div>
+            <div class="odds-xp-preview"><span class="missed-xp-lost">-98 XP</span> · <span class="missed-xp-avoided">+1
+                saved</span></div>
           </button>
         </div>
       </div>
@@ -4110,12 +4873,13 @@
       if (!data.boldnessLogs) data.boldnessLogs = [];
       if (!data.prettyGirls) data.prettyGirls = [];
       if (!data.quickLooks) data.quickLooks = {};
+      if (!data.situations) data.situations = [];
       delete data.settings.girlsPerDay;
       return data;
     }
 
     function createFreshData() {
-      const data = { startDate: todayStr(), settings: { ...DEFAULTS }, days: {}, seen: {}, missed: [], people: [], goAttempts: [], excuses: [], scaredLevel: 5, looks: [], boldnessLogs: [], prettyGirls: [], quickLooks: {} };
+      const data = { startDate: todayStr(), settings: { ...DEFAULTS }, days: {}, seen: {}, missed: [], people: [], goAttempts: [], excuses: [], scaredLevel: 5, looks: [], boldnessLogs: [], prettyGirls: [], quickLooks: {}, situations: [] };
       localStorage.setItem('approachData', JSON.stringify(data));
       return data;
     }
@@ -4565,10 +5329,10 @@
       if (!p) return;
       const displayTime = hhmmToDisplay(pickedTime);
 
-      p.interactions.push({ 
-        date: pickedDate, 
-        time: displayTime, 
-        note: note || '(talked)', 
+      p.interactions.push({
+        date: pickedDate,
+        time: displayTime,
+        note: note || '(talked)',
         location: location
       });
       p.status = 'talked';
@@ -4875,6 +5639,131 @@
     }
 
     function getUrgencyMultiplier(left, total) { return left <= 0 ? 999 : total / left; }
+
+    // --- SITUATIONS ---
+    let situationModalMode = 'add';
+    let situationEditId = null;
+
+    function openSituationModal(editId) {
+      if (editId) {
+        situationModalMode = 'edit';
+        situationEditId = editId;
+        const data = getData();
+        const sit = data.situations.find(s => s.id === editId);
+        if (!sit) return;
+        document.getElementById('situationModalTitle').textContent = 'Edit Situation';
+        document.getElementById('sitTitle').value = sit.title;
+        document.getElementById('sitSetting').value = sit.setting || '';
+        document.getElementById('sitDescription').value = sit.description || '';
+        document.getElementById('sitWhatSay').value = sit.whatSay || '';
+        document.getElementById('sitWhatDo').value = sit.whatDo || '';
+        document.getElementById('sitOutcomes').value = sit.outcomes || '';
+      } else {
+        situationModalMode = 'add';
+        situationEditId = null;
+        document.getElementById('situationModalTitle').textContent = 'Create Situation';
+        document.getElementById('sitTitle').value = '';
+        document.getElementById('sitSetting').value = '';
+        document.getElementById('sitDescription').value = '';
+        document.getElementById('sitWhatSay').value = '';
+        document.getElementById('sitWhatDo').value = '';
+        document.getElementById('sitOutcomes').value = '';
+      }
+      document.getElementById('situationModal').classList.add('open');
+      setTimeout(() => document.getElementById('sitTitle').focus(), 100);
+    }
+
+    function closeSituationModal() {
+      document.getElementById('situationModal').classList.remove('open');
+    }
+
+    function confirmSituation() {
+      const title = document.getElementById('sitTitle').value.trim();
+      if (!title) { document.getElementById('sitTitle').focus(); return; }
+      const setting = document.getElementById('sitSetting').value.trim();
+      const description = document.getElementById('sitDescription').value.trim();
+      const whatSay = document.getElementById('sitWhatSay').value.trim();
+      const whatDo = document.getElementById('sitWhatDo').value.trim();
+      const outcomes = document.getElementById('sitOutcomes').value.trim();
+      const data = getData();
+
+      if (situationModalMode === 'edit' && situationEditId) {
+        const sit = data.situations.find(s => s.id === situationEditId);
+        if (sit) {
+          sit.title = title;
+          sit.setting = setting;
+          sit.description = description;
+          sit.whatSay = whatSay;
+          sit.whatDo = whatDo;
+          sit.outcomes = outcomes;
+        }
+      } else {
+        data.situations.push({ id: Date.now(), title, setting, description, whatSay, whatDo, outcomes, created: todayStr() });
+      }
+      saveData(data);
+      closeSituationModal();
+      renderSituations();
+    }
+
+    function deleteSituation(id) {
+      if (!confirm('Delete this situation?')) return;
+      const data = getData();
+      data.situations = data.situations.filter(s => s.id !== id);
+      saveData(data);
+      renderSituations();
+    }
+
+    function toggleSituationCard(id) {
+      const card = document.getElementById('sitCard' + id);
+      if (card) card.classList.toggle('expanded');
+    }
+
+    function renderSituations() {
+      const data = getData();
+      const sits = data.situations || [];
+      document.getElementById('situationCountPage').textContent = sits.length;
+
+      const container = document.getElementById('situationList');
+      const tip = document.getElementById('situationsTip');
+
+      if (sits.length === 0) {
+        container.innerHTML = '<div class="situations-empty"><div class="empty-icon">🎭</div>No situations yet.<br>Create one and mentally rehearse your approach.</div>';
+        tip.style.display = '';
+        return;
+      }
+
+      tip.style.display = sits.length > 2 ? 'none' : '';
+
+      let html = '';
+      sits.slice().reverse().forEach(sit => {
+        const fields = [];
+        if (sit.description) fields.push({ label: 'Description', text: sit.description });
+        if (sit.whatSay) fields.push({ label: "What I'll Say", text: sit.whatSay });
+        if (sit.whatDo) fields.push({ label: "What I'll Do", text: sit.whatDo });
+        if (sit.outcomes) fields.push({ label: 'Possible Outcomes', text: sit.outcomes });
+
+        html += `<div class="situation-card" id="sitCard${sit.id}">
+          <div class="situation-card-header" onclick="toggleSituationCard(${sit.id})">
+            <div class="situation-card-title">
+              <span>${escHtml(sit.title)}</span>
+              <span class="expand-icon">▼</span>
+            </div>
+            ${sit.setting ? `<div class="situation-card-setting">📍 ${escHtml(sit.setting)}</div>` : ''}
+          </div>
+          <div class="situation-card-body">
+            ${fields.map(f => `<div class="situation-field">
+              <div class="situation-field-label">${f.label}</div>
+              <div class="situation-field-text">${escHtml(f.text)}</div>
+            </div>`).join('')}
+            <div class="situation-card-actions">
+              <button class="sit-edit" onclick="openSituationModal(${sit.id})">Edit</button>
+              <button class="sit-delete" onclick="deleteSituation(${sit.id})">Delete</button>
+            </div>
+          </div>
+        </div>`;
+      });
+      container.innerHTML = html;
+    }
 
     // --- EXCUSES / PLANS ---
     let excuseModalMode = 'add';
@@ -5325,7 +6214,7 @@
       const appearance = document.getElementById('prettyAppearance').value.trim();
       const situation = document.getElementById('prettySituation').value.trim();
       if (!rating && !appearance && !situation) return closePrettyModal();
-      
+
       if (editingPrettyId) {
         const pg = data.prettyGirls.find(p => p.id === editingPrettyId);
         if (pg) {
@@ -5351,27 +6240,27 @@
       const list = document.getElementById('prettyList');
       if (!list) return;
       const pgs = data.prettyGirls || [];
-      
+
       // Age Stats
       const ages = {};
       pgs.forEach(pg => {
-         if (!pg.age) return;
-         const ag = pg.age;
-         if(!ages[ag]) ages[ag] = {count:0, totalRating:0};
-         ages[ag].count++;
-         ages[ag].totalRating += parseFloat(pg.rating) || 0;
+        if (!pg.age) return;
+        const ag = pg.age;
+        if (!ages[ag]) ages[ag] = { count: 0, totalRating: 0 };
+        ages[ag].count++;
+        ages[ag].totalRating += parseFloat(pg.rating) || 0;
       });
-      
+
       let maxAgeCount = 1;
       Object.keys(ages).forEach(ag => {
-         if (ages[ag].count > maxAgeCount) maxAgeCount = ages[ag].count;
+        if (ages[ag].count > maxAgeCount) maxAgeCount = ages[ag].count;
       });
 
       let htmlAges = '';
-      Object.keys(ages).sort((a,b)=>Number(a)-Number(b)).forEach(ag => {
-         const avgRating = (ages[ag].totalRating / ages[ag].count).toFixed(1);
-         const pct = (ages[ag].count / maxAgeCount) * 100;
-         htmlAges += `
+      Object.keys(ages).sort((a, b) => Number(a) - Number(b)).forEach(ag => {
+        const avgRating = (ages[ag].totalRating / ages[ag].count).toFixed(1);
+        const pct = (ages[ag].count / maxAgeCount) * 100;
+        htmlAges += `
           <div class="funnel-step" style="align-items:center;">
             <span class="funnel-label" style="width:60px;">${ag}</span>
             <div class="funnel-bar-bg" style="flex:1;">
@@ -5385,10 +6274,10 @@
           </div>
          `;
       });
-      
+
       const ageStatsEl = document.getElementById('prettyAgeStats');
       if (ageStatsEl) {
-        if(Object.keys(ages).length === 0) {
+        if (Object.keys(ages).length === 0) {
           ageStatsEl.innerHTML = '';
         } else {
           ageStatsEl.innerHTML = `<h3 style="font-size:14px; margin-bottom:12px; color:var(--text); border-bottom:1px solid var(--border); padding-bottom:6px;">Age Stats & Ratings</h3><div style="display:flex; flex-direction:column; gap:8px; width:100%; margin-top:8px;">${htmlAges}</div>`;
@@ -5399,10 +6288,10 @@
         list.innerHTML = '<div style="font-size:12px;color:var(--dim);text-align:center;">No pretty girls logged yet.</div>';
         return;
       }
-      list.innerHTML = [...pgs].sort((a,b) => b.id - a.id).map(pg => `
+      list.innerHTML = [...pgs].sort((a, b) => b.id - a.id).map(pg => `
         <div style="background:var(--card); border:1px solid var(--border); border-radius:12px; padding:12px; margin-bottom:10px;">
           <div style="display:flex; justify-content:space-between; align-items:center;">
-             <div style="font-size:11px; color:var(--dim);">${pg.date} ${pg.time||''}</div>
+             <div style="font-size:11px; color:var(--dim);">${pg.date} ${pg.time || ''}</div>
              <div>
                <button onclick="openPrettyModal(${pg.id})" style="background:none;border:none;color:var(--accent);font-size:12px;cursor:pointer;margin-right:10px;">Edit</button>
                <button onclick="deletePrettyGirl(${pg.id})" style="background:none;border:none;color:var(--danger);font-size:12px;cursor:pointer;">Delete</button>
@@ -5428,6 +6317,8 @@
       'Bad timing',
       'She\'s with friends',
       'To do what exactly',
+      "I'm not approaching",
+      "I'm Scared"
     ];
 
     const GO_REFRAMES = {
@@ -5440,6 +6331,8 @@
       'Bad timing': 'There is no perfect timing. There is only NOW or NEVER. 90% of people you see, you\'ll never see again.',
       'She\'s with friends': 'Even better — shows confidence. "Hey sorry to interrupt, I just had to say..." Friends will respect it.',
       'To do what exactly': 'A coffee. A walk. You already have plans — look at your Excuses tab.',
+      "I'm not approaching": "95% aren't doing anything Not approaching makes less sense than approaching a with a 95% fail rate \n You will be better off approaching with a 95% fail rate than not approaching In all aspects of life. "
+      "I'm Scared": "If you scared to approach and approaching is part of the progthen you need to do scarier things"
     };
 
     let selectedGoFear = null;
@@ -6069,7 +6962,7 @@
 
     // --- NAVIGATION ---
     function switchView(view) {
-      ['Home','Stats','Excuses','Go','Encounters','Looks','Reviews'].forEach(v => {
+      ['Home', 'Stats', 'Excuses', 'Go', 'Encounters', 'Looks', 'Reviews', 'Situations'].forEach(v => {
         const k = v.toLowerCase();
         document.getElementById('view' + v).classList.toggle('active', view === k);
         document.getElementById('nav' + v).classList.toggle('active', view === k);
@@ -6081,6 +6974,7 @@
       if (view === 'encounters') renderEncounters(getData());
       if (view === 'looks') renderLooks();
       if (view === 'reviews') renderReviews();
+      if (view === 'situations') renderSituations();
     }
 
     // --- STATS RENDERING ---
@@ -6437,23 +7331,23 @@
       const today = new Date(todayStr());
       let timelineHtml = '';
       const validLogs = [];
-      
+
       (data.boldnessLogs || []).forEach(log => {
         const logDate = new Date(log.date);
         const daysAgo = Math.round((today - logDate) / 86400000);
         const currentPoints = Math.max(0, log.points - daysAgo);
-        
+
         if (currentPoints > 0) {
           score += currentPoints;
         }
-        
+
         timelineHtml += `<div style="padding: 10px; border-left: 2px solid var(--accent); margin-bottom: 10px; background: rgba(255,107,53,0.05); border-radius: 0 8px 8px 0;">
           <div style="font-size: 10px; color: var(--dim);">${log.date}</div>
           <div style="font-size: 14px; font-weight: 600;">${log.text}</div>
           <div style="font-size: 12px; color: var(--accent); margin-top: 4px;">+${currentPoints} pts (decayed by ${Math.min(daysAgo, log.points)})</div>
         </div>`;
       });
-      
+
       document.getElementById('boldnessScore').textContent = score;
       document.getElementById('boldnessTimeline').innerHTML = timelineHtml || '<div style="color:var(--dim);font-size:12px;">No bold actions logged yet. Start doing bold things!</div>';
     }
@@ -6478,7 +7372,7 @@
       const age = document.getElementById('lookHerAge').value;
       const app = document.getElementById('lookAppearance').value;
       const doHer = document.getElementById('lookDoHer').value;
-      
+
       const data = getData();
       data.looks.push({ id: Date.now(), date: todayStr(), time: toHHMM(), self, outfit, sit, her, age, app, doHer });
       saveData(data);
@@ -6490,50 +7384,50 @@
       const data = getData();
       const looks = data.looks || [];
       document.getElementById('looksTotalCount').textContent = `${looks.length} logs`;
-      
+
       const totalSeenList = Object.values(data.seen || {});
-      const totalSeen = totalSeenList.reduce((a,b)=>a+b, 0);
-      
+      const totalSeen = totalSeenList.reduce((a, b) => a + b, 0);
+
       const today = todayStr();
       const qLooksList = Object.values(data.quickLooks || {});
-      const totalQuickLooks = qLooksList.reduce((a,b)=>a+b, 0);
+      const totalQuickLooks = qLooksList.reduce((a, b) => a + b, 0);
       const todayQuickLooks = data.quickLooks[today] || 0;
-      
+
       document.getElementById('quickLooksToday').textContent = todayQuickLooks;
-      
+
       const totalLooksEver = looks.length + totalQuickLooks;
-      
+
       const lookRate = totalSeen > 0 ? ((totalLooksEver / totalSeen) * 100).toFixed(1) : 0;
       const deaths = Math.max(1, totalSeen - totalLooksEver);
       const kdRatio = (totalLooksEver / deaths).toFixed(2);
-      
+
       let ratioDisplay = '0';
       if (totalLooksEver > 0) {
         ratioDisplay = `1 in ${(totalSeen / totalLooksEver).toFixed(1)}`;
       }
-      
+
       document.getElementById('looksLookRate').innerHTML = `${totalLooksEver}/${totalSeen} (${lookRate}%)<br><span style="font-size:14px; color:var(--dim);">${ratioDisplay} · ${kdRatio} K/D</span>`;
       document.getElementById('looksTotalCount').textContent = totalLooksEver;
       document.getElementById('looksSeenCount').textContent = totalSeen;
-      
+
       const ages = {};
       looks.forEach(l => {
-         const ag = l.age || 'Unknown';
-         if(!ages[ag]) ages[ag] = {count:0, totalRating:0};
-         ages[ag].count++;
-         ages[ag].totalRating += parseFloat(l.her) || 0;
+        const ag = l.age || 'Unknown';
+        if (!ages[ag]) ages[ag] = { count: 0, totalRating: 0 };
+        ages[ag].count++;
+        ages[ag].totalRating += parseFloat(l.her) || 0;
       });
-      
+
       let maxAgeCount = 1;
       Object.keys(ages).forEach(ag => {
-         if (ages[ag].count > maxAgeCount) maxAgeCount = ages[ag].count;
+        if (ages[ag].count > maxAgeCount) maxAgeCount = ages[ag].count;
       });
 
       let htmlAges = '';
       Object.keys(ages).sort().forEach(ag => {
-         const avgRating = (ages[ag].totalRating / ages[ag].count).toFixed(1);
-         const pct = (ages[ag].count / maxAgeCount) * 100;
-         htmlAges += `
+        const avgRating = (ages[ag].totalRating / ages[ag].count).toFixed(1);
+        const pct = (ages[ag].count / maxAgeCount) * 100;
+        htmlAges += `
           <div class="funnel-step" style="align-items:center;">
             <span class="funnel-label" style="width:60px;">${ag}</span>
             <div class="funnel-bar-bg" style="flex:1;">
@@ -6547,18 +7441,18 @@
           </div>
          `;
       });
-      if(Object.keys(ages).length === 0) {
+      if (Object.keys(ages).length === 0) {
         htmlAges = '<div style="color:var(--dim); font-size:12px;">No data yet.</div>';
       }
       // Wrap it in a funnel container style if needed or just dump into the grid
       document.getElementById('looksAgeStats').innerHTML = `<div style="display:flex; flex-direction:column; gap:8px; width:100%; grid-column:1 / -1; margin-top:8px;">${htmlAges}</div>`;
-      
+
       const list = document.getElementById('looksList');
       if (looks.length === 0) {
         list.innerHTML = '<div style="color:var(--dim); font-size:12px;">No logs yet.</div>';
         return;
       }
-      list.innerHTML = [...looks].sort((a,b)=>b.id - a.id).map(l => `
+      list.innerHTML = [...looks].sort((a, b) => b.id - a.id).map(l => `
         <div style="background:var(--card); border:1px solid var(--border); border-radius:12px; padding:12px; margin-bottom:10px;">
           <div style="display:flex; justify-content:space-between; align-items:center;">
             <div style="font-size:11px; color:var(--dim);">${l.date} ${l.time || ''}</div>
@@ -6577,37 +7471,37 @@
     }
 
     function deleteLook(id) {
-      if(!confirm('Delete this look log?')) return;
+      if (!confirm('Delete this look log?')) return;
       const data = getData();
       data.looks = data.looks.filter(l => l.id !== id);
       saveData(data);
       renderLooks();
     }
-    
+
     // --- REVIEWS ---
     function renderReviews() {
-        const data = getData();
-        const reviews = [];
-        (data.goAttempts || []).forEach(a => {
-            if (!a.bailed && a.review) {
-                // Use firstLine as the identifier, or 'Approach' if empty
-                const identifier = a.firstLine ? a.firstLine : 'Approach';
-                reviews.push({ ...a.review, personName: `"${identifier}"`, date: a.date });
-            }
-        });
-        
-        let html = '';
-        if (reviews.length === 0) {
-           html = '<div style="color:var(--dim);font-size:13px;text-align:center;margin-top:20px;">No approach reviews logged yet.<br>Add them from the Go Mode history in Encounters.</div>';
-        } else {
-           // Full Reviews Section
-           html += `<div style="margin-bottom:30px;">
+      const data = getData();
+      const reviews = [];
+      (data.goAttempts || []).forEach(a => {
+        if (!a.bailed && a.review) {
+          // Use firstLine as the identifier, or 'Approach' if empty
+          const identifier = a.firstLine ? a.firstLine : 'Approach';
+          reviews.push({ ...a.review, personName: `"${identifier}"`, date: a.date });
+        }
+      });
+
+      let html = '';
+      if (reviews.length === 0) {
+        html = '<div style="color:var(--dim);font-size:13px;text-align:center;margin-top:20px;">No approach reviews logged yet.<br>Add them from the Go Mode history in Encounters.</div>';
+      } else {
+        // Full Reviews Section
+        html += `<div style="margin-bottom:30px;">
              <h3 style="font-size:16px; color:var(--text); margin-bottom:12px; border-bottom:1px solid var(--border); padding-bottom:6px;">Full Reviews</h3>`;
-           
-           reviews.forEach(r => {
-             // Only show the Full Review box if there is a description OR if they want it anyway. 
-             // We'll show all reviews as a full box.
-             html += `<div style="background:var(--card); border:1px solid var(--border); border-radius:12px; padding:14px; margin-bottom:12px;">
+
+        reviews.forEach(r => {
+          // Only show the Full Review box if there is a description OR if they want it anyway. 
+          // We'll show all reviews as a full box.
+          html += `<div style="background:var(--card); border:1px solid var(--border); border-radius:12px; padding:14px; margin-bottom:12px;">
                <div style="font-weight:700; font-size:14px; margin-bottom:4px; color:var(--accent);">${r.personName}</div>
                <div style="font-size:11px; color:var(--dim); margin-bottom:10px;">${r.date}</div>
                ${r.desc ? `<div style="font-size:13px; margin-bottom:12px; line-height:1.5;">${r.desc.replace(/\\n/g, '<br>')}</div>` : ''}
@@ -6620,26 +7514,26 @@
                  ${r.better ? `<div><span style="color:var(--dim);">Better:</span> ${r.better}</div>` : ''}
                </div>
              </div>`;
-           });
-           html += `</div>`;
-           
-           // Grouped Categories
-           html += `<div style="margin-bottom:20px;">
+        });
+        html += `</div>`;
+
+        // Grouped Categories
+        html += `<div style="margin-bottom:20px;">
              <h3 style="font-size:16px; color:var(--text); margin-bottom:12px; border-bottom:1px solid var(--border); padding-bottom:6px;">Collected Points</h3>
            </div>`;
-           
-           html += buildReviewCategory('Weakpoints', reviews.map(r => ({txt:r.weakpoints, t:r.personName, d:r.date})).filter(x=>x.txt));
-           html += buildReviewCategory('Goodpoints', reviews.map(r => ({txt:r.goodpoints, t:r.personName, d:r.date})).filter(x=>x.txt));
-           html += buildReviewCategory('Could Have Done More', reviews.map(r => ({txt:r.more, t:r.personName, d:r.date})).filter(x=>x.txt));
-           html += buildReviewCategory('Could Have Done Less', reviews.map(r => ({txt:r.less, t:r.personName, d:r.date})).filter(x=>x.txt));
-           html += buildReviewCategory('Better Than Expected', reviews.map(r => ({txt:r.better, t:r.personName, d:r.date})).filter(x=>x.txt));
-        }
-        document.getElementById('reviewsInventoryContainer').innerHTML = html;
+
+        html += buildReviewCategory('Weakpoints', reviews.map(r => ({ txt: r.weakpoints, t: r.personName, d: r.date })).filter(x => x.txt));
+        html += buildReviewCategory('Goodpoints', reviews.map(r => ({ txt: r.goodpoints, t: r.personName, d: r.date })).filter(x => x.txt));
+        html += buildReviewCategory('Could Have Done More', reviews.map(r => ({ txt: r.more, t: r.personName, d: r.date })).filter(x => x.txt));
+        html += buildReviewCategory('Could Have Done Less', reviews.map(r => ({ txt: r.less, t: r.personName, d: r.date })).filter(x => x.txt));
+        html += buildReviewCategory('Better Than Expected', reviews.map(r => ({ txt: r.better, t: r.personName, d: r.date })).filter(x => x.txt));
+      }
+      document.getElementById('reviewsInventoryContainer').innerHTML = html;
     }
-    
+
     function buildReviewCategory(title, items) {
-       if(items.length===0) return '';
-       return `<div style="margin-bottom:20px;">
+      if (items.length === 0) return '';
+      return `<div style="margin-bottom:20px;">
          <h3 style="font-size:15px; color:var(--accent); margin-bottom:10px; border-bottom:1px solid var(--border); padding-bottom:4px;">${title}</h3>
          ${items.map(i => `<div style="background:var(--card); font-size:13px; padding:10px; border-radius:8px; margin-bottom:6px;">"${i.txt}" <div style="font-size:10px; color:var(--dim);text-align:right;margin-top:4px;">${i.t} (${i.d})</div></div>`).join('')}
        </div>`;
@@ -6651,11 +7545,11 @@
       const data = getData();
       const attempt = (data.goAttempts || []).find(a => a.id === id);
       if (!attempt) return;
-      
+
       editingGoReviewId = id;
-      
+
       document.getElementById('goReviewSubtitle').textContent = attempt.date + (attempt.time ? ` ${attempt.time}` : '');
-      
+
       if (attempt.review) {
         document.getElementById('goReviewDesc').value = attempt.review.desc || '';
         document.getElementById('goReviewWeak').value = attempt.review.weakpoints || '';
@@ -6671,7 +7565,7 @@
         document.getElementById('goReviewLess').value = '';
         document.getElementById('goReviewBetter').value = '';
       }
-      
+
       document.getElementById('goReviewModal').classList.add('open');
     }
 
@@ -6682,7 +7576,7 @@
 
     function confirmGoReview() {
       if (!editingGoReviewId) return;
-      
+
       const review = {
         desc: document.getElementById('goReviewDesc').value.trim(),
         weakpoints: document.getElementById('goReviewWeak').value.trim(),
@@ -6691,9 +7585,9 @@
         less: document.getElementById('goReviewLess').value.trim(),
         better: document.getElementById('goReviewBetter').value.trim()
       };
-      
+
       const hasReview = Object.values(review).some(v => v !== '');
-      
+
       const data = getData();
       const attempt = (data.goAttempts || []).find(a => a.id === editingGoReviewId);
       if (attempt) {
@@ -6701,7 +7595,7 @@
         saveData(data);
         render(); // Re-render to update the button state in Encounters view & Reviews view
       }
-      
+
       closeGoReviewModal();
     }
 
@@ -6743,15 +7637,16 @@
               <div class="go-checkpoint-hint">What will you say first?</div>
             </div>
           </div>
-          <input type="text" id="goFirstLine" placeholder="Hey, I just saw you and had to say…"
-            oninput="checkGoReady()" maxlength="120">
+          <input type="text" id="goFirstLine" placeholder="Hey, I just saw you and had to say…" oninput="checkGoReady()"
+            maxlength="120">
         </div>
 
         <div class="go-checkpoint" id="goCheck3">
           <div class="go-checkpoint-header">
             <div class="go-checkpoint-num">3</div>
             <div>
-              <div class="go-checkpoint-label">Excuse <span class="go-checkpoint-hint">— what are we gonna do?</span></div>
+              <div class="go-checkpoint-label">Excuse <span class="go-checkpoint-hint">— what are we gonna do?</span>
+              </div>
             </div>
           </div>
           <input type="text" id="goExcuse" placeholder="Coffee right now, exchange numbers, walk together..."
