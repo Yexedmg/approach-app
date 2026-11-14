@@ -41,6 +41,7 @@ When you see that the "Fear of Approach" is just a broken subroutine — a loop 
 - **Re-encounter Tracker** — did you ever see them again?
 - **Stats** — monthly/weekly breakdown, records, Fortnite-style overview
 - **Reviews** — post-approach review notes (weakpoints, goodpoints, etc.)
+- **Could've Done More** — log every time you held back, sort the moments into categories, and see which category to pay attention to
 - **Internal** — boldness stat, power level, engagement stat, life's hard stat
 - **Feature Ideas** — log features you want built
 
