@@ -2653,6 +2653,7 @@
     .view-age-ratings,
     .view-seen-again,
     .view-prospects,
+    .view-more,
     .view-world {
       display: none;
     }
@@ -2670,9 +2671,39 @@
     .view-age-ratings.active,
     .view-seen-again.active,
     .view-prospects.active,
+    .view-more.active,
     .view-world.active {
       display: block;
     }
+
+    /* Could've Done More */
+    .more-hero { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 18px; text-align: center; margin-bottom: 14px; }
+    .more-hero-num { font-size: 52px; font-weight: 800; line-height: 1; color: var(--accent); }
+    .more-hero-label { font-size: 12px; color: var(--dim); text-transform: uppercase; letter-spacing: 1px; margin-top: 6px; }
+    .more-focus { margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border); }
+    .more-focus-label { font-size: 11px; color: var(--dim); text-transform: uppercase; letter-spacing: 1px; }
+    .more-focus-cat { font-size: 20px; font-weight: 800; color: var(--purple); margin-top: 4px; }
+    .more-focus-sub { font-size: 12px; color: var(--dim); margin-top: 2px; }
+    .more-section-title { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--dim); margin: 20px 0 10px; display: flex; justify-content: space-between; align-items: center; }
+    .more-section-title button { background: none; border: none; color: var(--blue); font-size: 12px; font-weight: 600; cursor: pointer; text-transform: none; letter-spacing: 0; padding: 0; }
+    .more-cat-row { position: relative; overflow: hidden; display: flex; justify-content: space-between; align-items: center; gap: 10px; width: 100%; text-align: left; background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 11px 12px; margin-bottom: 6px; color: var(--text); font-size: 14px; font-weight: 600; font-family: inherit; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+    .more-cat-row.selected { border-color: var(--purple); }
+    .more-cat-row .more-cat-bar { position: absolute; left: 0; top: 0; bottom: 0; background: rgba(191, 90, 242, 0.18); pointer-events: none; }
+    .more-cat-row.uncat .more-cat-bar { background: rgba(128, 128, 128, 0.15); }
+    .more-cat-row span { position: relative; }
+    .more-cat-row .more-cat-count { color: var(--purple); font-weight: 800; white-space: nowrap; }
+    .more-cat-row.uncat { color: var(--dim); }
+    .more-cat-row.uncat .more-cat-count { color: var(--dim); }
+    .more-item { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 12px; margin-bottom: 8px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+    .more-item-text { font-size: 14px; line-height: 1.4; }
+    .more-item-meta { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-top: 8px; font-size: 11px; color: var(--dim); }
+    .more-tag { display: inline-block; padding: 3px 9px; border-radius: 999px; font-size: 11px; font-weight: 700; background: rgba(191, 90, 242, 0.15); color: var(--purple); white-space: nowrap; }
+    .more-tag.none { background: none; border: 1px dashed var(--dim); color: var(--dim); font-weight: 600; }
+    .more-chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0 4px; }
+    .more-chip { padding: 7px 12px; border-radius: 999px; border: 1px solid var(--border); background: var(--card); color: var(--text); font-size: 12px; font-weight: 600; font-family: inherit; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+    .more-chip.selected { background: var(--purple); border-color: var(--purple); color: #fff; }
+    .more-chip.new { border-style: dashed; color: var(--dim); }
+    .more-empty { color: var(--dim); font-size: 13px; text-align: center; padding: 20px 0; line-height: 1.5; }
 
     /* Hamburger menu drawer */
     .report-hamburger-btn {
@@ -4166,6 +4197,9 @@
           👩 Girls
         </button>
       </div>
+      <button onclick="switchView('more')" style="width:100%; margin:-10px 0 20px; padding:14px 12px; border-radius:14px; border:1px solid rgba(255,255,255,0.12); background:rgba(255,255,255,0.06); color:var(--text); font-size:14px; font-weight:600; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px;">
+        📈 Could've Done More <span id="moreNavCount" style="color:var(--accent); font-weight:800;"></span>
+      </button>
 
       <!-- Overview Cards -->
       <div class="stats-overview" id="statsOverview"></div>
@@ -4432,6 +4466,45 @@
     <div style="padding: 16px;">
       <div id="reviewsApproachList"></div>
       <div id="reviewsInventoryContainer"></div>
+    </div>
+  </div>
+
+  <!-- ===== VIEW: COULD'VE DONE MORE ===== -->
+  <div class="view-more" id="viewMore">
+    <div style="padding: 16px 16px 0;">
+      <button onclick="switchView('stats')" style="background:none; border:none; color:var(--accent); font-size:14px; font-weight:600; cursor:pointer; padding:8px 0;">← Back to Stats</button>
+    </div>
+    <div class="header" style="padding-top: 10px;">
+      <h1>Could've Done More</h1>
+      <div class="subtitle">Every time you held back, and where it keeps happening</div>
+    </div>
+    <div style="padding: 16px 16px 130px;">
+      <div id="moreSummary"></div>
+      <button class="people-add-btn" onclick="openMoreModal()">+ Log a moment</button>
+      <div id="moreBreakdown"></div>
+      <div id="moreList"></div>
+    </div>
+  </div>
+
+  <!-- Could've Done More Modal -->
+  <div class="modal-overlay" id="moreModal">
+    <div class="person-modal">
+      <h3 id="moreModalTitle">Could've Done More</h3>
+      <div class="modal-sub" id="moreModalSub" style="margin-bottom:10px; display:none;"></div>
+      <textarea id="moreText" class="modal-note" placeholder="What could you have done more? e.g. asked for her number, kept talking, sat next to her..."></textarea>
+      <div class="modal-datetime-row" id="moreDateRow">
+        <div class="datetime-field">
+          <label>Date</label>
+          <input type="date" id="moreDate">
+        </div>
+      </div>
+      <div style="font-size:12px; color:var(--dim); margin-top:10px;">Category <span style="opacity:0.7;">(optional, you can sort it later)</span></div>
+      <div class="more-chips" id="moreChips"></div>
+      <div class="modal-actions" style="margin-top:12px;">
+        <button class="modal-cancel" id="moreDeleteBtn" onclick="deleteMoreMoment()" style="color:var(--danger); display:none;">Delete</button>
+        <button class="modal-cancel" onclick="closeMoreModal()">Cancel</button>
+        <button class="modal-confirm" onclick="confirmMore()">Save</button>
+      </div>
     </div>
   </div>
 
@@ -4797,12 +4870,14 @@
       if (!data.lifeHard) data.lifeHard = { logs: [] };
       if (!data.situations) data.situations = [];
       if (!data.manifests) data.manifests = [];
+      if (!data.moreMoments) data.moreMoments = [];
+      if (!data.moreCategories) data.moreCategories = [];
       delete data.settings.girlsPerDay;
       return data;
     }
 
     function createFreshData() {
-      const data = { startDate: todayStr(), settings: { ...DEFAULTS }, days: {}, seen: {}, missed: [], people: [], goAttempts: [], excuses: [], scaredLevel: 5, looks: [], boldnessLogs: [], prettyGirls: [], quickLooks: {}, prospects: [], openers: [], featureRequests: [], totalLostOpportunityPct: 0, engagementFactors: { environments: 1, friends: 0, talksDaily: 0, lastSocialDate: '' }, lifeHard: { logs: [] }, situations: [], manifests: [] };
+      const data = { startDate: todayStr(), settings: { ...DEFAULTS }, days: {}, seen: {}, missed: [], people: [], goAttempts: [], excuses: [], scaredLevel: 5, looks: [], boldnessLogs: [], prettyGirls: [], quickLooks: {}, prospects: [], openers: [], featureRequests: [], totalLostOpportunityPct: 0, engagementFactors: { environments: 1, friends: 0, talksDaily: 0, lastSocialDate: '' }, lifeHard: { logs: [] }, situations: [], manifests: [], moreMoments: [], moreCategories: [] };
       localStorage.setItem('approachData', JSON.stringify(data));
       return data;
     }
@@ -7750,7 +7825,7 @@
 
     // --- NAVIGATION ---
     const mainViews = ['Approach','Stats','Report','Internal','World'];
-    const subViews = ['Excuses','Encounters','Looks','Reviews','Openers','Prettygirls','Ageratings','Seenagain','Prospects'];
+    const subViews = ['Excuses','Encounters','Looks','Reviews','Openers','Prettygirls','Ageratings','Seenagain','Prospects','More'];
     const allViews = mainViews.concat(subViews);
 
     function openReportDrawer() {
@@ -7777,7 +7852,8 @@
       if (view === 'approach') { renderGoTab(getData()); renderRandomOpeners(); }
       if (view === 'report') render();
       if (view === 'internal') render();
-      if (view === 'stats') renderStats();
+      if (view === 'stats') { renderStats(); updateMoreNavCount(); }
+      if (view === 'more') renderMore();
       if (view === 'excuses') renderExcuses(getData());
       if (view === 'encounters') renderEncounters(getData());
       if (view === 'looks') renderLooks();
@@ -7788,6 +7864,173 @@
       if (view === 'seenagain') renderSeenAgainPage();
       if (view === 'prospects') renderProspectsPage();
       if (view === 'world') { renderSituations(); renderManifests(); }
+    }
+
+    // --- COULD'VE DONE MORE ---
+    const MORE_DEFAULT_CATS = ['Approaching at all', 'Opening', 'Keeping it going', 'Flirting / escalating', 'Asking for contact', 'Body language', 'Following up'];
+    let moreEditing = null;      // { src: 'manual' | 'review', id }
+    let moreSelectedCat = '';
+    let moreFilter = null;       // null = all, '' = uncategorized, else category name
+    let moreBreakdownRows = [];
+
+    // Manually logged moments plus the "Could have done more" line of every approach review
+    function getMoreItems(data) {
+      const items = (data.moreMoments || []).map(m => ({ src: 'manual', id: m.id, date: m.date, text: m.text, category: m.category || '', context: '' }));
+      (data.goAttempts || []).forEach(a => {
+        if (a.review && a.review.more) items.push({ src: 'review', id: a.id, date: a.date, text: a.review.more, category: a.review.moreCategory || '', context: 'From approach review' });
+      });
+      return items.sort((a, b) => (b.date || '').localeCompare(a.date || '') || b.id - a.id);
+    }
+
+    function getMoreCategories(data) {
+      const used = getMoreItems(data).map(i => i.category).filter(Boolean);
+      return [...new Set([...MORE_DEFAULT_CATS, ...(data.moreCategories || []), ...used])];
+    }
+
+    function updateMoreNavCount() {
+      const el = document.getElementById('moreNavCount');
+      if (el) { const n = getMoreItems(getData()).length; el.textContent = n ? n + '×' : ''; }
+    }
+
+    function renderMoreChips() {
+      const cats = getMoreCategories(getData());
+      if (moreSelectedCat && !cats.includes(moreSelectedCat)) cats.push(moreSelectedCat);
+      document.getElementById('moreChips').innerHTML = cats.map((c, i) =>
+        `<button type="button" class="more-chip${c === moreSelectedCat ? ' selected' : ''}" data-cat="${escHtml(c).replace(/"/g, '&quot;')}" onclick="pickMoreCat(this.dataset.cat)">${escHtml(c)}</button>`
+      ).join('') + '<button type="button" class="more-chip new" onclick="addMoreCategory()">+ New</button>';
+    }
+
+    function pickMoreCat(cat) {
+      moreSelectedCat = moreSelectedCat === cat ? '' : cat;
+      renderMoreChips();
+    }
+
+    function addMoreCategory() {
+      const name = (prompt('New category name:') || '').trim().slice(0, 40);
+      if (!name) return;
+      const data = getData();
+      const existing = getMoreCategories(data).find(c => c.toLowerCase() === name.toLowerCase());
+      if (!existing) { data.moreCategories.push(name); saveData(data); }
+      moreSelectedCat = existing || name;
+      renderMoreChips();
+    }
+
+    function openMoreModal(src, id) {
+      const data = getData();
+      const item = src ? getMoreItems(data).find(i => i.src === src && i.id === id) : null;
+      moreEditing = item ? { src, id } : null;
+      moreSelectedCat = item ? item.category : (moreFilter || '');
+      document.getElementById('moreText').value = item ? item.text : '';
+      document.getElementById('moreDate').value = item ? item.date : todayStr();
+      document.getElementById('moreModalTitle').textContent = item ? 'Edit Moment' : "Could've Done More";
+      const isReview = !!item && item.src === 'review';
+      const sub = document.getElementById('moreModalSub');
+      sub.style.display = isReview ? 'block' : 'none';
+      sub.textContent = isReview ? 'From your approach review on ' + item.date : '';
+      document.getElementById('moreDateRow').style.display = isReview ? 'none' : '';
+      document.getElementById('moreDeleteBtn').style.display = item && !isReview ? '' : 'none';
+      renderMoreChips();
+      document.getElementById('moreModal').classList.add('open');
+      if (!item) setTimeout(() => document.getElementById('moreText').focus(), 100);
+    }
+
+    function closeMoreModal() {
+      document.getElementById('moreModal').classList.remove('open');
+      moreEditing = null;
+    }
+
+    function confirmMore() {
+      const text = document.getElementById('moreText').value.trim();
+      if (!text) return;
+      const date = document.getElementById('moreDate').value || todayStr();
+      const data = getData();
+      if (moreEditing && moreEditing.src === 'review') {
+        const a = data.goAttempts.find(x => x.id === moreEditing.id);
+        if (a && a.review) { a.review.more = text; a.review.moreCategory = moreSelectedCat; }
+      } else if (moreEditing) {
+        const m = data.moreMoments.find(x => x.id === moreEditing.id);
+        if (m) { m.text = text; m.date = date; m.category = moreSelectedCat; }
+      } else {
+        data.moreMoments.push({ id: Date.now(), date, text, category: moreSelectedCat });
+      }
+      saveData(data);
+      closeMoreModal();
+      renderMore();
+    }
+
+    function deleteMoreMoment() {
+      if (!moreEditing || moreEditing.src !== 'manual') return;
+      if (!confirm('Delete this moment?')) return;
+      const data = getData();
+      data.moreMoments = data.moreMoments.filter(m => m.id !== moreEditing.id);
+      saveData(data);
+      closeMoreModal();
+      renderMore();
+    }
+
+    function setMoreFilter(idx) {
+      const cat = idx == null ? null : moreBreakdownRows[idx].cat;
+      moreFilter = moreFilter === cat ? null : cat;
+      renderMore();
+    }
+
+    function renderMore() {
+      const data = getData();
+      const items = getMoreItems(data);
+      const total = items.length;
+      const counts = {};
+      items.forEach(i => { counts[i.category] = (counts[i.category] || 0) + 1; });
+      const uncat = counts[''] || 0;
+      const ranked = Object.keys(counts).filter(Boolean).map(cat => ({ cat, n: counts[cat] })).sort((a, b) => b.n - a.n || a.cat.localeCompare(b.cat));
+      moreBreakdownRows = uncat ? [...ranked, { cat: '', n: uncat }] : ranked;
+      if (moreFilter != null && !moreBreakdownRows.some(r => r.cat === moreFilter)) moreFilter = null;
+
+      // Summary: how many times + which category to pay attention to
+      let focus = '';
+      if (ranked.length) {
+        const top = ranked.filter(r => r.n === ranked[0].n);
+        focus = `<div class="more-focus">
+          <div class="more-focus-label">Pay attention to</div>
+          <div class="more-focus-cat">${top.map(r => escHtml(r.cat)).join(' & ')}</div>
+          <div class="more-focus-sub">${ranked[0].n} of ${total} moments (${Math.round(ranked[0].n / total * 100)}%)${top.length > 1 ? ' each' : ''}</div>
+        </div>`;
+      } else if (total) {
+        focus = `<div class="more-focus"><div class="more-focus-sub">Tap a moment below and give it a category to see what you should pay attention to.</div></div>`;
+      }
+      document.getElementById('moreSummary').innerHTML = `<div class="more-hero">
+        <div class="more-hero-num">${total}</div>
+        <div class="more-hero-label">${total === 1 ? "time you could've done more" : "times you could've done more"}</div>
+        ${focus}
+      </div>`;
+
+      // Category breakdown, biggest first
+      const max = Math.max(1, ...moreBreakdownRows.map(r => r.n));
+      document.getElementById('moreBreakdown').innerHTML = !moreBreakdownRows.length ? '' :
+        `<div class="more-section-title"><span>By category</span></div>` +
+        moreBreakdownRows.map((r, i) => `
+          <button type="button" class="more-cat-row${r.cat ? '' : ' uncat'}${moreFilter === r.cat ? ' selected' : ''}" onclick="setMoreFilter(${i})">
+            <span class="more-cat-bar" style="width:${Math.round(r.n / max * 100)}%"></span>
+            <span>${r.cat ? escHtml(r.cat) : 'Not sorted yet'}</span>
+            <span class="more-cat-count">${r.n}×</span>
+          </button>`).join('');
+
+      // Moments
+      const shown = moreFilter == null ? items : items.filter(i => i.category === moreFilter);
+      const listEl = document.getElementById('moreList');
+      if (!total) {
+        listEl.innerHTML = `<div class="more-empty">Nothing logged yet.<br>Whenever you walk away thinking "I could've done more", log it here. The "Could have done more" line from your approach reviews shows up here too.</div>`;
+        return;
+      }
+      const title = moreFilter == null ? 'All moments' : (moreFilter || 'Not sorted yet') + ' · ' + shown.length;
+      listEl.innerHTML = `<div class="more-section-title"><span>${escHtml(title)}</span>${moreFilter != null ? '<button onclick="setMoreFilter(null)">Show all</button>' : ''}</div>` +
+        shown.map(i => `
+          <div class="more-item" onclick="openMoreModal('${i.src}', ${i.id})">
+            <div class="more-item-text">${escHtml(i.text).replace(/\n/g, '<br>')}</div>
+            <div class="more-item-meta">
+              <span>${i.date}${i.context ? ' · ' + i.context : ''}</span>
+              <span class="more-tag${i.category ? '' : ' none'}">${i.category ? escHtml(i.category) : '+ Category'}</span>
+            </div>
+          </div>`).join('');
     }
 
     // --- STATS RENDERING ---
@@ -8471,6 +8714,7 @@
       const data = getData();
       const attempt = (data.goAttempts || []).find(a => a.id === editingGoReviewId);
       if (attempt) {
+        if (hasReview && review.more && attempt.review && attempt.review.moreCategory) review.moreCategory = attempt.review.moreCategory;
         attempt.review = hasReview ? review : null;
         saveData(data);
         render(); // Re-render to update the button state in Encounters view & Reviews view
