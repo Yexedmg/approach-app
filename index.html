@@ -2703,6 +2703,11 @@
     .more-chip { padding: 7px 12px; border-radius: 999px; border: 1px solid var(--border); background: var(--card); color: var(--text); font-size: 12px; font-weight: 600; font-family: inherit; cursor: pointer; -webkit-tap-highlight-color: transparent; }
     .more-chip.selected { background: var(--purple); border-color: var(--purple); color: #fff; }
     .more-chip.new { border-style: dashed; color: var(--dim); }
+    .enc-more { background: rgba(191, 90, 242, 0.07); border: 1px solid rgba(191, 90, 242, 0.25); border-radius: 12px; padding: 12px; margin-bottom: 16px; }
+    .enc-more-title { font-size: 13px; font-weight: 700; color: var(--purple); margin-bottom: 8px; }
+    .enc-more .modal-note { min-height: 56px; }
+    .enc-more-hint { font-size: 11px; color: var(--dim); margin-top: 6px; }
+    .go-focus-hint { margin: 10px auto 0; display: inline-block; padding: 6px 12px; border-radius: 999px; background: rgba(191, 90, 242, 0.12); border: 1px solid rgba(191, 90, 242, 0.3); color: var(--purple); font-size: 12px; font-weight: 600; }
     .more-empty { color: var(--dim); font-size: 13px; text-align: center; padding: 20px 0; line-height: 1.5; }
 
     /* Hamburger menu drawer */
@@ -6806,6 +6811,7 @@
       document.getElementById('goReframe').style.display = 'none';
       document.getElementById('goHerAge').value = '';
       document.getElementById('goUrgencyHint').style.display = 'none';
+      renderGoFocusHint();
       selectedSeeAgain = null;
       document.querySelectorAll('.go-see-btn').forEach(b => b.classList.remove('selected'));
       // Reset intention state
@@ -6957,7 +6963,10 @@
 
       const flash = document.getElementById('goBailFlash');
       flash.classList.add('show');
-      setTimeout(() => flash.classList.remove('show'), 1200);
+      setTimeout(() => {
+        flash.classList.remove('show');
+        openMoreModal(null, null, 'Right after bailing');
+      }, 1200);
 
       if (navigator.vibrate) navigator.vibrate([80]);
       render();
@@ -7431,6 +7440,11 @@
     let encStatsPendingMiss = false; // track if we should open miss modal on log
 
     function showEncStatsModal(type, context) {
+      encMoreContext = type === 'approach' ? { label: 'Right after approaching', attemptId: context && context.id } : { label: 'Right after a miss' };
+      document.getElementById('encMoreText').value = '';
+      moreSelectedCat = '';
+      moreChipsTarget = 'encMoreChips';
+      renderMoreChips();
       const data = getData();
       const s = data.settings;
       const seeAgainPct = s.secondChance || 10;
@@ -7513,6 +7527,7 @@
     }
 
     function closeEncStatsModal() {
+      saveEncMore();
       document.getElementById('encStatsModal').classList.remove('open');
       encStatsPendingMiss = false;
     }
@@ -7872,10 +7887,39 @@
     let moreSelectedCat = '';
     let moreFilter = null;       // null = all, '' = uncategorized, else category name
     let moreBreakdownRows = [];
+    let moreChipsTarget = 'moreChips';
+    let moreNewContext = '';     // where a new moment was logged from
+    let encMoreContext = null;
+
+    function saveEncMore() {
+      const el = document.getElementById('encMoreText');
+      const text = el ? el.value.trim() : '';
+      if (!text || !encMoreContext) { encMoreContext = null; return; }
+      const data = getData();
+      data.moreMoments.push({ id: Date.now(), date: todayStr(), text, category: moreSelectedCat, context: encMoreContext.label, attemptId: encMoreContext.attemptId || null });
+      saveData(data);
+      el.value = '';
+      encMoreContext = null;
+    }
+
+    function getMoreFocus(data) {
+      const counts = {};
+      getMoreItems(data).forEach(i => { if (i.category) counts[i.category] = (counts[i.category] || 0) + 1; });
+      const top = Object.entries(counts).sort((a, b) => b[1] - a[1])[0];
+      return top ? { cat: top[0], n: top[1] } : null;
+    }
+
+    function renderGoFocusHint() {
+      const el = document.getElementById('goFocusHint');
+      if (!el) return;
+      const f = getMoreFocus(getData());
+      el.style.display = f ? '' : 'none';
+      if (f) el.textContent = `🎯 Watch for: ${f.cat} (held back ${f.n}×)`;
+    }
 
     // Manually logged moments plus the "Could have done more" line of every approach review
     function getMoreItems(data) {
-      const items = (data.moreMoments || []).map(m => ({ src: 'manual', id: m.id, date: m.date, text: m.text, category: m.category || '', context: '' }));
+      const items = (data.moreMoments || []).map(m => ({ src: 'manual', id: m.id, date: m.date, text: m.text, category: m.category || '', context: m.context || '' }));
       (data.goAttempts || []).forEach(a => {
         if (a.review && a.review.more) items.push({ src: 'review', id: a.id, date: a.date, text: a.review.more, category: a.review.moreCategory || '', context: 'From approach review' });
       });
@@ -7895,7 +7939,7 @@
     function renderMoreChips() {
       const cats = getMoreCategories(getData());
       if (moreSelectedCat && !cats.includes(moreSelectedCat)) cats.push(moreSelectedCat);
-      document.getElementById('moreChips').innerHTML = cats.map((c, i) =>
+      document.getElementById(moreChipsTarget).innerHTML = cats.map((c, i) =>
         `<button type="button" class="more-chip${c === moreSelectedCat ? ' selected' : ''}" data-cat="${escHtml(c).replace(/"/g, '&quot;')}" onclick="pickMoreCat(this.dataset.cat)">${escHtml(c)}</button>`
       ).join('') + '<button type="button" class="more-chip new" onclick="addMoreCategory()">+ New</button>';
     }
@@ -7915,7 +7959,9 @@
       renderMoreChips();
     }
 
-    function openMoreModal(src, id) {
+    function openMoreModal(src, id, newContext) {
+      moreNewContext = (!src && newContext) || '';
+      moreChipsTarget = 'moreChips';
       const data = getData();
       const item = src ? getMoreItems(data).find(i => i.src === src && i.id === id) : null;
       moreEditing = item ? { src, id } : null;
@@ -7925,8 +7971,9 @@
       document.getElementById('moreModalTitle').textContent = item ? 'Edit Moment' : "Could've Done More";
       const isReview = !!item && item.src === 'review';
       const sub = document.getElementById('moreModalSub');
-      sub.style.display = isReview ? 'block' : 'none';
-      sub.textContent = isReview ? 'From your approach review on ' + item.date : '';
+      const subText = isReview ? 'From your approach review on ' + item.date : (moreNewContext || (item && item.context) || '');
+      sub.style.display = subText ? 'block' : 'none';
+      sub.textContent = subText;
       document.getElementById('moreDateRow').style.display = isReview ? 'none' : '';
       document.getElementById('moreDeleteBtn').style.display = item && !isReview ? '' : 'none';
       renderMoreChips();
@@ -7937,6 +7984,7 @@
     function closeMoreModal() {
       document.getElementById('moreModal').classList.remove('open');
       moreEditing = null;
+      moreNewContext = '';
     }
 
     function confirmMore() {
@@ -7951,11 +7999,11 @@
         const m = data.moreMoments.find(x => x.id === moreEditing.id);
         if (m) { m.text = text; m.date = date; m.category = moreSelectedCat; }
       } else {
-        data.moreMoments.push({ id: Date.now(), date, text, category: moreSelectedCat });
+        data.moreMoments.push({ id: Date.now(), date, text, category: moreSelectedCat, context: moreNewContext });
       }
       saveData(data);
       closeMoreModal();
-      renderMore();
+      if (document.getElementById('viewMore').classList.contains('active')) renderMore();
     }
 
     function deleteMoreMoment() {
@@ -8759,6 +8807,13 @@
 
       <div id="encStatsCumulative" style="background:rgba(255,255,255,0.05); border:1px solid var(--border); border-radius:10px; padding:10px; text-align:center; margin-bottom:16px; font-size:12px; color:var(--dim); display:none;"></div>
 
+      <div id="encMoreBox" class="enc-more">
+        <div class="enc-more-title">📈 Could you have done more?</div>
+        <textarea id="encMoreText" class="modal-note" placeholder="Optional. e.g. asked for her number, kept talking longer..."></textarea>
+        <div class="more-chips" id="encMoreChips"></div>
+        <div class="enc-more-hint">Saved to Could've Done More when you tap Continue. Leave it empty to skip.</div>
+      </div>
+
       <div id="encStatsActions" style="display:flex; flex-direction:column; gap:8px;">
         <button id="encStatsLogBtn" onclick="encStatsLogMiss()" style="display:none; padding:12px; border-radius:12px; border:1px solid rgba(255,107,53,0.3); background:rgba(255,107,53,0.08); color:var(--accent); font-size:14px; font-weight:600; cursor:pointer;">Log this miss in detail →</button>
         <button onclick="closeEncStatsModal()" style="padding:14px; border-radius:12px; border:none; background:rgba(255,255,255,0.1); color:var(--text); font-size:15px; font-weight:700; cursor:pointer;">Continue</button>
@@ -8772,6 +8827,7 @@
       <div class="go-header">
         <h2>She's right there.</h2>
         <div class="go-sub">Fill these 3 and you're good to approach.</div>
+        <div class="go-focus-hint" id="goFocusHint" style="display:none;"></div>
       </div>
 
       <div class="go-checkpoints">
